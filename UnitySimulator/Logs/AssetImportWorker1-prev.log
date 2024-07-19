@@ -1,0 +1,292 @@
+Using pre-set license
+Built from '2021.3/staging' branch; Version is '2021.3.40f1 (6fcab7dbbbc1) revision 7326391'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 11  (10.0.22631) 64bit Professional' Language: 'en' Physical Memory: 15610 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
+
+COMMAND LINE ARGUMENTS:
+D:\Software\Unity\2021.3.40f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker1
+-projectPath
+D:/Scoala/Personal-Projects/Parking Lot/UnitySimulator
+-logFile
+Logs/AssetImportWorker1.log
+-srvPort
+61494
+Successfully changed project path to: D:/Scoala/Personal-Projects/Parking Lot/UnitySimulator
+D:/Scoala/Personal-Projects/Parking Lot/UnitySimulator
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [5504] Host "[IP] 192.168.0.100 [Port] 0 [Flags] 2 [Guid] 3848148532 [EditorId] 3848148532 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-L7N1APU) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+
+Player connection [5504] Host "[IP] 192.168.0.100 [Port] 0 [Flags] 2 [Guid] 3848148532 [EditorId] 3848148532 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-L7N1APU) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+
+[Physics::Module] Initialized MultithreadedJobDispatcher with {0} workers.
+Refreshing native plugins compatible for Editor in 59.79 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2021.3.40f1 (6fcab7dbbbc1)
+[Subsystems] Discovering subsystems at path D:/Software/Unity/2021.3.40f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path D:/Scoala/Personal-Projects/Parking Lot/UnitySimulator/Assets
+GfxDevice: creating device client; threaded=0; jobified=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce RTX 4050 Laptop GPU (ID=0x28e1)
+    Vendor:   NVIDIA
+    VRAM:     5921 MB
+    Driver:   32.0.15.6070
+Initialize mono
+Mono path[0] = 'D:/Software/Unity/2021.3.40f1/Editor/Data/Managed'
+Mono path[1] = 'D:/Software/Unity/2021.3.40f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'D:/Software/Unity/2021.3.40f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56520
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: D:/Software/Unity/2021.3.40f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.001427 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 64.86 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.582 seconds
+Domain Reload Profiling:
+	ReloadAssembly (583ms)
+		BeginReloadAssembly (70ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (0ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (1ms)
+		EndReloadAssembly (441ms)
+			LoadAssemblies (69ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (87ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (21ms)
+			SetupLoadedEditorAssemblies (300ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (5ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (65ms)
+				BeforeProcessingInitializeOnLoad (1ms)
+				ProcessInitializeOnLoadAttributes (163ms)
+				ProcessInitializeOnLoadMethodAttributes (65ms)
+				AfterProcessingInitializeOnLoad (0ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (0ms)
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.009803 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.85 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.628 seconds
+Domain Reload Profiling:
+	ReloadAssembly (628ms)
+		BeginReloadAssembly (104ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (5ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (24ms)
+		EndReloadAssembly (442ms)
+			LoadAssemblies (59ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (168ms)
+			ReleaseScriptCaches (0ms)
+			RebuildScriptCaches (37ms)
+			SetupLoadedEditorAssemblies (149ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (4ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (33ms)
+				ProcessInitializeOnLoadAttributes (93ms)
+				ProcessInitializeOnLoadMethodAttributes (16ms)
+				AfterProcessingInitializeOnLoad (2ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Failed to load shader (instanceID 404, GUID dd89cf5b9246416f84610a006f916af7)
+Failed to load shader (instanceID 406, GUID 14eb328de4b8eb245bb7cea29e4ac00b)
+Failed to load shader (instanceID 408, GUID 68e6db2ebdc24f95958faec2be5558d6)
+Failed to load shader (instanceID 400, GUID fe393ace9b354375a9cb14cdbbc28be4)
+Failed to load shader (instanceID 402, GUID cf81c85f95fe47e1a27f6ae460cf182c)
+Failed to load shader (instanceID 398, GUID 9c442dc870b456e48b615cd8add0e9ef)
+Failed to load shader (instanceID 414, GUID 85187c2149c549c5b33f0cdb02836b17)
+Failed to load shader (instanceID 416, GUID 128e987d567d4e2c824d754223b3f3b0)
+Failed to load shader (instanceID 424, GUID f7ada0af4f174f0694ca6a487b8f543d)
+Failed to load shader (instanceID 422, GUID c8d12adcee749c344b8117cf7c7eb912)
+Failed to load shader (instanceID 418, GUID 1e3b057af24249748ff873be7fafee47)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
+Refreshing native plugins compatible for Editor in 0.79 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 486 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 7 unused Assets / (153.6 KB). Loaded Objects now: 950.
+Memory consumption went from 37.3 MB to 37.1 MB.
+Total: 1.885100 ms (FindLiveObjects: 0.058500 ms CreateObjectMapping: 0.011500 ms MarkObjects: 1.720000 ms  DeleteObjects: 0.094500 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-codec-MediaFoundation-h265: 746d11721c4dcdbdad8f713fa42b33f4 -> 
+  custom:CustomObjectIndexerAttribute: bc11b3a6c3213fcdd17b65e7da85e133 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:SearchIndexIgnoredProperties: e643bd26f0fe6173181afceb89e7c659 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 347078.059559 seconds.
+  path: Assets/Car.prefab
+  artifactKey: Guid(05abb5c226b3258479725a5b230a8ec6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Car.prefab using Guid(05abb5c226b3258479725a5b230a8ec6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e3122dbe2f236a1ce3401fe473e33cc7') in 0.400466 seconds 
+Number of asset objects unloaded after import = 64
+========================================================================
+Received Import Request.
+  Time since last request: 185.811685 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Black_B.prefab
+  artifactKey: Guid(aa030eda2a56d6e47b2cbd861aba4eae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Black_B.prefab using Guid(aa030eda2a56d6e47b2cbd861aba4eae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4d8125681734aa7ddbde6c854849f5fd') in 0.257396 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_BlueDark_B.prefab
+  artifactKey: Guid(01b22945d9b995946bb81990a0308e32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_BlueDark_B.prefab using Guid(01b22945d9b995946bb81990a0308e32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cc1cbe08a30794b964252eb963693f62') in 0.029771 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Green_A.prefab
+  artifactKey: Guid(ed23e2b2420d5a94d95cff4f52c94395) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Green_A.prefab using Guid(ed23e2b2420d5a94d95cff4f52c94395) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3cede26eeb3c035944e6e9122b6b5c8c') in 0.078263 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_GreenDark_B.prefab
+  artifactKey: Guid(50c246d15f7c5de4f813a88bbf8c1b3b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_GreenDark_B.prefab using Guid(50c246d15f7c5de4f813a88bbf8c1b3b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '18d1020afff6c7ea1f8d70328522d080') in 0.027926 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Grey_B.prefab
+  artifactKey: Guid(21e8ffeeb536a614483787c4a7fe5846) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Grey_B.prefab using Guid(21e8ffeeb536a614483787c4a7fe5846) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7f2abeb1424518f61947001760bc0599') in 0.026213 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Red_A.prefab
+  artifactKey: Guid(4a0341a940545c9448342f2aad45cd8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Red_A.prefab using Guid(4a0341a940545c9448342f2aad45cd8e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a4bdfbec060ac7ee5be5a0248333a615') in 0.059419 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_White_B.prefab
+  artifactKey: Guid(1592290141e72cb40adfcdf358fb32a2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_White_B.prefab using Guid(1592290141e72cb40adfcdf358fb32a2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a740025336d2fa0e207003a9f449178c') in 0.037163 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_RedDark_A.prefab
+  artifactKey: Guid(23b1af83084a0ca4c9f3561bb084a094) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_RedDark_A.prefab using Guid(23b1af83084a0ca4c9f3561bb084a094) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2a3c4e87961d4cad53ff94f65a3afffc') in 0.026933 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000038 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Blue_A.prefab
+  artifactKey: Guid(baf98ff71ec84ae4f87bf2921f94b35a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Blue_A.prefab using Guid(baf98ff71ec84ae4f87bf2921f94b35a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3a147704dc2afda1e05a496f8a65577b') in 0.026651 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_GreenDark_A.prefab
+  artifactKey: Guid(2c965f4636231ac46b17d2ef180a3d7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_GreenDark_A.prefab using Guid(2c965f4636231ac46b17d2ef180a3d7c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '33a77fad23b140dff663f04c0a0209f6') in 0.023781 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Red_B.prefab
+  artifactKey: Guid(9bc1256eb29630844b3036067a8ba3a8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Red_B.prefab using Guid(9bc1256eb29630844b3036067a8ba3a8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f5adfd99551fa5a533ab467b3c50e15f') in 0.027151 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Yellow_B.prefab
+  artifactKey: Guid(a217e8d604a28eb4b9d091a0352d4065) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Yellow_B.prefab using Guid(a217e8d604a28eb4b9d091a0352d4065) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fe1ad5e0471ff9b6f6903c637ff5c2e4') in 0.030145 seconds 
+Number of asset objects unloaded after import = 39
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Green_B.prefab
+  artifactKey: Guid(e5ea0171483d53c4e80e6360818bffda) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Number of updated assets reloaded before import = 0
+Start importing Assets/Resources/ICONIC - Sports Car FREE Vol.02/Prefabs/NoColliders/Samurai_Green_B.prefab using Guid(e5ea0171483d53c4e80e6360818bffda) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f93806bbbe7afa7ba223c5884cbc17d4') in 0.028828 seconds 
+Number of asset objects unloaded after import = 39
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0
