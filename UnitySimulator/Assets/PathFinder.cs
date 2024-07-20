@@ -6,13 +6,21 @@ public class PathFinder : MonoBehaviour
 {
     public int id = 1, futurePosition;
     public float currentTime=0, maxTime=2;
-    public Transform[] positions = new Transform[9];
+    public Transform[] positions;
     public Vector3 start, final;
     public float rotationSpeed = 25f, rotationAngle=90f;
-    public bool firstTime = true;
+    bool isRotated = false;
+
+    public int isAllowedToEnter = 2; // 0 - nu; 1 - inca nu se stie; 2 - da
+    public int state = 0; // 0 - entering; 1 - stationed; 2 - exiting
+
+    public CarGenerator carGenerator;
+
     void Start()
     {
-        for(int i=0; i<positions.Length; i++)
+        positions = new Transform[10];
+
+        for (int i=0; i<positions.Length; i++)
         {
             positions[i] = GameObject.Find("Position (" + (i+1) +")").transform;    
         }
@@ -22,41 +30,117 @@ public class PathFinder : MonoBehaviour
         final = positions[futurePosition].position;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //aici un if de confirmare 
+        switch(state)
+        {
+            case 0:
+                enter();
+                break;
+            case 1:
+                stay();
+                break;
+            case 2:
+                exit();
+                break;
+        }
+    }
+
+    private void enter()
+    {
+        switch(isAllowedToEnter)
+        {
+            case 0:
+                Destroy(this.gameObject);
+                break;
+            case 2:
+                move();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void stay()
+    {
+        if (Input.GetKeyDown(("" + (id + 1))))
+        {
+            Debug.Log("apasat");
+            state = 2;
+            start = this.transform.position;
+            final = positions[futurePosition % 3].position;
+            currentTime = 0;
+        }
+    }
+
+    private void exit()
+    {
         move();
-        Debug.Log(futurePosition + " " + id);
     }
 
     private void move()
     {
         this.transform.position = Vector3.Lerp(start, final, currentTime / maxTime);
-        if (currentTime < maxTime)
+
+        if (currentTime < maxTime) currentTime += Time.deltaTime;
+        else takeTurn();
+    }
+
+    private void takeTurn()
+    {
+        if (state == 0)
         {
-            currentTime += Time.deltaTime;
+            if (!isRotated)
+            {
+                updateFuturePosition();
+                start = this.transform.position;
+                final = positions[futurePosition].position;
+                currentTime = 0;
+            }
+            else state = 1;
         }
-        else
+        if (state == 2)
         {
-            updateFuturePosition();
-            start = this.transform.position;
-            final = positions[futurePosition].position;
-            currentTime = 0;
+            if (isRotated)
+            {
+                updateFuturePosition();
+                start = this.transform.position;
+                final = positions[futurePosition].position;
+                currentTime = 0;
+            }
+            else
+            {
+                carGenerator.parked[id] = false;
+                Destroy(this.gameObject);
+            }
         }
     }
 
     private void updateFuturePosition()
     {
-        if(futurePosition < 3)
+        if (state == 0)
         {
-            futurePosition += 3 * (id / 3 + 1);
-        } 
-        if (firstTime)
+            if (futurePosition < 3)
+            {
+                futurePosition += 3 * (id / 3 + 1);
+            }
+
+            if (!isRotated)
+            {
+                this.transform.eulerAngles += new Vector3(0, id <= 2 ? -90 : +90, 0);
+                isRotated = true;
+            }
+        }
+
+        if(state == 2)
         {
-            Vector3 rotationAxis = (id == 0 || id == 1 || id == 2) ? Vector3.down : Vector3.up;
-            this.transform.Rotate(rotationAxis * rotationAngle); firstTime = false;
-            firstTime = false;
+            futurePosition = 9;
+
+            if (isRotated)
+            {
+                this.transform.eulerAngles = new Vector3(0, -90, 0);
+                isRotated = false;
+            }
         }
     }
 }

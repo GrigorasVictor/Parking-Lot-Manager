@@ -24,15 +24,12 @@ public class CarGenerator : MonoBehaviour
             if (Input.GetKeyDown(input) && !parked[index])
             {
                 cars[index] = Instantiate(carPrefab);
-                cars[index].GetComponent<PathFinder>().id = index + 1;
+
+                PathFinder curCarPathFinder = cars[index].GetComponent<PathFinder>();
+                curCarPathFinder.id = index + 1;
+                curCarPathFinder.carGenerator = this;
+
                 parked[index] = true;
-                
-            }
-            else if (Input.GetKeyDown(input) && parked[index])
-            {
-                //animatie pentru iesire
-                parked[index] = false;
-                Destroy(cars[index]);
             }
         }
     }

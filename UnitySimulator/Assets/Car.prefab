@@ -775,16 +775,12 @@ MonoBehaviour:
   maxTime: 2
   positions:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   start: {x: 0, y: 0, z: 0}
   final: {x: 0, y: 0, z: 0}
+  rotationSpeed: 25
+  rotationAngle: 90
+  isAllowedToEnter: 2
+  state: 0
 --- !u!114 &3862106417401173094
 MonoBehaviour:
   m_ObjectHideFlags: 0
