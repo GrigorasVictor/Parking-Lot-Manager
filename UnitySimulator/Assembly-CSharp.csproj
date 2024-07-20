@@ -62,6 +62,7 @@
     <Compile Include="Assets\NumberPlateRandomizer.cs" />
     <Compile Include="Assets\MaterialRandomizer.cs" />
     <Compile Include="Assets\CarGenerator.cs" />
+    <Compile Include="Assets\TCPClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
