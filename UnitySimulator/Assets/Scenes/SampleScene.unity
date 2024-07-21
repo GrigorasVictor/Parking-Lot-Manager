@@ -1980,7 +1980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90ef5c5430cc99f45b7a5b3343e2c659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carPrefab: {fileID: 4873813705406722829, guid: 05abb5c226b3258479725a5b230a8ec6, type: 3}
+  carPrefab: {fileID: 1880868630294075027, guid: 05abb5c226b3258479725a5b230a8ec6, type: 3}
   parked: 010101000101
 --- !u!4 &1362660219
 Transform:
