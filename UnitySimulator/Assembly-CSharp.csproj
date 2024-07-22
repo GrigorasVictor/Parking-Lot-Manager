@@ -62,9 +62,9 @@
     <Compile Include="Assets\Scripts\NumberPlateRandomizer.cs" />
     <Compile Include="Assets\Scripts\NumberPlateRoullete.cs" />
     <Compile Include="Assets\Scripts\MaterialRandomizer.cs" />
+    <Compile Include="Assets\Scripts\TCPServer.cs" />
     <Compile Include="Assets\Scripts\CarGenerator.cs" />
     <Compile Include="Assets\Scripts\TCPClient.cs" />
-    <Compile Include="Assets\Scripts\TCPServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
