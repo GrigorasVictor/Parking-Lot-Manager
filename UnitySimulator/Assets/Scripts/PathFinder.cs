@@ -22,7 +22,7 @@ public class PathFinder : MonoBehaviour
 
         for (int i=0; i<positions.Length; i++)
         {
-            positions[i] = GameObject.Find("Position (" + (i+1) +")").transform;    
+            positions[i] = GameObject.Find("Position (" + (i+1) + ")").transform;    
         }
         id--;
         futurePosition = id % 3;

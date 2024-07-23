@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\TCPServer.cs" />
 =======
     <Compile Include="Assets\Scripts\TCPServer.cs" />
+    <Compile Include="Assets\Scripts\ScreenRecorder.cs" />
     <Compile Include="Assets\Scripts\CarGenerator.cs" />
     <Compile Include="Assets\Scripts\TCPClient.cs" />
 >>>>>>> 5e14767430f1a625b8b7ed1a0518536b894e28a6
