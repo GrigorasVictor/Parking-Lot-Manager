@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\NumberPlateRoullete.cs" />
     <Compile Include="Assets\Scripts\MaterialRandomizer.cs" />
     <Compile Include="Assets\Scripts\TCPServer.cs" />
+    <Compile Include="Assets\Scripts\ScreenRecorder.cs" />
     <Compile Include="Assets\Scripts\CarGenerator.cs" />
     <Compile Include="Assets\Scripts\TCPClient.cs" />
   </ItemGroup>
