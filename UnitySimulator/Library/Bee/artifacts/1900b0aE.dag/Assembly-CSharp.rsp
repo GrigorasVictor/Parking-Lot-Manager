@@ -350,7 +350,10 @@
 "Assets/Scripts/NumberPlateRandomizer.cs"
 "Assets/Scripts/NumberPlateRoullete.cs"
 "Assets/Scripts/PathFinder.cs"
+<<<<<<< HEAD
 "Assets/Scripts/ScreenRecorder.cs"
+=======
+>>>>>>> origin/tmp2
 "Assets/Scripts/TCPClient.cs"
 "Assets/Scripts/TCPServer.cs"
 -langversion:9.0

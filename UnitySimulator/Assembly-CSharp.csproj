@@ -62,10 +62,16 @@
     <Compile Include="Assets\Scripts\NumberPlateRandomizer.cs" />
     <Compile Include="Assets\Scripts\NumberPlateRoullete.cs" />
     <Compile Include="Assets\Scripts\MaterialRandomizer.cs" />
+<<<<<<< HEAD
     <Compile Include="Assets\Scripts\TCPServer.cs" />
     <Compile Include="Assets\Scripts\ScreenRecorder.cs" />
     <Compile Include="Assets\Scripts\CarGenerator.cs" />
     <Compile Include="Assets\Scripts\TCPClient.cs" />
+=======
+    <Compile Include="Assets\Scripts\CarGenerator.cs" />
+    <Compile Include="Assets\Scripts\TCPClient.cs" />
+    <Compile Include="Assets\Scripts\TCPServer.cs" />
+>>>>>>> origin/tmp2
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

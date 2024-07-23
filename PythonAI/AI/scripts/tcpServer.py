@@ -8,7 +8,6 @@ def start_tcp_server(host, port):
     # Bind the socket to the address and port
     server_socket.bind((host, port))
 
-    # Listen for incoming connections (max 5 queued connections)
     server_socket.listen(5)
 
     print(f"Server started and listening on {host}:{port}")
@@ -33,9 +32,3 @@ def handle_client(client_socket):
 
             # Send data back to the client (echo)
             client_socket.sendall(data)
-
-
-if __name__ == "__main__":
-    host_IP = '127.0.0.1'
-    port = 13337
-    start_tcp_server(host_IP, port)
