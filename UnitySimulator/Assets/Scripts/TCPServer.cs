@@ -27,7 +27,6 @@ public class TCPServer : MonoBehaviour
         // Start TcpServer background thread 		
         tcpListenerThread = new Thread(new ThreadStart(ListenForIncommingRequests));
         tcpListenerThread.Start();
-        /*ListenForIncommingRequests();*/
     }
 
     private void ListenForIncommingRequests()
@@ -35,9 +34,16 @@ public class TCPServer : MonoBehaviour
         TcpListener server = null;
         try
         {
-            // Set the TcpListener on port 13000.
+
+            string host = Dns.GetHostName();
+            // Getting ip address using host name 
+            IPHostEntry ip = Dns.GetHostEntry(host);
+            string localIP = ip.AddressList[0].ToString();
+            Console.WriteLine(localIP);
+
+            // Set the TcpListener on port 9001.
             Int32 port = 9001;
-            IPAddress localAddr = IPAddress.Parse("192.168.0.100");
+            IPAddress localAddr = IPAddress.Parse(GetLocalIpV4Address());
 
             // TcpListener server = new TcpListener(port);
             server = new TcpListener(localAddr, port);
@@ -83,5 +89,23 @@ public class TCPServer : MonoBehaviour
         {
             server.Stop();
         }
+    }
+
+    public static string GetLocalIpV4Address()
+    {
+        string hostName = Dns.GetHostName(); // Get the host name
+        IPAddress[] addresses = Dns.GetHostAddresses(hostName); // Get list of IP addresses associated with the host name
+
+        /*Console.WriteLine(addresses[2]);*/
+        foreach (IPAddress address in addresses)
+        {
+            // Check if the address is an IPv4 address
+            if (address.AddressFamily == AddressFamily.InterNetwork)
+            {
+                return address.ToString();
+            }
+        }
+
+        return null;
     }
 }

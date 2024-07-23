@@ -24,7 +24,7 @@ public class ScreenRecorder : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
             takeScreenShots(frontCamera);
-            /*takeScreenShots(topCamera);*/
+            takeScreenShots(topCamera);
         }
     }
 
@@ -43,6 +43,6 @@ public class ScreenRecorder : MonoBehaviour
         cam.rect = stdCoords;
 
         byte[] buffer = screenShot.EncodeToPNG();
-        System.IO.File.WriteAllBytes("C:\\Users\\Public\\Pictures\\test1.png", buffer);
+        System.IO.File.WriteAllBytes("C:\\Users\\Public\\Pictures\\ss_" + cam.gameObject.name + ".png", buffer);
     }
 }

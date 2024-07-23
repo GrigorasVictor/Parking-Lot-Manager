@@ -14,9 +14,9 @@ public class TCPClient : MonoBehaviour
     void Start()
     {
         TcpClient tcpClient = new TcpClient();
-        string hostname = "192.168.0.100";
+        string hostAddress = TCPServer.GetLocalIpV4Address();
 
-        tcpClient.Connect(hostname, 9001);
+        tcpClient.Connect(hostAddress, 9001);
 
         networkStream = tcpClient.GetStream();
     }
