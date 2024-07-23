@@ -58,10 +58,13 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PathFinder.cs" />
-    <Compile Include="Assets\NumberPlateRandomizer.cs" />
-    <Compile Include="Assets\MaterialRandomizer.cs" />
-    <Compile Include="Assets\CarGenerator.cs" />
+    <Compile Include="Assets\Scripts\PathFinder.cs" />
+    <Compile Include="Assets\Scripts\NumberPlateRandomizer.cs" />
+    <Compile Include="Assets\Scripts\NumberPlateRoullete.cs" />
+    <Compile Include="Assets\Scripts\MaterialRandomizer.cs" />
+    <Compile Include="Assets\Scripts\CarGenerator.cs" />
+    <Compile Include="Assets\Scripts\TCPClient.cs" />
+    <Compile Include="Assets\Scripts\TCPServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
