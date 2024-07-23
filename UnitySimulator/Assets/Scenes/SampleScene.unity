@@ -625,12 +625,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49a3e4e19e62e714cb2e8f2d265db97a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frontCamera: {fileID: 0}
-  topCamera: {fileID: 0}
-  frontTexture: {fileID: 0}
-  topTexture: {fileID: 0}
-  width: 640
-  height: 720
 --- !u!1 &551327451
 GameObject:
   m_ObjectHideFlags: 0

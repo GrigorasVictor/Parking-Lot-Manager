@@ -1,1 +1,9 @@
 /.vs
+/UnitySimulator/.vs
+/UnitySimulator/Library
+/UnitySimulator/Logs
+/UnitySimulator/obj
+/UnitySimulator/UserSettings
+/UnitySimulator/.vsconfig
+/UnitySimulator/UnitySimulator.sln
+/UnitySimulator/*.csproj
