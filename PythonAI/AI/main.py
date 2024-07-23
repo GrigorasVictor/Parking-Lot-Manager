@@ -1,9 +1,8 @@
-from scripts.tcpServer import start_tcp_server as startServer
 import threading
+from scripts.tcpServer import start_tcp_server as startServer
+from scripts.ipv4Grabber import getIpv4
 
-host = '192.168.0.100'
+local_ip = getIpv4()
 port = 9001
-
-#Running Server on a Thread
-thread = threading.Thread(target=startServer(host, port))
+thread = threading.Thread(target=startServer, args=(local_ip, port))
 thread.start()

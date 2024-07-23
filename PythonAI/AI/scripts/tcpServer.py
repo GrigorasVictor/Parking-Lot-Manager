@@ -7,9 +7,7 @@ def start_tcp_server(host, port):
 
     # Bind the socket to the address and port
     server_socket.bind((host, port))
-
     server_socket.listen(5)
-
     print(f"Server started and listening on {host}:{port}")
 
     while True:
@@ -32,3 +30,4 @@ def handle_client(client_socket):
 
             # Send data back to the client (echo)
             client_socket.sendall(data)
+
