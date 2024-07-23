@@ -14,7 +14,7 @@ public class TCPClient : MonoBehaviour
     void Start()
     {
         TcpClient tcpClient = new TcpClient();
-        string hostname = "localhost";
+        string hostname = "192.168.0.100";
 
         tcpClient.Connect(hostname, 9001);
 
@@ -24,13 +24,6 @@ public class TCPClient : MonoBehaviour
     void Update()
     {
         curString = "";
-
-        /*for(char i = 'a'; i <= 'z'; i++)
-        {
-            curKey = "" + i; 
-            if(Input.GetKeyDown(curKey)) curString += i;
-        }*/
-
         if (Input.GetKeyDown(KeyCode.Space)) curString += "Hello World!\n"; 
 
         if(curString != "")

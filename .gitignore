@@ -7,3 +7,6 @@
 /UnitySimulator/.vsconfig
 /UnitySimulator/UnitySimulator.sln
 /UnitySimulator/*.csproj
+/PythonAI/AI/.idea
+/PythonAI/AI/.venv
+/PythonAI/AI/.env

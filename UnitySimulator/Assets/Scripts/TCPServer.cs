@@ -37,7 +37,7 @@ public class TCPServer : MonoBehaviour
         {
             // Set the TcpListener on port 13000.
             Int32 port = 9001;
-            IPAddress localAddr = IPAddress.Parse("192.168.1.130");
+            IPAddress localAddr = IPAddress.Parse("192.168.0.100");
 
             // TcpListener server = new TcpListener(port);
             server = new TcpListener(localAddr, port);
