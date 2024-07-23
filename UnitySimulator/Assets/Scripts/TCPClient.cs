@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -11,8 +12,16 @@ public class TCPClient : MonoBehaviour
 
     NetworkStream networkStream;
 
+    byte[] imageBytes;
+    ScreenRecorder screenRecorder;
+
+    int responseMaxLength = 1024;
+    byte[] responseBytes = new byte[1024];
+
     void Start()
     {
+        screenRecorder = GameObject.Find("ScreenRecorder").GetComponent<ScreenRecorder>();
+
         TcpClient tcpClient = new TcpClient();
         string hostAddress = TCPServer.GetLocalIpV4Address();
 
@@ -23,15 +32,31 @@ public class TCPClient : MonoBehaviour
 
     void Update()
     {
-        curString = "";
-        if (Input.GetKeyDown(KeyCode.Space)) curString += "Hello World!\n"; 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            curString += "Hello World!\n";
 
-        if(curString != "")
+            imageBytes = screenRecorder.getFrontCameraView();
+            networkStream.Write(imageBytes, 0, imageBytes.Length);
+
+            imageBytes = screenRecorder.getTopCameraView();
+            networkStream.Write(imageBytes, 0, imageBytes.Length);
+
+            int responseLength = networkStream.Read(responseBytes, 0, responseMaxLength);
+
+            /*for(int i = 0; i < responseLength; i++)
+                Debug.Log(responseBytes[i]);*/
+
+            string responseString = Encoding.UTF8.GetString(responseBytes);
+            Debug.Log(responseString);
+        }
+
+        /*if (curString != "")
         {
             Debug.Log(curString);
             byte[] bytes = Encoding.UTF8.GetBytes(curString);
             
             networkStream.Write(bytes, 0, bytes.Length);
-        }
+        }*/
     }
 }

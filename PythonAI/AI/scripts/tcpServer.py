@@ -1,4 +1,7 @@
 import socket
+from PIL import Image
+import io
+import matplotlib.pyplot as plt
 
 
 def start_tcp_server(host, port):
@@ -25,10 +28,19 @@ def handle_client(client_socket):
     with client_socket:
         while True:
             # Receive data from the client
-            data = client_socket.recv(1024)
+            data = client_socket.recv(2000000)
             if not data:
                 break
-            print(f"Received data: {data.decode()}")
+            print(f"Received some data!")
+
+            image = Image.open(io.BytesIO(data))
+            plt.imshow(image)
+            plt.axis('off')
+            plt.show()
 
             # Send data back to the client (echo)
-            client_socket.sendall(data)
+            responseBytes = ("VALID plate number!").encode('ASCII')
+            for i in range(18):
+                print(responseBytes[i])
+
+            client_socket.sendall(responseBytes)

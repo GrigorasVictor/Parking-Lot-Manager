@@ -21,14 +21,24 @@ public class ScreenRecorder : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             takeScreenShots(frontCamera);
             takeScreenShots(topCamera);
         }
     }
 
-    private void takeScreenShots(Camera cam)
+    public byte[] getTopCameraView()
+    {
+        return takeScreenShots(topCamera);
+    }
+
+    public byte[] getFrontCameraView()
+    {
+        return takeScreenShots(frontCamera);
+    }
+
+    private byte[] takeScreenShots(Camera cam)
     {
         Rect stdCoords = cam.rect;
         cam.rect = new Rect(0, 0, 1, 1);
@@ -42,7 +52,8 @@ public class ScreenRecorder : MonoBehaviour
         cam.targetTexture = null;
         cam.rect = stdCoords;
 
-        byte[] buffer = screenShot.EncodeToPNG();
-        System.IO.File.WriteAllBytes("C:\\Users\\Public\\Pictures\\ss_" + cam.gameObject.name + ".png", buffer);
+        /*byte[] buffer = */
+        return screenShot.EncodeToPNG();
+        /*System.IO.File.WriteAllBytes("C:\\Users\\Public\\Pictures\\ss_" + cam.gameObject.name + ".png", buffer);*/
     }
 }

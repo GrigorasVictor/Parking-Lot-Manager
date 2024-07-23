@@ -8,7 +8,7 @@ def start_tcp_client(host, port, message):
 
     try:
         client_socket.sendall(message.encode())
-        response = client_socket.recv(1024)
+        response = client_socket.recv(1843200)
         print(f"Received response from server: {response.decode()}")
     except Exception:
         print(f"Connection failed to server: {host}:{port}")
@@ -16,7 +16,7 @@ def start_tcp_client(host, port, message):
         client_socket.close()
 
 if __name__ == "__main__":
-    host = '192.168.0.100'
+    host = '192.168.1.130'
     port = 9001
     message = "Hello, Server!"  # Message to send
     start_tcp_client(host, port, message)
