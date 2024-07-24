@@ -102,6 +102,7 @@ public class TCPServer : MonoBehaviour
             // Check if the address is an IPv4 address
             if (address.AddressFamily == AddressFamily.InterNetwork)
             {
+                if (address.GetAddressBytes()[0] == 192)
                 return address.ToString();
             }
         }

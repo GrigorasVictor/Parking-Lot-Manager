@@ -10,3 +10,8 @@
 /PythonAI/AI/.idea
 /PythonAI/AI/.venv
 /PythonAI/AI/.env
+/UnitySimulator/Temp/
+/PythonAI/AI/*.pt
+/PythonAI/AI/*.jpg
+/PythonAI/AI/*.png
+/PythonAI/AI/scripts/__pycache__

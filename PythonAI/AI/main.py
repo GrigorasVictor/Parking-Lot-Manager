@@ -1,6 +1,6 @@
 from scripts.tcpServer import start_tcp_server as startServer
 import threading
-
+    
 host = '192.168.1.130'
 port = 9001
 

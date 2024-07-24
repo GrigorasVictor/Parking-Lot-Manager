@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
@@ -24,6 +25,9 @@ public class TCPClient : MonoBehaviour
 
         TcpClient tcpClient = new TcpClient();
         string hostAddress = TCPServer.GetLocalIpV4Address();
+        Debug.Log(hostAddress);
+
+        /*hostAddress = IPAddress.Parse("192.168.1.130").ToString();*/
 
         tcpClient.Connect(hostAddress, 9001);
 
