@@ -1,6 +1,5 @@
 import socket
-
-
+from .yoloAnalyzer import parseData
 def start_tcp_server(host, port):
     # Create a socket object
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,11 +22,16 @@ def handle_client(client_socket):
     with client_socket:
         while True:
             # Receive data from the client
-            data = client_socket.recv(1024)
+            data = client_socket.recv(2000000)
             if not data:
                 break
-            print(f"Received data: {data.decode()}")
+            print(f"Received some data!")
 
-            # Send data back to the client (echo)
-            client_socket.sendall(data)
+            # Converting binaries into array and then into an image
+            parseData(data)
+
+            responseBytes = ("VALID plate number!").encode('ASCII')
+            client_socket.sendall(responseBytes)
+
+
 
