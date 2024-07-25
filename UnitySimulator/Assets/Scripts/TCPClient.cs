@@ -9,58 +9,55 @@ using UnityEngine;
 
 public class TCPClient : MonoBehaviour
 {
-    string curString = "", curKey = "";
-
     NetworkStream networkStream;
+    TcpClient tcpClient;
 
-    byte[] imageBytes;
+    byte[] imageBytes, responseBytes = new byte[1024];
     ScreenRecorder screenRecorder;
 
+    string hostAddress;
+    int port = 9001;
     int responseMaxLength = 1024;
-    byte[] responseBytes = new byte[1024];
+    float currentTime = 0f;
 
     void Start()
     {
         screenRecorder = GameObject.Find("ScreenRecorder").GetComponent<ScreenRecorder>();
-
-        TcpClient tcpClient = new TcpClient();
-        string hostAddress = TCPServer.GetLocalIpV4Address();
-        Debug.Log(hostAddress);
-
-        /*hostAddress = IPAddress.Parse("192.168.1.130").ToString();*/
-
-        tcpClient.Connect(hostAddress, 9001);
-
-        networkStream = tcpClient.GetStream();
+        tcpClient = new TcpClient();
+        hostAddress = TCPServer.GetLocalIpV4Address();
+        Connect();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        currentTime += Time.deltaTime;
+        if (Mathf.FloorToInt(currentTime) !=0) // if timer == 1
         {
-            curString += "Hello World!\n";
+            currentTime = 0; //reset the timer
+            try
+            {
+                imageBytes = screenRecorder.getFrontCameraView();
+                networkStream.Write(imageBytes, 0, imageBytes.Length);
 
-            imageBytes = screenRecorder.getFrontCameraView();
-            networkStream.Write(imageBytes, 0, imageBytes.Length);
+                imageBytes = screenRecorder.getTopCameraView();
+                networkStream.Write(imageBytes, 0, imageBytes.Length);
 
-            imageBytes = screenRecorder.getTopCameraView();
-            networkStream.Write(imageBytes, 0, imageBytes.Length);
-
-            int responseLength = networkStream.Read(responseBytes, 0, responseMaxLength);
-
-            /*for(int i = 0; i < responseLength; i++)
-                Debug.Log(responseBytes[i]);*/
-
-            string responseString = Encoding.UTF8.GetString(responseBytes);
-            Debug.Log(responseString);
+                int responseLength = networkStream.Read(responseBytes, 0, responseMaxLength);
+                string responseString = Encoding.UTF8.GetString(responseBytes);
+                Debug.Log(responseString);
+            }
+            catch(System.Exception e)
+            {
+                Connect();
+            }
         }
 
-        /*if (curString != "")
-        {
-            Debug.Log(curString);
-            byte[] bytes = Encoding.UTF8.GetBytes(curString);
-            
-            networkStream.Write(bytes, 0, bytes.Length);
-        }*/
+    }
+    
+    void Connect()
+    {
+        Debug.Log("Attempting to connect at: " + hostAddress + ":" + port);
+        tcpClient.Connect(hostAddress, port);
+        networkStream = tcpClient.GetStream();
     }
 }
