@@ -33,16 +33,21 @@ def parseData(data1, data2):
             confidence = round(float(box1.conf[0]), 2)
             cls = int(box1.cls[0])
 
-            cvzone.putTextRect(image1, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
             cv2.rectangle(image1, (x1, y1), (x2, y2), (0, 255, 0))
 
             if classNames[cls] == 'numberplate':
                 cropped_plate = image1[y1:y2, x1:x2]
+                cv2.imshow("numberplate", cropped_plate)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
 
                 # Convert cropped plate to bytes
                 is_success, buffer = cv2.imencode(".png", cropped_plate)
                 if is_success:
                     print(buffer)
+            else:
+                cvzone.putTextRect(image1, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
+
 
 
 
