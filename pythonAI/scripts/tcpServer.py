@@ -25,13 +25,17 @@ def handle_client(client_socket):
     with client_socket:
         while True:
             # Receive data from the client
-            data = client_socket.recv(2000000)
-            if not data:
+            data1 = client_socket.recv(2000000)
+            if not data1:
                 break
-            print(f"Received some data!")
+            print(f"Received the first photo")
 
-            # Converting binaries into array and then into an image
-            parseData(data)
+            data2= client_socket.recv(2000000)
+            if not data2:
+                break
+            print(f"Received the second photo")
 
-            responseBytes = ("VALID plate number!").encode('ASCII')
+            #print(f'data1={data1}')
+            parseData(data1, data2)
+            responseBytes = ("VALID").encode('ASCII')
             client_socket.sendall(responseBytes)

@@ -31,7 +31,7 @@ public class TCPClient : MonoBehaviour
     void Update()
     {
         currentTime += Time.deltaTime;
-        if (Mathf.FloorToInt(currentTime) !=0) // if timer == 1
+        if (currentTime >=0.2f)
         {
             currentTime = 0; //reset the timer
             try

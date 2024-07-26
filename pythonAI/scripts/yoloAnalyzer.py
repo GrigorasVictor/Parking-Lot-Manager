@@ -4,32 +4,60 @@ import cv2
 import cvzone
 
 # Load the YOLO model
-#model = YOLO("yolov8m.pt")
+# model = YOLO("yolov8m.pt")
 model = YOLO("customModel(25iulie).pt")
-
 classNames = ["car", "numberplate"]
-def parseData(data):
-    nparr = np.frombuffer(data, np.uint8)
-    image = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+
+def parseData(data1, data2):
+    nparr1 = np.frombuffer(data1, np.uint8)
+    image1 = cv2.imdecode(nparr1, cv2.IMREAD_UNCHANGED)
+
+    nparr2 = np.frombuffer(data2, np.uint8)
+    image2 = cv2.imdecode(nparr2, cv2.IMREAD_UNCHANGED)
 
     # Check if the image has an alpha channel
-    if image.shape[2] == 4:
-        image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
+    if image1.shape[2] == 4:
+        image1 = cv2.cvtColor(image1, cv2.COLOR_BGRA2BGR)
 
-    results = model(image, stream=True)
+    if image2.shape[2] == 4:
+        image2 = cv2.cvtColor(image2, cv2.COLOR_BGRA2BGR)
 
-    # Draw the bounding boxes on the image
-    for result in results:
-        for box in result.boxes:
-            x1, y1, x2, y2 = box.xyxy[0]
+    results1 = model(image1, stream=True)
+    results2 = model(image2, stream=True)
+
+    # Draw the bounding boxes on the images
+    for result1 in results1:
+        for box1 in result1.boxes:
+            x1, y1, x2, y2 = box1.xyxy[0]
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-            confidence = round(float(box.conf[0]), 2)
-            cls = int(box.cls[0])
+            confidence = round(float(box1.conf[0]), 2)
+            cls = int(box1.cls[0])
 
-            cvzone.putTextRect(image, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
-            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0))
+            cvzone.putTextRect(image1, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
+            cv2.rectangle(image1, (x1, y1), (x2, y2), (0, 255, 0))
 
-    # Display the image using OpenCV
-    cv2.imshow("Image", image)
+            if classNames[cls] == 'numberplate':
+                cropped_plate = image1[y1:y2, x1:x2]
+
+                # Convert cropped plate to bytes
+                is_success, buffer = cv2.imencode(".png", cropped_plate)
+                if is_success:
+                    print(buffer)
+
+
+
+    for result2 in results2:
+        for box2 in result2.boxes:
+            x1, y1, x2, y2 = box2.xyxy[0]
+            x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+            confidence = round(float(box2.conf[0]), 2)
+            cls = int(box2.cls[0])
+
+            cvzone.putTextRect(image2, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
+            cv2.rectangle(image2, (x1, y1), (x2, y2), (0, 255, 0))
+
+    # Display the images in separate windows
+    #cv2.imshow("Image1", image1)
+    #cv2.imshow("Image2", image2)
     #cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.destroyAllWindows()
