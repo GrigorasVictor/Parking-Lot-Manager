@@ -35,7 +35,6 @@ def handle_client(client_socket):
                 break
             print(f"Received the second photo")
 
-            #print(f'data1={data1}')
             parseData(data1, data2)
             responseBytes = ("VALID").encode('ASCII')
             client_socket.sendall(responseBytes)

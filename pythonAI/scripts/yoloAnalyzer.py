@@ -7,6 +7,7 @@ import cvzone
 # model = YOLO("yolov8m.pt")
 model = YOLO("customModel(25iulie).pt")
 classNames = ["car", "numberplate"]
+bestCroppedPlate = {}
 
 def parseData(data1, data2):
     nparr1 = np.frombuffer(data1, np.uint8)
@@ -37,16 +38,11 @@ def parseData(data1, data2):
 
             if classNames[cls] == 'numberplate':
                 cropped_plate = image1[y1:y2, x1:x2]
-                cv2.imshow("numberplate", cropped_plate)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+                
 
-                # Convert cropped plate to bytes
-                is_success, buffer = cv2.imencode(".png", cropped_plate)
-                if is_success:
-                    print(buffer)
             else:
                 cvzone.putTextRect(image1, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
+
 
 
 
