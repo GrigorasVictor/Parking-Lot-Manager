@@ -57,6 +57,11 @@ public class TCPClient : MonoBehaviour
     void Connect()
     {
         Debug.Log("Attempting to connect at: " + hostAddress + ":" + port);
+        if (tcpClient != null)
+        {
+            tcpClient.Close();
+            tcpClient = new TcpClient();
+        }
         tcpClient.Connect(hostAddress, port);
         networkStream = tcpClient.GetStream();
     }
