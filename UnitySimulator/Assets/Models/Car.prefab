@@ -344,7 +344,7 @@ MonoBehaviour:
   final: {x: 0, y: 0, z: 0}
   rotationSpeed: 25
   rotationAngle: 90
-  isAllowedToEnter: 2
+  isAllowedToEnter: 1
   state: 0
   carGenerator: {fileID: 0}
 --- !u!114 &7791657130181538296
