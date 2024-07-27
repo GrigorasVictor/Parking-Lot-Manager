@@ -9,6 +9,8 @@ using UnityEngine;
 
 public class TCPClient : MonoBehaviour
 {
+    public float commsPeriod;
+
     NetworkStream networkStream;
     TcpClient tcpClient;
 
@@ -31,7 +33,8 @@ public class TCPClient : MonoBehaviour
     void Update()
     {
         currentTime += Time.deltaTime;
-        if (currentTime >=0.2f)
+        if (currentTime >= commsPeriod)
+        if (currentTime >= commsPeriod)
         {
             currentTime = 0; //reset the timer
             try
@@ -44,7 +47,7 @@ public class TCPClient : MonoBehaviour
 
                 int responseLength = networkStream.Read(responseBytes, 0, responseMaxLength);
                 string responseString = Encoding.UTF8.GetString(responseBytes);
-                Debug.Log(responseString);
+                /*Debug.Log(responseString);*/
             }
             catch(System.Exception e)
             {

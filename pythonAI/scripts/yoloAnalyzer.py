@@ -2,6 +2,7 @@ import numpy as np
 from ultralytics import YOLO
 import cv2
 import cvzone
+from .ocr import parseNumPlate
 
 # Load the YOLO model
 # model = YOLO("yolov8m.pt")
@@ -37,8 +38,10 @@ def parseData(data1, data2):
             cv2.rectangle(image1, (x1, y1), (x2, y2), (0, 255, 0))
 
             if classNames[cls] == 'numberplate':
-                cropped_plate = image1[y1:y2, x1:x2]
-                
+                croppedPlate = image1[y1:y2, x1:x2]
+                isSucces, buffer = cv2.imencode('.png', croppedPlate)
+                numPlateString = parseNumPlate(croppedPlate)
+                print(numPlateString)
 
             else:
                 cvzone.putTextRect(image1, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
