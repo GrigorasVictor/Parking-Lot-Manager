@@ -1,38 +1,41 @@
 import psycopg2
-from psycopg2 import sql
 
-def connect_and_select():
+def check_registration_number_exists(registration_number):
     # Database connection parameters
     conn_params = {
         'dbname': 'postgres',
         'user': 'postgres',
-        'password': '',
+        'password': 'omega1234',
         'host': 'localhost',  # e.g., 'localhost'
         'port': '5432'   # e.g., '5432'
     }
+
     connection = None
-    # SQL query to execute
-    query = sql.SQL("SELECT * FROM parking_management.users;")
     try:
         # Connect to the PostgreSQL database
         connection = psycopg2.connect(**conn_params)
         cursor = connection.cursor()
 
-        # Execute the query
-        cursor.execute(query)
-        results = cursor.fetchall()
-        for row in results:
-            print(row)
+        query = """SELECT 1
+            FROM parking_management.vehicle_registration
+            WHERE registration_number = %s;"""
+
+        cursor.execute(query, (registration_number,))
+        result = cursor.fetchone()
+
+        # Check if the registration number exists
+        return "valid" if result else "invalid"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
 
     finally:
-        if connection:
+        if connection is not None:
             cursor.close()
             connection.close()
             print("Connection closed.")
 
-# Run the function
+
 if __name__ == "__main__":
-    connect_and_select()
+    test_registration_number = 'AB 10 FFV'
+    check_registration_number_exists(test_registration_number)

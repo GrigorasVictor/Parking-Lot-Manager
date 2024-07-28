@@ -35,6 +35,9 @@ def handle_client(client_socket):
                 break
             print(f"Received the second photo")
 
-            parseData(data1, data2)
-            responseBytes = ("VALID").encode('ASCII')
-            client_socket.sendall(responseBytes)
+            try:
+                answer = parseData(data1, data2)
+            except Exception as e:
+                print(f"Error parsing data: No car detected")
+                answer = "missing"
+            client_socket.sendall(answer.encode('utf-8'))

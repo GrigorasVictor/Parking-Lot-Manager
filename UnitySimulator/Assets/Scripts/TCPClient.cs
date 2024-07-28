@@ -10,16 +10,15 @@ using UnityEngine;
 public class TCPClient : MonoBehaviour
 {
     public float commsPeriod;
-
+    public CarGenerator carGenerator;
     NetworkStream networkStream;
     TcpClient tcpClient;
 
-    byte[] imageBytes, responseBytes = new byte[1024];
+    byte[] imageBytes, responseBytes = new byte[32];
     ScreenRecorder screenRecorder;
 
     string hostAddress;
     int port = 9001;
-    int responseMaxLength = 1024;
     float currentTime = 0f;
 
     void Start()
@@ -34,7 +33,6 @@ public class TCPClient : MonoBehaviour
     {
         currentTime += Time.deltaTime;
         if (currentTime >= commsPeriod)
-        if (currentTime >= commsPeriod)
         {
             currentTime = 0; //reset the timer
             try
@@ -45,9 +43,23 @@ public class TCPClient : MonoBehaviour
                 imageBytes = screenRecorder.getTopCameraView();
                 networkStream.Write(imageBytes, 0, imageBytes.Length);
 
-                int responseLength = networkStream.Read(responseBytes, 0, responseMaxLength);
+                for (int i = 0; i < responseBytes.Length; i++)
+                    responseBytes[i] = 0;
+                int responseLength = networkStream.Read(responseBytes, 0, responseBytes.Length);
                 string responseString = Encoding.UTF8.GetString(responseBytes);
-                /*Debug.Log(responseString);*/
+                //Debug.Log(responseString);
+
+                if (responseBytes.Equals(System.Text.Encoding.UTF8.GetBytes("valid")))
+                {
+                    carGenerator.acceptCar();
+                    Debug.Log("Car accepted");
+                }
+                else if(responseBytes.Equals(System.Text.Encoding.UTF8.GetBytes("invalid")))
+                {
+                    carGenerator.declineCar();
+                    Debug.Log("Car declined");
+                }
+
             }
             catch(System.Exception e)
             {

@@ -11,5 +11,4 @@ def parseNumPlate(encodedCroppedPlate):
     returnString = ""
     for (bbox, text, prob) in result:
         returnString += text
-        # print(f'Text: {text}, Probability: {prob}')
-    return returnString
+    return returnString.replace(" ", "")

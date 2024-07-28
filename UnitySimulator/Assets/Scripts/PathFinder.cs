@@ -11,7 +11,7 @@ public class PathFinder : MonoBehaviour
     public float rotationSpeed = 25f, rotationAngle=90f;
     bool isRotated = false;
 
-    public int isAllowedToEnter = 2; // 0 - nu; 1 - inca nu se stie; 2 - da
+    public int isAllowedToEnter = 1; // 0 - nu; 1 - inca nu se stie; 2 - da
     public int state = 0; // 0 - entering; 1 - stationed; 2 - exiting
 
     public CarGenerator carGenerator;

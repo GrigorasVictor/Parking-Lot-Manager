@@ -3,13 +3,13 @@ from ultralytics import YOLO
 import cv2
 import cvzone
 from .ocr import parseNumPlate
+from .sqlGrabber import check_registration_number_exists
 
 # Load the YOLO model
 # model = YOLO("yolov8m.pt")
 model = YOLO("customModel(25iulie).pt")
 classNames = ["car", "numberplate"]
-bestCroppedPlate = {}
-
+answer = "missing"
 def parseData(data1, data2):
     nparr1 = np.frombuffer(data1, np.uint8)
     image1 = cv2.imdecode(nparr1, cv2.IMREAD_UNCHANGED)
@@ -39,16 +39,11 @@ def parseData(data1, data2):
 
             if classNames[cls] == 'numberplate':
                 croppedPlate = image1[y1:y2, x1:x2]
-                isSucces, buffer = cv2.imencode('.png', croppedPlate)
                 numPlateString = parseNumPlate(croppedPlate)
-                print(numPlateString)
-
+                answer= check_registration_number_exists(numPlateString)
+                print(numPlateString + " and it's " + answer)
             else:
                 cvzone.putTextRect(image1, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
-
-
-
-
 
     for result2 in results2:
         for box2 in result2.boxes:
@@ -65,3 +60,5 @@ def parseData(data1, data2):
     #cv2.imshow("Image2", image2)
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
+
+    return answer
