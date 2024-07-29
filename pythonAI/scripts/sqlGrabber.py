@@ -5,7 +5,7 @@ def check_registration_number_exists(registration_number):
     conn_params = {
         'dbname': 'postgres',
         'user': 'postgres',
-        'password': 'omega1234',
+        'password': 'changeme',
         'host': 'localhost',  # e.g., 'localhost'
         'port': '5432'   # e.g., '5432'
     }

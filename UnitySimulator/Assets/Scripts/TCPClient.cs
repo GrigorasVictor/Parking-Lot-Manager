@@ -47,19 +47,20 @@ public class TCPClient : MonoBehaviour
                     responseBytes[i] = 0;
                 int responseLength = networkStream.Read(responseBytes, 0, responseBytes.Length);
                 string responseString = Encoding.UTF8.GetString(responseBytes);
-                //Debug.Log(responseString);
 
-                if (responseBytes.Equals(System.Text.Encoding.UTF8.GetBytes("valid")))
+                /*if (responseBytes[0] == 'v')*/
+                if (areEqual("valid", responseBytes))
                 {
-                    carGenerator.acceptCar();
                     Debug.Log("Car accepted");
+                    carGenerator.acceptCar();
                 }
-                else if(responseBytes.Equals(System.Text.Encoding.UTF8.GetBytes("invalid")))
+                if (areEqual("invalid", responseBytes))
                 {
                     carGenerator.declineCar();
                     Debug.Log("Car declined");
                 }
 
+                /*Debug.Log(responseString);*/
             }
             catch(System.Exception e)
             {
@@ -67,6 +68,13 @@ public class TCPClient : MonoBehaviour
             }
         }
 
+    }
+
+    bool areEqual(string str, byte[] byteArr)
+    {
+        for (int i = 0; i < str.Length; i++) if (byteArr[i] != str[i]) return false;
+
+        return true;
     }
     
     void Connect()

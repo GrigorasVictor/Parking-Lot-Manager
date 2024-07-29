@@ -38,11 +38,13 @@ public class CarGenerator : MonoBehaviour
 
     public void acceptCar()
     {
+        Debug.Log("tring to make the car move");
         cars[currentPosition].GetComponent<PathFinder>().isAllowedToEnter = 2;
     }
 
     public void declineCar()
     {
+        parked[currentPosition] = false;
         cars[currentPosition].GetComponent<PathFinder>().isAllowedToEnter = 0;
     }
 }

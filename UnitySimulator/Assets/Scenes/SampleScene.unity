@@ -2074,6 +2074,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 1880868630294075027, guid: 05abb5c226b3258479725a5b230a8ec6, type: 3}
   parked: 010101000101
+  cars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentPosition: 99999
 --- !u!4 &1362660219
 Transform:
   m_ObjectHideFlags: 0
@@ -3098,6 +3106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   commsPeriod: 0.5
+  carGenerator: {fileID: 1362660218}
 --- !u!4 &1828387350
 Transform:
   m_ObjectHideFlags: 0
