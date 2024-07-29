@@ -5,7 +5,7 @@ def check_registration_number_exists(registration_number):
     conn_params = {
         'dbname': 'postgres',
         'user': 'postgres',
-        'password': 'changeme',
+        'password': 'omega1234',
         'host': 'localhost',  # e.g., 'localhost'
         'port': '5432'   # e.g., '5432'
     }
@@ -16,7 +16,7 @@ def check_registration_number_exists(registration_number):
         connection = psycopg2.connect(**conn_params)
         cursor = connection.cursor()
 
-        query = """SELECT 1
+        query = """SELECT user_id
             FROM parking_management.vehicle_registration
             WHERE registration_number = %s;"""
 
@@ -24,7 +24,7 @@ def check_registration_number_exists(registration_number):
         result = cursor.fetchone()
 
         # Check if the registration number exists
-        return "valid" if result else "invalid"
+        return str(result[0]) if result else None
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
@@ -37,5 +37,5 @@ def check_registration_number_exists(registration_number):
 
 
 if __name__ == "__main__":
-    test_registration_number = 'AB 10 FFV'
-    check_registration_number_exists(test_registration_number)
+    test_registration_number = 'AB10FFV'
+    print(check_registration_number_exists(test_registration_number))

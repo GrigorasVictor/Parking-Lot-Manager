@@ -1,21 +1,20 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using TMPro;
 
 public class TCPClient : MonoBehaviour
 {
     public float commsPeriod;
     public CarGenerator carGenerator;
-    NetworkStream networkStream;
-    TcpClient tcpClient;
+    public TMP_Text textDebugUI;
 
-    byte[] imageBytes, responseBytes = new byte[32];
-    ScreenRecorder screenRecorder;
+    private NetworkStream networkStream;
+    private TcpClient tcpClient;
+    private string text;
+
+    private byte[] imageBytes, responseBytes = new byte[32];
+    private ScreenRecorder screenRecorder;
 
     string hostAddress;
     int port = 9001;
@@ -26,6 +25,9 @@ public class TCPClient : MonoBehaviour
         screenRecorder = GameObject.Find("ScreenRecorder").GetComponent<ScreenRecorder>();
         tcpClient = new TcpClient();
         hostAddress = TCPServer.GetLocalIpV4Address();
+
+        text = "Attempting to connect at: " + hostAddress + ":" + port;
+        textDebugUI.text = text;
         Connect();
     }
 
@@ -47,32 +49,35 @@ public class TCPClient : MonoBehaviour
                     responseBytes[i] = 0;
                 int responseLength = networkStream.Read(responseBytes, 0, responseBytes.Length);
                 string responseString = Encoding.UTF8.GetString(responseBytes);
-
-                /*if (responseBytes[0] == 'v')*/
+              
                 if (areEqual("valid", responseBytes))
                 {
                     Debug.Log("Car accepted");
+                    text = "Car accepted";
                     carGenerator.acceptCar();
                 }
                 if (areEqual("invalid", responseBytes))
                 {
-                    carGenerator.declineCar();
                     Debug.Log("Car declined");
+                    text = "Car declined";
+                    carGenerator.declineCar();
                 }
-
-                /*Debug.Log(responseString);*/
             }
             catch(System.Exception e)
             {
+                Debug.Log(e);
                 Connect();
             }
+            textDebugUI.text = text;
         }
 
     }
 
     bool areEqual(string str, byte[] byteArr)
     {
-        for (int i = 0; i < str.Length; i++) if (byteArr[i] != str[i]) return false;
+        for (int i = 0; i < str.Length; i++) 
+            if (byteArr[i] != str[i]) 
+                return false;
 
         return true;
     }

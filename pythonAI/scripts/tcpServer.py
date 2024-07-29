@@ -1,5 +1,6 @@
 import socket
 from .yoloAnalyzer import parseData
+
 def start_tcp_server(host, port):
     # Create a socket object
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,8 +19,7 @@ def start_tcp_server(host, port):
             # Handle the connection
             handle_client(client_socket)
         except Exception as e:
-            print(f"Error accepting client connection: {e}")
-
+            print(f"Error accepting client connection: {str(e)}")
 
 def handle_client(client_socket):
     with client_socket:
@@ -30,14 +30,15 @@ def handle_client(client_socket):
                 break
             print(f"Received the first photo")
 
-            data2= client_socket.recv(2000000)
+            data2 = client_socket.recv(2000000)
             if not data2:
                 break
             print(f"Received the second photo")
 
             try:
                 answer = parseData(data1, data2)
+                print("Sending to client: " + answer)
+                client_socket.sendall(answer.encode('utf-8'))
             except Exception as e:
-                print(f"Error parsing data: No car detected")
-                answer = "missing"
-            client_socket.sendall(answer.encode('utf-8'))
+                print(f"Error parsing data: {e}")
+
