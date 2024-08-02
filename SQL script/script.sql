@@ -1,12 +1,13 @@
 -- Create Schema
+DROP SCHEMA IF EXISTS parking_management CASCADE;
 CREATE SCHEMA IF NOT EXISTS parking_management;
 
 -- Drop Tables if they exist
 DROP TABLE IF EXISTS parking_management.user_subscriptions;
 DROP TABLE IF EXISTS parking_management.vehicle_registration;
-DROP TABLE IF EXISTS parking_management.users;
 DROP TABLE IF EXISTS parking_management.transaction_records;
 DROP TABLE IF EXISTS parking_management.parking_records;
+DROP TABLE IF EXISTS parking_management.users;
 
 -- Create Tables
 
@@ -21,6 +22,7 @@ CREATE TABLE parking_management.user_subscriptions (
 -- Users Table
 CREATE TABLE parking_management.users (
     user_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     phone_number VARCHAR(10) NOT NULL
@@ -52,20 +54,20 @@ CREATE TABLE parking_management.parking_records (
 );
 
 -- Insert sample data into users table
-INSERT INTO parking_management.users (email, password, phone_number)
+INSERT INTO parking_management.users (full_name, email, password, phone_number)
 VALUES
-('user1@example.com', 'password1', '1234567890'),
-('user2@example.com', 'password2', '1234567891'),
-('user3@example.com', 'password3', '1234567892'),
-('user4@example.com', 'password4', '1234567893'),
-('user5@example.com', 'password5', '1234567894'),
-('user6@example.com', 'password6', '1234567895'),
-('user7@example.com', 'password7', '1234567896'),
-('user8@example.com', 'password8', '1234567897'),
-('user9@example.com', 'password9', '1234567898'),
-('user10@example.com', 'password10', '1234567899'),
-('user11@example.com', 'password11', '1234567800'),
-('user12@example.com', 'password12', '1234567801');
+('John Doe', 'user1@example.com', 'password1', '1234567890'),
+('Jane Smith', 'user2@example.com', 'password2', '1234567891'),
+('Robert Brown', 'user3@example.com', 'password3', '1234567892'),
+('Emily Davis', 'user4@example.com', 'password4', '1234567893'),
+('Michael Wilson', 'user5@example.com', 'password5', '1234567894'),
+('Sarah Johnson', 'user6@example.com', 'password6', '1234567895'),
+('William Lee', 'user7@example.com', 'password7', '1234567896'),
+('Jessica White', 'user8@example.com', 'password8', '1234567897'),
+('David Harris', 'user9@example.com', 'password9', '1234567898'),
+('Susan Martin', 'user10@example.com', 'password10', '1234567899'),
+('Daniel Thompson', 'user11@example.com', 'password11', '1234567800'),
+('Laura Garcia', 'user12@example.com', 'password12', '1234567801');
 
 -- Insert vehicle registration numbers
 INSERT INTO parking_management.vehicle_registration (user_id, registration_number)

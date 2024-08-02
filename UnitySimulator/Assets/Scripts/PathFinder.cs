@@ -14,6 +14,7 @@ public class PathFinder : MonoBehaviour
     public int isAllowedToEnter = 1; // 0 - nu; 1 - inca nu se stie; 2 - da
     public int state = 0; // 0 - entering; 1 - stationed; 2 - exiting
 
+    public int index = NumberPlateRoullete.index;
     public CarGenerator carGenerator;
 
     void Start()
@@ -111,6 +112,7 @@ public class PathFinder : MonoBehaviour
             else
             {
                 carGenerator.parked[id] = false;
+                NumberPlateRoullete.isTaken[index] = false;
                 Destroy(this.gameObject);
             }
         }

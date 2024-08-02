@@ -4,6 +4,7 @@ import cv2
 import cvzone
 from .ocr import parseNumPlate
 from .sqlGrabber import check_registration_number_exists
+import traceback
 
 # Load the YOLO model
 # model = YOLO("yolov8m.pt")
@@ -44,7 +45,8 @@ def parseData(data1, data2):
                 #Getting information from the db
                 getId= check_registration_number_exists(numPlateString)
                 answer = "valid" if getId else "invalid"
-                print_in_yellow(numPlateString + " and it's " + answer + "with the ID: " + getId)
+                if answer == "valid":
+                    print_in_yellow(numPlateString + " and it's " + answer + " with the ID: " + getId)
             else:
                 cvzone.putTextRect(image1, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
 
@@ -58,12 +60,10 @@ def parseData(data1, data2):
             cvzone.putTextRect(image2, f'Confidence: {confidence} {classNames[cls]}', (x1, y1), scale=1, thickness=1)
             cv2.rectangle(image2, (x1, y1), (x2, y2), (0, 255, 0))
 
-    # Display the images in separate windows
     #cv2.imshow("Image1", image1)
     #cv2.imshow("Image2", image2)
-    #cv2.waitKey(0)
+    #cv2.waitKey(1000)
     #cv2.destroyAllWindows()
-
     return answer
 
 def print_in_yellow(text):
