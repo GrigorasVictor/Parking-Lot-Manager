@@ -26,12 +26,12 @@ public class ParkingRecordsController {
         repo.deleteById(id);
     }
 
-    @GetMapping("/getParkingRecords")
+    @GetMapping("/parkingRecords")
     public List<ParkingRecord> getAllParkingRecords(){
         return repo.findAll();
     }
 
-    @GetMapping("/getParkingRecord/{id}")
+    @GetMapping("/parkingRecord/{id}")
     public Optional<ParkingRecord> getParkingRecord(@PathVariable Integer id){
         System.out.println(id);
         return repo.findById(id);
