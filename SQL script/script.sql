@@ -30,9 +30,9 @@ CREATE TABLE parking_management.users (
 
 -- Vehicle Registration Table
 CREATE TABLE parking_management.vehicle_registration (
+    registration_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES parking_management.users(user_id),
-    registration_number VARCHAR(7),
-    PRIMARY KEY (user_id, registration_number)
+    registration_number VARCHAR(7)
 );
 
 -- Transaction Records Table

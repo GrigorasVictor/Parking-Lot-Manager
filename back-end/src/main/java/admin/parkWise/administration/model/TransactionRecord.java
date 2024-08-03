@@ -23,7 +23,7 @@ public class TransactionRecord {
 
     @Column(name = "user_id", nullable = false)
     @JsonProperty("user_id")
-    private String userId;
+    private int userId;
 
     @Column(name = "transaction_date", nullable = false)
     @JsonProperty("transaction_date")
@@ -31,7 +31,7 @@ public class TransactionRecord {
 
     @Column(name = "amount", nullable = false)
     @JsonProperty("amount")
-    private float amount;
+    private double amount;
 
     @Column(name = "description", nullable = false)
     @JsonProperty("description")
