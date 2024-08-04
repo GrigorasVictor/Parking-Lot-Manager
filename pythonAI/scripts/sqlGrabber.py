@@ -1,14 +1,20 @@
 import psycopg2
+import json
+
+FILE_PATH = 'db.localconfig'
 
 def check_registration_number_exists(registration_number):
     # Database connection parameters
-    conn_params = {
-        'dbname': 'postgres',
-        'user': 'postgres',
-        'password': 'changeme',
-        'host': 'localhost',  # e.g., 'localhost'
-        'port': '5432'   # e.g., '5432'
-    }
+    with open(FILE_PATH, 'r') as file:
+        conn_params = json.load(file)
+
+    # = {
+    #     'dbname': 'postgres',
+    #     'user': 'postgres',
+    #     'password': 'changeme',
+    #     'host': 'localhost',  # e.g., 'localhost'
+    #     'port': '5432'   # e.g., '5432'
+    # }
 
     connection = None
     try:

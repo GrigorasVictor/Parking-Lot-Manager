@@ -50,6 +50,7 @@ public class PathFinder : MonoBehaviour
         switch(isAllowedToEnter)
         {
             case 0:
+                setPlateNumberUsageToNone();
                 Destroy(this.gameObject);
                 break;
             case 2:
@@ -109,6 +110,7 @@ public class PathFinder : MonoBehaviour
             else
             {
                 carGenerator.parked[id] = false;
+                setPlateNumberUsageToNone();
                 Destroy(this.gameObject);
             }
         }
@@ -140,5 +142,12 @@ public class PathFinder : MonoBehaviour
                 isRotated = false;
             }
         }
+    }
+
+    private void setPlateNumberUsageToNone()
+    {
+        string numberPlateNumber = GetComponent<NumberPlateRoullete>().backPlate.text;
+        Debug.Log(numberPlateNumber);
+        NumberPlateRoullete.existsDict[numberPlateNumber] = false;
     }
 }

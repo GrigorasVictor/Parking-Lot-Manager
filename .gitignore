@@ -15,3 +15,4 @@
 /PythonAI/*.png
 /PythonAI/scripts/__pycache__
 /PythonAI/yoloAssets/runs
+*.localconfig
