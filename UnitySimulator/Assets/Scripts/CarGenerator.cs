@@ -6,7 +6,8 @@ public class CarGenerator : MonoBehaviour
 {
     public GameObject carPrefab;
     public bool[] parked = new bool[6];
-    private GameObject[] cars = new GameObject[6];
+    public GameObject[] cars = new GameObject[6];
+    public int currentPosition = 99999;
 
     void Start()
     {
@@ -23,6 +24,7 @@ public class CarGenerator : MonoBehaviour
 
             if (Input.GetKeyDown(input) && !parked[index])
             {
+                currentPosition = index;
                 cars[index] = Instantiate(carPrefab);
 
                 PathFinder curCarPathFinder = cars[index].GetComponent<PathFinder>();
@@ -32,5 +34,16 @@ public class CarGenerator : MonoBehaviour
                 parked[index] = true;
             }
         }
+    }
+
+    public void acceptCar()
+    {
+        cars[currentPosition].GetComponent<PathFinder>().isAllowedToEnter = 2;
+    }
+
+    public void declineCar()
+    {
+        parked[currentPosition] = false;
+        cars[currentPosition].GetComponent<PathFinder>().isAllowedToEnter = 0;
     }
 }

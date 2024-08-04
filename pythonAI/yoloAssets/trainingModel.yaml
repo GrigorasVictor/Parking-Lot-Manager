@@ -1,0 +1,7 @@
+target: D:/Scoala/Parking-Lot-Project/Parking-Lot-Manager/PythonAI/yoloAssets
+train: D:/Scoala/Parking-Lot-Project/Parking-Lot-Manager/PythonAI/yoloAssets/train
+val: D:/Scoala/Parking-Lot-Project/Parking-Lot-Manager/PythonAI/yoloAssets/val
+
+
+nc: 2
+names: [car, numplate]

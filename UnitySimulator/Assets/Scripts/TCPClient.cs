@@ -1,66 +1,146 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using TMPro;
+using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
 
 public class TCPClient : MonoBehaviour
 {
-    string curString = "", curKey = "";
+    public float commsPeriod;
+    public CarGenerator carGenerator;
+    public TMP_Text textDebugUI;
 
-    NetworkStream networkStream;
+    private NetworkStream networkStream;
+    private TcpClient tcpClient;
+    private string text;
 
-    byte[] imageBytes;
-    ScreenRecorder screenRecorder;
+    private byte[] imageBytes, responseBytes = new byte[32];
+    private ScreenRecorder screenRecorder;
 
-    int responseMaxLength = 1024;
-    byte[] responseBytes = new byte[1024];
+    string hostAddress;
+    int port = 9001;
+    float currentTime = 0f;
+
+    bool isFrontImgTaken = false;
 
     void Start()
     {
         screenRecorder = GameObject.Find("ScreenRecorder").GetComponent<ScreenRecorder>();
+        tcpClient = new TcpClient();
+        hostAddress = TCPServer.GetLocalIpV4Address();
 
-        TcpClient tcpClient = new TcpClient();
-        string hostAddress = TCPServer.GetLocalIpV4Address();
-        Debug.Log(hostAddress);
+        text = "Attempting to connect at: " + hostAddress + ":" + port;
+        textDebugUI.text = text;
+        Connect();
 
-        /*hostAddress = IPAddress.Parse("192.168.1.130").ToString();*/
-
-        tcpClient.Connect(hostAddress, 9001);
-
-        networkStream = tcpClient.GetStream();
+        imageBytes = screenRecorder.getFrontCameraView();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        currentTime += Time.deltaTime;
+
+        if(currentTime >= commsPeriod && !isFrontImgTaken) 
         {
-            curString += "Hello World!\n";
-
             imageBytes = screenRecorder.getFrontCameraView();
-            networkStream.Write(imageBytes, 0, imageBytes.Length);
-
-            imageBytes = screenRecorder.getTopCameraView();
-            networkStream.Write(imageBytes, 0, imageBytes.Length);
-
-            int responseLength = networkStream.Read(responseBytes, 0, responseMaxLength);
-
-            /*for(int i = 0; i < responseLength; i++)
-                Debug.Log(responseBytes[i]);*/
-
-            string responseString = Encoding.UTF8.GetString(responseBytes);
-            Debug.Log(responseString);
+            isFrontImgTaken = true;
         }
 
-        /*if (curString != "")
+        if (currentTime >= commsPeriod * 2)
         {
-            Debug.Log(curString);
-            byte[] bytes = Encoding.UTF8.GetBytes(curString);
-            
-            networkStream.Write(bytes, 0, bytes.Length);
-        }*/
+            isFrontImgTaken = false;
+            currentTime = 0; //reset the timer
+            try
+            {
+                imageBytes = screenRecorder.getTopCameraView();
+                StartCoroutine(TcpIo());
+
+                /*if (areEqual("valid", responseBytes))
+                {
+                    Debug.Log("Car accepted");
+                    *//*text = "Car accepted";*//*
+                    carGenerator.acceptCar();
+                }
+                if (areEqual("invalid", responseBytes))
+                {
+                    Debug.Log("Car declined");
+                    *//*text = "Car declined";*//*
+                    carGenerator.declineCar();
+                }*/
+            }
+            catch(System.Exception e)
+            {
+                Debug.Log(e);
+                Connect();
+            }
+            textDebugUI.text = text;
+        }
+    }
+
+    IEnumerator TcpIo()
+    {
+        new Thread(() => {
+            /*imageBytes = screenRecorder.getFrontCameraView();*/
+            networkStream.Write(imageBytes, 0, imageBytes.Length);
+        
+            /*imageBytes = screenRecorder.getTopCameraView();*/
+            networkStream.Write(imageBytes, 0, imageBytes.Length);
+        }).Start();
+
+
+        for (int i = 0; i < 7; i++) responseBytes[i] = 0;
+
+        /*int responseLength = networkStream.Read(responseBytes, 0, responseBytes.Length);*/
+        /*await Task.Run(ReadResp);*/
+
+        /*new Thread(() => {*/
+            networkStream.Read(responseBytes, 0, responseBytes.Length);
+        /*}).Start();*/
+
+        if (areEqual("valid", responseBytes))
+        {
+            Debug.Log("Car accepted");
+            text = "Car accepted";
+            carGenerator.acceptCar();
+        }
+        if (areEqual("invalid", responseBytes))
+        {
+            Debug.Log("Car declined");
+            text = "Car declined";
+            carGenerator.declineCar();
+        }
+
+        yield break;
+    }
+
+    /*async Task<byte[]> ReadResp()
+    {
+        networkStream.Read(responseBytes, 0, responseBytes.Length);
+        return responseBytes;
+    }*/
+
+    bool areEqual(string str, byte[] byteArr)
+    {
+        for (int i = 0; i < str.Length; i++) 
+            if (byteArr[i] != str[i]) 
+                return false;
+
+        return true;
+    }
+    
+    void Connect()
+    {
+        Debug.Log("Attempting to connect at: " + hostAddress + ":" + port);
+        if (tcpClient != null)
+        {
+            tcpClient.Close();
+            tcpClient = new TcpClient();
+        }
+        tcpClient.Connect(hostAddress, port);
+        networkStream = tcpClient.GetStream();
     }
 }

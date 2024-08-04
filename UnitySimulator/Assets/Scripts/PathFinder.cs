@@ -11,9 +11,8 @@ public class PathFinder : MonoBehaviour
     public float rotationSpeed = 25f, rotationAngle=90f;
     bool isRotated = false;
 
-    public int isAllowedToEnter = 2; // 0 - nu; 1 - inca nu se stie; 2 - da
+    public int isAllowedToEnter = 1; // 0 - nu; 1 - inca nu se stie; 2 - da
     public int state = 0; // 0 - entering; 1 - stationed; 2 - exiting
-
     public CarGenerator carGenerator;
 
     void Start()
@@ -51,6 +50,7 @@ public class PathFinder : MonoBehaviour
         switch(isAllowedToEnter)
         {
             case 0:
+                setPlateNumberUsageToNone();
                 Destroy(this.gameObject);
                 break;
             case 2:
@@ -65,7 +65,6 @@ public class PathFinder : MonoBehaviour
     {
         if (Input.GetKeyDown(("" + (id + 1))))
         {
-            Debug.Log("apasat");
             state = 2;
             start = this.transform.position;
             final = positions[futurePosition % 3].position;
@@ -111,6 +110,7 @@ public class PathFinder : MonoBehaviour
             else
             {
                 carGenerator.parked[id] = false;
+                setPlateNumberUsageToNone();
                 Destroy(this.gameObject);
             }
         }
@@ -142,5 +142,12 @@ public class PathFinder : MonoBehaviour
                 isRotated = false;
             }
         }
+    }
+
+    private void setPlateNumberUsageToNone()
+    {
+        string numberPlateNumber = GetComponent<NumberPlateRoullete>().backPlate.text;
+        Debug.Log(numberPlateNumber);
+        NumberPlateRoullete.existsDict[numberPlateNumber] = false;
     }
 }

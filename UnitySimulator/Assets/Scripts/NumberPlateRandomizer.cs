@@ -12,7 +12,6 @@ public class NumberPlateRandomizer : MonoBehaviour
 
     private string numarInmatriculare = string.Empty;
 
-    // Start is called before the first frame update
     void Start()
     {
         numarInmatriculare += judete[UnityEngine.Random.Range(1, judete.Length)] + " " + // Judet
@@ -24,6 +23,4 @@ public class NumberPlateRandomizer : MonoBehaviour
         Debug.Log(numarInmatriculare);
 
     }
-
-
 }
