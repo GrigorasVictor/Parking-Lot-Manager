@@ -16,3 +16,4 @@
 /PythonAI/scripts/__pycache__
 /PythonAI/yoloAssets/runs
 *.localconfig
+/back-end/src/main/resources/application.properties
