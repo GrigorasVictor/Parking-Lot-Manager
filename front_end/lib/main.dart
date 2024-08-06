@@ -47,12 +47,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final String content = myGetRequest();
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
+  }
+
+  Future<String> myGetRequest() async {
+    final response = await http.get(Uri.parse('http://localhost:8080/vehicleRegistration'));
+
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   @override
@@ -66,8 +75,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            FutureBuilder<String>(
+              future: myGetRequest(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (snapshot.hasData) {
+                  return Text('Result: ${snapshot.data}');
+                } else {
+                  return Text('No data found');
+                }
+              },
+            ),
             const Text(
-              content
+              'content'
             ),
             Text(
               '$_counter',
