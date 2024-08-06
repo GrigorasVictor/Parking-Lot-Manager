@@ -6,20 +6,6 @@ void main() {
   runApp(const MyApp());
 }
 
-String myGetRequest() {
-    String rspString = "Hi, Dan!";
-
-    final response = http.get(Uri.parse('http://localhost:8080/vehicleRegistration'));
-
-    response.then((data){
-      rspString = data.body;
-    }, onError: (e) {
-      print(e);
-    });
-
-    return rspString;
-  }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   
@@ -55,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String> myGetRequest() async {
-    final response = await http.get(Uri.parse('http://localhost:8080/vehicleRegistration'));
+    final response = await http.get(Uri.http('localhost:8080', 'vehicleRegistration'));
 
     if (response.statusCode == 200) {
       return response.body;
@@ -80,10 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
                   return Text('Result: ${snapshot.data}');
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
                 } else {
                   return Text('No data found');
                 }
