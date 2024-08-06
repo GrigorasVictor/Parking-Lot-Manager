@@ -1,21 +1,9 @@
 package admin.parkWise.administration.controller;
-
-import admin.parkWise.administration.model.User;
-import admin.parkWise.administration.model.VehicleRegistration;
-import admin.parkWise.administration.repository.VehicleRegistrationRepo;
-import jakarta.servlet.http.HttpServletResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.net.ssl.SSLSession;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
