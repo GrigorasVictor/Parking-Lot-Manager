@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/navbar.dart';
 import 'widgets/userShower.dart';
 
@@ -43,7 +44,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            UserShower(1),
+            CustomCardIcon(
+              icon: Image.asset('lib/assets/icons/account.png'),
+              title: 'Account',
+              height: 150,
+              width: 125,
+              onTap: () => print('apasat'),
+            ),
           ],
         ),
       ),
