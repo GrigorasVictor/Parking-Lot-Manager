@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/model/user.dart';
 import 'package:front_end/logic/httpReq.dart';
+import 'card.dart';
 
 FutureBuilder<User> UserShower(int userNo) {
+  const double cardWidth = 500;
+  const double cardHeight = 75;
+
   return FutureBuilder<User>(
     future: getUser(userNo),
     builder: (context, snapshot) {
@@ -12,34 +16,25 @@ FutureBuilder<User> UserShower(int userNo) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ShaderMask(shaderCallback: (bounds) =>
-              const LinearGradient(
-                colors: [
-                  Colors.green,
-                  Colors.black,
-                ]
-              ).createShader(bounds),
-              child: Text(
-                  'Name: ${snapshot.data?.full_name}',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+            CustomCard(
+              title: 'Name',
+              content: snapshot.data?.full_name ?? 'name not found',
+              width: cardWidth,
+              height: cardHeight,
             ),
-            Text(
-              'Email: ${snapshot.data?.email}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold
-              ),
+            CustomCard(
+              title: 'Email',
+              content: snapshot.data?.email ?? 'email not found',
+              width: cardWidth,
+              height: cardHeight,
             ),
-            Text(
-              'Phone number: ${snapshot.data?.phone_number}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold
-              ),
+            CustomCard(
+              title: 'Phone Number',
+              content: snapshot.data?.phone_number ?? 'phone number not found',
+              width: cardWidth,
+              height: cardHeight,
             ),
+            // TODO: Also show the number plates in a separate column
           ],
         );
       } else if (snapshot.hasError) {

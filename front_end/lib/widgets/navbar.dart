@@ -1,4 +1,3 @@
-// TODO: NavBar *by Victor*
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -25,7 +24,9 @@ class _Navbar extends State<Navbar> {
         activeColor: const Color(itemColorHighlighted),
         tabBackgroundColor: const Color(itemColorHighlightedTransparent),
         padding: const EdgeInsets.all(paddingValue),
-        onTabChange: (index) {print(index);}, // TODO: functions
+        onTabChange: (index) {
+          print(index);
+        }, // TODO: functions
         tabs: const [
           GButton(
             icon: Icons.home,
