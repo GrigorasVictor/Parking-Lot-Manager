@@ -31,4 +31,5 @@ class User {
       _ => throw const FormatException('Failed to load user.'),
     };
   }
+  //TO DO: User.toJson
 }

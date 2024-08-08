@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/widgets/navbar.dart';
 import 'widgets/userShower.dart';
 
 void main() {
@@ -36,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Navbar(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
