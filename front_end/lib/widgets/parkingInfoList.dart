@@ -10,11 +10,17 @@ class ParkingInfoList extends StatefulWidget {
     required this.parkingId,
     this.parkingSpot,
     required this.onTap,
+    required this.initialHours,
+    required this.initialMinutes,
+    required this.initialSeconds,
   }) : super(key: key);
 
   final String parkingId;
   final String? parkingSpot;
   final VoidCallback onTap;
+  final int initialHours;
+  final int initialMinutes;
+  final int initialSeconds;
 
   @override
   _ParkingInfoListState createState() => _ParkingInfoListState();
@@ -31,11 +37,19 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
     super.initState();
     _formattedTime = '00:00:00';
     _formattedDate = DateFormat('MMM d').format(DateTime.now());
-    _startTimer(); // Automatically start the timer when the widget is initialized
+    _startTimerWithInitialTime();
   }
 
-  void _startTimer() {
-    _timer?.cancel(); // Cancel any existing timer
+  void _startTimerWithInitialTime() {
+    final int initialSeconds = widget.initialHours * 3600 +
+        widget.initialMinutes * 60 +
+        widget.initialSeconds;
+    _startTimer(initialSeconds: initialSeconds);
+  }
+
+  void _startTimer({int initialSeconds = 0}) {
+    _timer?.cancel();
+    _elapsedSeconds = initialSeconds;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedSeconds++;
@@ -49,15 +63,6 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
 
   void _stopTimer() {
     _timer?.cancel();
-  }
-
-  void _resetTimer() {
-    _stopTimer();
-    setState(() {
-      _elapsedSeconds = 0;
-      _formattedTime = '00:00:00';
-      _formattedDate = DateFormat('MMM d').format(DateTime.now());
-    });
   }
 
   @override
