@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/navbar.dart';
+import 'package:front_end/widgets/parkingInfoList.dart';
 import 'widgets/userShower.dart';
 
 void main() {
@@ -51,6 +52,10 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 125,
               onTap: () => print('apasat'),
             ),
+            ParkingInfoList( 
+                parkingId: '3',
+                parkingSpot: '4',
+                onTap: () => print('Apasat'))
           ],
         ),
       ),
