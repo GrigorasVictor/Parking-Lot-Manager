@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'constants.dart';
 
 class CustomCardIcon extends StatefulWidget {
   const CustomCardIcon({
@@ -37,7 +38,7 @@ class _CustomCardIcon extends State<CustomCardIcon> {
               elevation: 8,
               clipBehavior: Clip.hardEdge,
               child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
+                splashColor: Color(itemColorHighlightedTransparent),
                 onTap: () {
                   widget.onTap();
                 },

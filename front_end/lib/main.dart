@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/widgets/cardIcon.dart';
-import 'package:front_end/widgets/navbar.dart';
-import 'package:front_end/widgets/parkingInfoList.dart';
-import 'widgets/userShower.dart';
+import 'package:front_end/widgets/parkingInfoList.dart'; // Make sure this import is correct
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +34,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // bottomNavigationBar: const Navbar(),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
@@ -50,12 +47,13 @@ class _MyHomePageState extends State<MyHomePage> {
               title: 'Account',
               height: 150,
               width: 125,
-              onTap: () => print('apasat'),
+              onTap: () => print('Account tapped'),
             ),
-            ParkingInfoList( 
-                parkingId: '3',
-                parkingSpot: '4',
-                onTap: () => print('Apasat'))
+            ParkingInfoList(
+              parkingId: '3',
+              parkingSpot: '4',
+              onTap: () => print('ParkingInfoList tapped'),
+            ),
           ],
         ),
       ),
