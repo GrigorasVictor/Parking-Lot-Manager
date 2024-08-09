@@ -26,10 +26,7 @@ class _CustomCardIcon extends State<CustomCardIcon> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector( 
-        onTap: widget.onTap, // TODO optional : probabil animatie sau ceva sa arate frumos cand apas
-        child:
-      Container(
+    return Container(
       margin: const EdgeInsets.all(20),
       child: Center(
         child: Column(
@@ -38,29 +35,36 @@ class _CustomCardIcon extends State<CustomCardIcon> {
           children: <Widget>[
             Card(
               elevation: 8,
-              child: SizedBox(
-                  width: widget.width ?? 200,
-                  height: widget.height ?? 100,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: iconSize,
-                        width: iconSize,
-                        child: widget.icon,
-                      ),
-                      Text(widget.title ?? 'error',
-                          style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700)),
-                    ],
-                  )),
+              clipBehavior: Clip.hardEdge,
+              child: InkWell(
+                splashColor: Colors.blue.withAlpha(30),
+                onTap: () {
+                  widget.onTap();
+                },
+                child: SizedBox(
+                    width: widget.width ?? 200,
+                    height: widget.height ?? 100,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: iconSize,
+                          width: iconSize,
+                          child: widget.icon,
+                        ),
+                        Text(widget.title ?? 'error',
+                            style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700)),
+                      ],
+                    )),
+              ),
             ),
           ],
         ),
       ),
-    ));
+    );
   }
 }
