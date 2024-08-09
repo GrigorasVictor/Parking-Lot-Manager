@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'constants.dart'; // Ensure this is the correct path
 import 'package:intl/intl.dart';
 import 'dart:async';
 
 class ParkingInfoList extends StatefulWidget {
-  const ParkingInfoList({
+  ParkingInfoList({
     Key? key,
     required this.parkingId,
     this.parkingSpot,
     required this.onTap,
-    required this.initialHours,
-    required this.initialMinutes,
-    required this.initialSeconds,
+    this.initialHours,
+    this.initialMinutes,
+    this.initialSeconds,
   }) : super(key: key);
 
   final String parkingId;
-  final String? parkingSpot;
+  String? parkingSpot;
   final VoidCallback onTap;
-  final int initialHours;
-  final int initialMinutes;
-  final int initialSeconds;
+  final int? initialHours;
+  final int? initialMinutes;
+  final int? initialSeconds;
 
   @override
   _ParkingInfoListState createState() => _ParkingInfoListState();
@@ -31,19 +32,36 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
   int _elapsedSeconds = 0;
   late String _formattedTime;
   late String _formattedDate;
+  bool _isLoading = true;
+  bool _isActive = false;
 
   @override
   void initState() {
     super.initState();
-    _formattedTime = '00:00:00';
     _formattedDate = DateFormat('MMM d').format(DateTime.now());
-    _startTimerWithInitialTime();
+    _formattedTime = 'Loading...';
+
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        if (widget.initialHours == -1 ||
+            widget.initialMinutes == -1 ||
+            widget.initialSeconds == -1) {
+          _formattedTime = 'Invalid';
+          widget.parkingSpot = '-'; // Update parkingSpot when invalid
+          _isActive = false;
+        } else {
+          _isActive = true;
+          _startTimerWithInitialTime();
+        }
+        _isLoading = false;
+      });
+    });
   }
 
   void _startTimerWithInitialTime() {
-    final int initialSeconds = widget.initialHours * 3600 +
-        widget.initialMinutes * 60 +
-        widget.initialSeconds;
+    final int initialSeconds = (widget.initialHours ?? 0) * 3600 +
+        (widget.initialMinutes ?? 0) * 60 +
+        (widget.initialSeconds ?? 0);
     _startTimer(initialSeconds: initialSeconds);
   }
 
@@ -56,107 +74,129 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
         final hours = _elapsedSeconds ~/ 3600;
         final minutes = (_elapsedSeconds % 3600) ~/ 60;
         final seconds = _elapsedSeconds % 60;
-        _formattedTime = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+        _formattedTime =
+            '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
       });
     });
   }
 
-  void _stopTimer() {
-    _timer?.cancel();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: Container(
-        margin: const EdgeInsets.all(20),
-        child: Center(
-          child: Card(
-            elevation: 8,
-            child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 50,
+    return Container(
+      color: Colors.transparent, // Transparent background for the container
+      child: Stack(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              padding: EdgeInsets.zero, // Ensure no padding
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    child: SvgPicture.asset(
+                      _isActive
+                          ? 'lib/assets/icons/active.svg'
+                          : 'lib/assets/icons/inactive.svg',
                       width: 50,
-                      child: SvgPicture.asset(
-                        'lib/assets/icons/active.svg',
-                        width: 50,
-                        height: 50,
-                      ),
+                      height: 50,
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AutoSizeText(
-                            'Parking Lot #${widget.parkingId}',
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            maxLines: 1,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AutoSizeText(
+                          'Parking Lot #${widget.parkingId}',
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
                           ),
-                          AutoSizeText(
-                            'Parking Spot: ${widget.parkingSpot ?? 'N/A'}',
-                            style: const TextStyle(
-                              color: Color(0xFFADBBB9),
-                              fontFamily: 'Inter',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            maxLines: 1,
+                          maxLines: 1,
+                        ),
+                        AutoSizeText(
+                          'Parking Spot: ${widget.parkingSpot ?? '-'}',
+                          style: const TextStyle(
+                            color: Color(0xFFADBBB9),
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
                           ),
-                        ],
-                      ),
+                          maxLines: 1,
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 15),
-                    SizedBox(
+                  ),
+                  const SizedBox(width: 15),
+                  // Added padding on the right side
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: SizedBox(
                       width: 125,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          AutoSizeText(
-                            _formattedTime,
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            maxLines: 1,
-                            textAlign: TextAlign.right,
-                          ),
-                          AutoSizeText(
-                            _formattedDate,
-                            style: const TextStyle(
-                              color: Color(0xFFADBBB9),
-                              fontFamily: 'Inter',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            maxLines: 1,
-                            textAlign: TextAlign.right,
-                          ),
-                        ],
+                        children: _isLoading
+                            ? [
+                                CircularProgressIndicator(),
+                              ]
+                            : [
+                                AutoSizeText(
+                                  _formattedTime,
+                                  style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.black),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.right,
+                                ),
+                                AutoSizeText(
+                                  _formattedDate,
+                                  style: TextStyle(
+                                    color: _isActive
+                                        ? const Color(0xFFADBBB9)
+                                        : const Color(0xFFADBBB9).withOpacity(0.5),
+                                    fontFamily: 'Inter',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                    decoration: _isActive
+                                        ? TextDecoration.none
+                                        : TextDecoration.lineThrough,
+                                  ),
+                                  maxLines: 1,
+                                  textAlign: TextAlign.right,
+                                ),
+                              ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
+          Positioned.fill(
+            child: Material(
+              color: Colors.transparent, // Transparent material
+              child: InkWell(
+                onTap: widget.onTap,
+                splashColor: Color(itemColorHighlightedTransparent),
+                highlightColor: Colors.transparent, // No highlight color
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
