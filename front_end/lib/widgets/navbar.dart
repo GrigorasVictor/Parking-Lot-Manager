@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
-const backgroundColor = 0xFF33404F;
-const itemColor = 0xFFFFFFFF;
-const itemColorHighlighted = 0xFF00DDA3;
-const itemColorHighlightedTransparent = 0x3300DDA3;
-const double paddingValue = 19;
+import 'constants.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({Key? key}) : super(key: key);
