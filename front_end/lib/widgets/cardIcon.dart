@@ -48,7 +48,7 @@ class _CustomCardIcon extends State<CustomCardIcon> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
+                        SizedBox(
                           height: iconSize,
                           width: iconSize,
                           child: widget.icon,

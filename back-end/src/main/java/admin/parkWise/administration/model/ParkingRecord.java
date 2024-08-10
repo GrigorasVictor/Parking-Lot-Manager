@@ -19,11 +19,11 @@ public class ParkingRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "record_id")
-    private int recordId;
+    private Integer recordId;
 
     @Column(name = "user_id", nullable = false)
     @JsonProperty("user_id")
-    private int userId;
+    private Integer userId;
 
     @Column(name = "entry_time", nullable = false)
     @JsonProperty("entry_time")

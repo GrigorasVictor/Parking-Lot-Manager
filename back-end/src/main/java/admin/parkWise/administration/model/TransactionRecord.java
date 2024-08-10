@@ -19,11 +19,11 @@ public class TransactionRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_id")
-    private int transactionId;
+    private Integer transactionId;
 
     @Column(name = "user_id", nullable = false)
     @JsonProperty("user_id")
-    private int userId;
+    private Integer userId;
 
     @Column(name = "transaction_date", nullable = false)
     @JsonProperty("transaction_date")
@@ -31,7 +31,7 @@ public class TransactionRecord {
 
     @Column(name = "amount", nullable = false)
     @JsonProperty("amount")
-    private double amount;
+    private Double amount;
 
     @Column(name = "description", nullable = false)
     @JsonProperty("description")

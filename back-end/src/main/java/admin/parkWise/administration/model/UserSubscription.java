@@ -15,7 +15,7 @@ public class UserSubscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
 
     @Column(name="start_date")
     @JsonProperty("start_date")
@@ -27,5 +27,5 @@ public class UserSubscription {
 
     @Column(name="parking_space")
     @JsonProperty("parking_space")
-    private int parkingSpace;
+    private Integer parkingSpace;
 }
