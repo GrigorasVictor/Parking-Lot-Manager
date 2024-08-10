@@ -3,6 +3,7 @@ import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/parkingInfoList.dart';
 import 'package:front_end/widgets/calendarCard.dart';
 import 'package:front_end/widgets/constants.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,8 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(itemColorHighlighted)),
-        useMaterial3: true, // Ensure your widgets are compatible with Material 3
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color(itemColorHighlighted)),
+        useMaterial3:
+            true, // Ensure your widgets are compatible with Material 3
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -94,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CustomCardIcon(
-                icon: Image.asset('lib/assets/icons/account.png'), 
+                icon: Image.asset('lib/assets/icons/account.png'),
                 title: 'Account',
                 height: 150,
                 width: 125,
@@ -145,8 +148,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                 onPressed: () {
                   final int hours = int.tryParse(_hoursController.text) ?? 0;
-                  final int minutes = int.tryParse(_minutesController.text) ?? 0;
-                  final int seconds = int.tryParse(_secondsController.text) ?? 0;
+                  final int minutes =
+                      int.tryParse(_minutesController.text) ?? 0;
+                  final int seconds =
+                      int.tryParse(_secondsController.text) ?? 0;
                   _applyTime(hours, minutes, seconds);
                 },
                 child: const Text('Set Timer'),
