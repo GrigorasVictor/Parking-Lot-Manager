@@ -43,10 +43,8 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
 
     Future.delayed(Duration.zero, () {
       setState(() {
-        if (widget.initialHours == -1 ||
-            widget.initialMinutes == -1 ||
-            widget.initialSeconds == -1) {
-          _formattedTime = 'Invalid';
+        if (widget.initialHours == -1 || widget.initialMinutes == -1 || widget.initialSeconds == -1) {
+          _formattedTime = 'Inactive';
           widget.parkingSpot = '-'; // Update parkingSpot when invalid
           _isActive = false;
         } else {
@@ -167,7 +165,8 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                                   style: TextStyle(
                                     color: _isActive
                                         ? const Color(0xFFADBBB9)
-                                        : const Color(0xFFADBBB9).withOpacity(0.5),
+                                        : const Color(0xFFADBBB9)
+                                            .withOpacity(0.5),
                                     fontFamily: 'Inter',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
