@@ -12,8 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/vehicleRegistration")
 public class VehicleRegistrationController extends AbstractController<VehicleRegistration, VehicleRegistrationRepo>{
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<VehicleRegistration>> getUsersLicences(@PathVariable Integer id){
-        return new ResponseEntity<>(repo.findByUserId(new User(id)), HttpStatus.OK);
-    }
+//    @GetMapping("/user/{id}")
+//    public ResponseEntity<List<VehicleRegistration>> getUsersLicences(@PathVariable Integer id){
+//        return new ResponseEntity<>(repo.findByUserId(new User(id)), HttpStatus.OK);
+//    }
 }
