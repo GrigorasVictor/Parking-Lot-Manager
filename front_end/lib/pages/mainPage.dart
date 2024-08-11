@@ -13,7 +13,7 @@ class MainPage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     final cardIconHeight = screenWidth * 0.25;
-    final cardIconWidth = screenWidth * 0.215;
+    final cardIconWidth = (screenWidth - 40) * 0.24;
 
     return Scaffold(
       backgroundColor: const Color(backgroundColor),
