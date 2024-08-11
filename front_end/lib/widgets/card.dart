@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard(
-      {this.title, required this.content, this.height, this.width});
+      {super.key, this.title, required this.content, this.height, this.width});
   final String? title;
   final String content;
   final double? width, height;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class CalendarCard extends StatefulWidget {
   const CalendarCard({
-    Key? key,
+    super.key,
     required this.onDateSelected,
-  }) : super(key: key);
+  });
 
   final ValueChanged<DateTime> onDateSelected;
 

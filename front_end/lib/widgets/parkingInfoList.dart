@@ -7,14 +7,14 @@ import 'dart:async';
 
 class ParkingInfoList extends StatefulWidget {
   ParkingInfoList({
-    Key? key,
+    super.key,
     required this.parkingId,
     this.parkingSpot,
     required this.onTap,
     this.initialHours,
     this.initialMinutes,
     this.initialSeconds,
-  }) : super(key: key);
+  });
 
   final String parkingId;
   String? parkingSpot;
@@ -96,7 +96,7 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 50,
                     width: 50,
                     child: SvgPicture.asset(
@@ -147,12 +147,12 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: _isLoading
                             ? [
-                                CircularProgressIndicator(),
+                                const CircularProgressIndicator(),
                               ]
                             : [
                                 AutoSizeText(
                                   _formattedTime,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: 20,
                                       fontWeight: FontWeight.w800,
@@ -190,7 +190,7 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
               color: Colors.transparent, // Transparent material
               child: InkWell(
                 onTap: widget.onTap,
-                splashColor: Color(itemColorHighlightedTransparent),
+                splashColor: const Color(itemColorHighlightedTransparent),
                 highlightColor: Colors.transparent, // No highlight color
               ),
             ),
