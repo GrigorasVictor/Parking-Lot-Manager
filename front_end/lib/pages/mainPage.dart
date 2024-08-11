@@ -12,20 +12,20 @@ class MainPage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final cardIconHeight = screenHeight * 0.15;
-    final cardIconWidth = screenWidth * 0.18; 
+    final cardIconHeight = screenWidth * 0.25;
+    final cardIconWidth = screenWidth * 0.215;
 
     return Scaffold(
       backgroundColor: const Color(backgroundColor),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
-            AutoSizeText(
+            const AutoSizeText(
               'Hi, Arthur!',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 32, // Large font size
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -41,19 +41,19 @@ class MainPage extends StatelessWidget {
               maxLines: 1,
             ),
             const SizedBox(height: 40),
-
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(2.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distributes cards evenly with less space
+                    mainAxisAlignment: MainAxisAlignment
+                        .spaceBetween, // Distributes cards evenly with less space
                     children: [
                       CustomCardIcon(
                         title: 'Account',
@@ -79,14 +79,17 @@ class MainPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 40),
-                  const AutoSizeText(
-                    'Available Parking Lot',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    child: const AutoSizeText(
+                      'Available Parking Lot',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                    maxLines: 1,
+                    // maxLines: 1,
                   ),
                   const SizedBox(height: 20),
                 ],
