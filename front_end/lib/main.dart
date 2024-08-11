@@ -13,12 +13,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ParkWise',
-      theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color(itemColorHighlighted)),
-        useMaterial3:
-            true, // Ensure your widgets are compatible with Material 3
-      ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

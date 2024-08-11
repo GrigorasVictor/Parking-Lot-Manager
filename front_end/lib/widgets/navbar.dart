@@ -6,46 +6,56 @@ import 'package:front_end/pages/subscriptionPage.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'constants.dart';
+import 'package:front_end/logic/pageNavigationController.dart'; // Import the new controller
 
 class Navbar extends StatefulWidget {
   const Navbar({Key? key}) : super(key: key);
 
   @override
-  State<Navbar> createState() => _Navbar();
+  State<Navbar> createState() => _NavbarState();
 }
 
-class _Navbar extends State<Navbar> {
-  int indexPage = 0;
+class _NavbarState extends State<Navbar> {
+  final PageNavigationController _navigationController =
+      PageNavigationController();
 
-    Widget _getPage() {
-      switch (indexPage) {
-        case 0:
-          return const MainPage();
-        case 1:
-          return const SubscriptionPage();
-        case 2:
-          return const MapPage();
-        case 3:
-          return const AccountPage();
-        default:
-          return const MainPage();
-    }
+  @override
+  void dispose() {
+    _navigationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = _navigationController.indexPage % 2 == 0;  // Example: 
+    int backgroundColorAppBar = isDarkMode ? backgroundColor : itemColor;
+    Color textColor = isDarkMode ? Colors.white : Colors.black;
+
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 100,
+        title: Text(
+          "P A R K W I S E",
+          style: TextStyle(
+            color: textColor, // Dynamically set the text color
+          ),
+        ),
+        leading: SvgPicture.asset(
+          'lib/assets/icons/logo.svg',
+          color: textColor, // Set the icon color to match the text color
+        ),
+        backgroundColor: Color(backgroundColorAppBar), // Dynamically set the background color
+      ),
       bottomNavigationBar: GNav(
+        selectedIndex: _navigationController.indexPage,
         backgroundColor: const Color(backgroundColor),
         color: const Color(itemColor),
         activeColor: const Color(itemColorHighlighted),
         tabBackgroundColor: const Color(itemColorHighlightedTransparent),
         padding: const EdgeInsets.all(paddingValue),
-        onTabChange: (index) {
-          setState(() {
-            indexPage = index;
-          });
-        }, // TODO: functions
+        onTabChange: (indexPage) {
+          _navigationController.navigateToPage(indexPage, setState);
+        },
         tabs: const [
           GButton(
             icon: Icons.home,
@@ -65,20 +75,17 @@ class _Navbar extends State<Navbar> {
           ),
         ],
       ),
-
-      appBar: AppBar(
-        toolbarHeight: 100,
-        title: const Text(
-          "P A R K W I S E",
-          style: TextStyle(
-            color: Colors.white, // Set the text color to white
-          ),
-        ),
-        leading: SvgPicture.asset('lib/assets/icons/logo.svg'),
-        backgroundColor: const Color(backgroundColor),
+      
+      body: PageView(
+        controller: _navigationController.pageController,
+        physics: const NeverScrollableScrollPhysics(), // Disable swiping
+        children: const [
+          MainPage(),
+          SubscriptionPage(),
+          MapPage(),
+          AccountPage(),
+        ],
       ),
-
-      body: _getPage()
     );
   }
 }
