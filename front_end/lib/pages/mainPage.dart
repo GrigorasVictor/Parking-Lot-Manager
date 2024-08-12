@@ -4,16 +4,41 @@ import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/parkingInfoList.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({super.key});
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  // List to keep track of whether each parking widget is active
+  final List<bool> _parkingActive = [true, true, true, true];
+
+  void _toggleParkingState(int index) {
+    setState(() {
+      _parkingActive[index] = !_parkingActive[index];
+    });
+  }
+
+  ParkingInfoList _buildParkingInfoList(int id, bool isActive) {
+    return ParkingInfoList(
+      parkingId: id.toString(),
+      parkingSpot: isActive ? 'A$id' : null,
+      initialHours: isActive ? 0 : -1,
+      initialMinutes: isActive ? 10 * id : -1,
+      initialSeconds: isActive ? 0 : -1,
+      onTap: () => _toggleParkingState(id - 1),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     final cardIconHeight = screenWidth * 0.25;
-    final cardIconWidth = (screenWidth - 40) * 0.24;
+    final cardIconWidth = (screenWidth - 40) * 0.22;
 
     return Scaffold(
       backgroundColor: const Color(backgroundColor),
@@ -41,58 +66,73 @@ class MainPage extends StatelessWidget {
               maxLines: 1,
             ),
             const SizedBox(height: 40),
-            Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              padding: const EdgeInsets.all(2.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment
-                        .spaceBetween, // Distributes cards evenly with less space
-                    children: [
-                      CustomCardIcon(
-                        title: 'Account',
-                        width: cardIconWidth, // Adjusted width
-                        height: cardIconHeight,
-                        iconPath: 'lib/assets/icons/account.svg',
-                        onTap: () => print('Pressed Account'),
-                      ),
-                      CustomCardIcon(
-                        title: 'Privacy',
-                        width: cardIconWidth, // Adjusted width
-                        height: cardIconHeight,
-                        iconPath: 'lib/assets/icons/privacy.svg',
-                        onTap: () => print('Pressed Privacy'),
-                      ),
-                      CustomCardIcon(
-                        title: 'Help',
-                        width: cardIconWidth, // Adjusted width
-                        height: cardIconHeight,
-                        iconPath: 'lib/assets/icons/help.svg',
-                        onTap: () => print('Pressed Help'),
-                      ),
-                    ],
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  // Rounded corners only at the top
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
-                  const SizedBox(height: 40),
-                  Container(
-                    padding: const EdgeInsets.all(18),
-                    child: const AutoSizeText(
-                      'Available Parking Lot',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                ),
+                padding: const EdgeInsets.all(2.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomCardIcon(
+                          title: 'Account',
+                          width: cardIconWidth,
+                          height: cardIconHeight,
+                          iconPath: 'lib/assets/icons/account.svg',
+                          onTap: () => print('Pressed Account'),
+                        ),
+                        CustomCardIcon(
+                          title: 'Privacy',
+                          width: cardIconWidth,
+                          height: cardIconHeight,
+                          iconPath: 'lib/assets/icons/privacy.svg',
+                          onTap: () => print('Pressed Privacy'),
+                        ),
+                        CustomCardIcon(
+                          title: 'Help',
+                          width: cardIconWidth,
+                          height: cardIconHeight,
+                          iconPath: 'lib/assets/icons/help.svg',
+                          onTap: () => print('Pressed Help'),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Container(
+                      padding: const EdgeInsets.all(18),
+                      child: const AutoSizeText(
+                        'Available Parking Lot',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                    // maxLines: 1,
-                  ),
-                  const SizedBox(height: 20),
-                ],
+                    // Ensure ListView takes all available space
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: _parkingActive.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: _buildParkingInfoList(index + 1, _parkingActive[index]),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

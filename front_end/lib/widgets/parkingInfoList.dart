@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'constants.dart'; // Ensure this is the correct path
 import 'package:intl/intl.dart';
+import 'constants.dart';
 import 'dart:async';
 
 class ParkingInfoList extends StatefulWidget {
@@ -43,10 +43,10 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
 
     Future.delayed(Duration.zero, () {
       setState(() {
-        if (widget.initialHours == -1 || widget.initialMinutes == -1 || widget.initialSeconds == -1) {
-          _formattedTime = 'Inactive';
-          widget.parkingSpot = '-'; // Update parkingSpot when invalid
-          _isActive = false;
+        if (widget.initialHours == -1 ||
+            widget.initialMinutes == -1 ||
+            widget.initialSeconds == -1) {
+          _setInactive();
         } else {
           _isActive = true;
           _startTimerWithInitialTime();
@@ -60,7 +60,12 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
     final int initialSeconds = (widget.initialHours ?? 0) * 3600 +
         (widget.initialMinutes ?? 0) * 60 +
         (widget.initialSeconds ?? 0);
-    _startTimer(initialSeconds: initialSeconds);
+
+    if (initialSeconds >= 0) {
+      _startTimer(initialSeconds: initialSeconds);
+    } else {
+      _setInactive(); // Handle invalid time
+    }
   }
 
   void _startTimer({int initialSeconds = 0}) {
@@ -76,6 +81,33 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
             '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
       });
     });
+  }
+
+  void _setInactive() {
+    setState(() {
+      _isActive = false;
+      _formattedTime = 'Inactive';
+      widget.parkingSpot = '-';
+      _timer?.cancel();
+    });
+  }
+
+  void _setActive() {
+    setState(() {
+      _isActive = true;
+      _formattedTime = '00:00:00';
+      widget.parkingSpot = 'A${widget.parkingId}';
+    });
+
+    final int initialSeconds = (widget.initialHours ?? 0) * 3600 +
+        (widget.initialMinutes ?? 0) * 60 +
+        (widget.initialSeconds ?? 0);
+        
+    if (initialSeconds >= 0) {
+      _startTimer(initialSeconds: initialSeconds);
+    } else {
+      _setInactive(); // Handle invalid time
+    }
   }
 
   @override
@@ -189,7 +221,14 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
             child: Material(
               color: Colors.transparent, // Transparent material
               child: InkWell(
-                onTap: widget.onTap,
+                onTap: () {
+                  if (_isActive) {
+                    _setInactive(); // Set to inactive if currently active
+                  } else {
+                    _setActive(); // Set to active if currently inactive
+                  }
+                  widget.onTap(); // Call the parent callback
+                },
                 splashColor: const Color(itemColorHighlightedTransparent),
                 highlightColor: Colors.transparent, // No highlight color
               ),
