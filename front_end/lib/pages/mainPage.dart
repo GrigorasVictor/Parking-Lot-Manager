@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/parkingInfoList.dart';
@@ -37,7 +38,7 @@ class _MainPageState extends State<MainPage> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     final cardIconHeight = screenWidth * 0.25;
-    final cardIconWidth = (screenWidth - 131.7) * 0.33;
+    final cardIconWidth = (screenWidth - 131.8) * 0.33;
 
     return Scaffold(
       backgroundColor: const Color(backgroundColor),
@@ -47,22 +48,64 @@ class _MainPageState extends State<MainPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
-            const AutoSizeText(
-              'Hi, Jane!',
-              style: TextStyle(
-                fontSize: 32, // Large font size
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              maxLines: 1,
-            ),
-            const AutoSizeText(
-              'Welcome Back!',
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.white,
-              ),
-              maxLines: 1,
+            FutureBuilder(
+              future: getUser(3),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      AutoSizeText(
+                        'Error loading user data',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                      ),
+                    ],
+                  );
+                } else if (snapshot.hasData) {
+                  // Extract the surname from the full name
+                  final fullName = snapshot.data?.fullName ?? '';
+                  final surname = fullName.split(' ').last;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AutoSizeText(
+                        'Hi, $surname!',
+                        style: const TextStyle(
+                          fontSize: 26, // Large font size
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                      ),
+                      const AutoSizeText(
+                        'Welcome Back!',
+                        style: TextStyle(
+                          fontSize: 44,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w100
+                        ),
+                        maxLines: 1,
+                      ),
+                    ],
+                  );
+                } else {
+                  return const AutoSizeText(
+                    'Welcome Back!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                    ),
+                    maxLines: 1,
+                  );
+                }
+              },
             ),
             const SizedBox(height: 40),
             Expanded(
@@ -71,7 +114,7 @@ class _MainPageState extends State<MainPage> {
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   // Rounded corners only at the top
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   ),
