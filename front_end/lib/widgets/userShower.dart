@@ -15,10 +15,11 @@ FutureBuilder<User> UserShower(int userNo) {
       } else if (snapshot.hasData) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CustomCard(
               title: 'Name',
-              content: snapshot.data?.full_name ?? 'name not found',
+              content: snapshot.data?.fullName ?? 'name not found',
               width: cardWidth,
               height: cardHeight,
             ),
@@ -30,10 +31,22 @@ FutureBuilder<User> UserShower(int userNo) {
             ),
             CustomCard(
               title: 'Phone Number',
-              content: snapshot.data?.phone_number ?? 'phone number not found',
+              content: snapshot.data?.phoneNumber ?? 'phone number not found',
               width: cardWidth,
               height: cardHeight,
             ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+              child: Text(
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  'Registered licence plates:'),
+            ),
+            for (var registration in snapshot.data!.registrations)
+              CustomCard(
+                content: registration.licencePlate,
+                width: cardWidth - 100,
+                height: cardHeight,
+              )
             // TODO: Also show the number plates in a separate column
           ],
         );

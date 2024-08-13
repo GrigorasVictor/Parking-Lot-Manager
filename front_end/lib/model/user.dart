@@ -1,35 +1,45 @@
+import 'registration.dart';
+
 class User {
   final int userId;
-  final String full_name;
+  final String fullName;
   final String email;
   final String password;
-  final String phone_number;
+  final String phoneNumber;
+  final List<VehicleRegistration> registrations;
 
   const User({
     required this.userId,
-    required this.full_name,
+    required this.fullName,
     required this.email,
     required this.password,
-    required this.phone_number,
+    required this.phoneNumber,
+    required this.registrations,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    return switch (json) {
-      {
-        'userId': int userId,
-        'full_name': String full_name,
-        'email': String email,
-        'password': String password,
-        'phone_number': String phone_number,
-      } => User(
-          userId: userId,
-          full_name: full_name,
-          email: email,
-          password: password,
-          phone_number: phone_number,
-        ),
-      _ => throw const FormatException('Failed to load user.'),
+    return User(
+      userId: json['userId'] as int,
+      fullName: json['full_name'] as String,
+      email: json['email'] as String,
+      password: json['password'] as String,
+      phoneNumber: json['phone_number'] as String,
+      registrations: (json['licencePlates'] as List<dynamic>)
+          .map((item) =>
+              VehicleRegistration.fromJson(item as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userId': userId,
+      'full_name': fullName,
+      'email': email,
+      'password': password,
+      'phone_number': phoneNumber,
+      'licencePlates':
+          registrations.map((registration) => registration.toJson()).toList(),
     };
   }
-  //TO DO: User.toJson
 }

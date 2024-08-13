@@ -38,9 +38,13 @@ class _CustomCardIconState extends State<CustomCardIcon> {
       margin: const EdgeInsets.all(16.0), // Adjust margin to your needs
       child: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center, // Center the icon and text
+          crossAxisAlignment:
+              CrossAxisAlignment.center, // Center the icon and text
           children: <Widget>[
             Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
               elevation: 8,
               clipBehavior: Clip.hardEdge,
               child: InkWell(
@@ -57,7 +61,8 @@ class _CustomCardIconState extends State<CustomCardIcon> {
                         widget.iconPath,
                         height: iconSize,
                         width: iconSize,
-                        fit: BoxFit.contain, // Ensure the icon scales proportionally
+                        fit: BoxFit
+                            .contain, // Ensure the icon scales proportionally
                       ),
                       const SizedBox(height: 10), // Space between icon and text
                       AutoSizeText(
@@ -68,7 +73,8 @@ class _CustomCardIconState extends State<CustomCardIcon> {
                           fontWeight: FontWeight.w700,
                         ),
                         maxLines: 1, // Restricts the text to 1 line
-                        overflow: TextOverflow.ellipsis, // Handles text overflow with an ellipsis
+                        overflow: TextOverflow
+                            .ellipsis, // Handles text overflow with an ellipsis
                       ),
                     ],
                   ),

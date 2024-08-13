@@ -32,24 +32,23 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     final cardIconHeight = screenWidth * 0.25;
-    final cardIconWidth = (screenWidth - 40) * 0.22;
+    final cardIconWidth = (screenWidth - 131.7) * 0.33;
 
     return Scaffold(
       backgroundColor: const Color(backgroundColor),
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.fromLTRB(5, 10, 5, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
             const AutoSizeText(
-              'Hi, Arthur!',
+              'Hi, Jane!',
               style: TextStyle(
                 fontSize: 32, // Large font size
                 fontWeight: FontWeight.bold,
@@ -82,7 +81,7 @@ class _MainPageState extends State<MainPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomCardIcon(
                           title: 'Account',
@@ -126,7 +125,8 @@ class _MainPageState extends State<MainPage> {
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
-                            child: _buildParkingInfoList(index + 1, _parkingActive[index]),
+                            child: _buildParkingInfoList(
+                                index + 1, _parkingActive[index]),
                           );
                         },
                       ),

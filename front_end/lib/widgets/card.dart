@@ -20,6 +20,9 @@ class CustomCard extends StatelessWidget {
               // maybe icon display
               Text(title!, style: const TextStyle(fontWeight: FontWeight.bold)),
             Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
               elevation: 8,
               child: SizedBox(
                 width: width ?? 200,
