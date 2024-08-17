@@ -53,7 +53,7 @@ FutureBuilder<User> UserShower(int userNo) {
       } else if (snapshot.hasError) {
         return Text('Error: ${snapshot.error}');
       } else {
-        return Text('No data found');
+        return const Text('No data found');
       }
     },
   );

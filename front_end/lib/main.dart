@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/widgets/navbar.dart';
-import 'package:front_end/widgets/constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'ParkWise',
-      home: const MyHomePage(title: 'ParkWise'),
+      home: MyHomePage(title: 'ParkWise'),
     );
   }
 }

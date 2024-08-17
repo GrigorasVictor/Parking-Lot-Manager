@@ -54,9 +54,9 @@ class _MainPageState extends State<MainPage> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
-                  return Column(
+                  return const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       AutoSizeText(
                         'Error loading user data',
                         style: TextStyle(

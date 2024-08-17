@@ -15,8 +15,8 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: const Color(backgroundColor),
-      body: const Center(
+      backgroundColor: Color(backgroundColor),
+      body: Center(
         child: Text('mappage'),
       ),
     );
