@@ -26,7 +26,6 @@ class _CustomCardIconState extends State<CustomCardIcon> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     // Calculate icon size based on screen dimensions
     double iconSize = screenWidth * 0.1; // 10% of screen width for icon size

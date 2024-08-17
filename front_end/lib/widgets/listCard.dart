@@ -12,8 +12,9 @@ class ListCardItem {
 // The Listcard widget
 class Listcard extends StatelessWidget {
   final List<ListCardItem> items;
+  final ValueChanged<String> onItemTap; // Callback to pass the selected price
 
-  const Listcard({Key? key, required this.items}) : super(key: key);
+  const Listcard({super.key, required this.items, required this.onItemTap});
 
   @override
   Widget build(BuildContext context) {
@@ -26,30 +27,34 @@ class Listcard extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 10.0,
             spreadRadius: 2.0,
-            offset: Offset(0, 5), // Shadow direction: bottom right
+            offset: const Offset(0, 5), // Shadow direction: bottom right
           ),
         ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.0),
-        child: ListView.builder(
-          padding: const EdgeInsets.all(8.0),
-          shrinkWrap: true, // Ensure ListView takes only the necessary height
-          physics: const NeverScrollableScrollPhysics(), // Disable internal scrolling
+        child: ListView.separated(
+          padding: const EdgeInsets.all(1.0),
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
+          separatorBuilder: (context, index) =>
+              const Divider(height: 0.5, color: Color.fromARGB(255, 187, 187, 187)),
           itemBuilder: (context, index) {
             return ListTile(
               title: Center(
                 child: AutoSizeText(
                   items[index].title,
-                  style: const TextStyle(fontSize: 22), // Set a base font size
-                  maxLines: 1, // Ensure text doesn't wrap
-                  overflow: TextOverflow.ellipsis, // Show ellipsis if text is too long
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               onTap: () {
-                // Handle tap on list item
-                print('Selected: ${items[index].title} for ${items[index].price}');
+                onItemTap(items[index].price); // Pass the selected price to the callback
               },
             );
           },

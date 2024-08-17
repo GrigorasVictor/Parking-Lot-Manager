@@ -83,7 +83,7 @@ class SubscriptionCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16.0), 
+          const SizedBox(width: 5.0), 
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0), 
@@ -94,10 +94,10 @@ class SubscriptionCard extends StatelessWidget {
                   AutoSizeText(
                     subscriptionText,
                     style: const TextStyle(
-                      fontSize: 28,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4.0),
