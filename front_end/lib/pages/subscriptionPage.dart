@@ -3,7 +3,7 @@ import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/customButton.dart';
-import 'package:front_end/widgets/listCard.dart'; // Import the Listcard widget
+import 'package:front_end/widgets/listCard.dart'; 
 import 'package:front_end/widgets/subscriptionCard.dart';
 import 'package:intl/intl.dart';
 
@@ -215,7 +215,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               minHeight: 15,
               onPressed: () {
                 sendTransaction(5, currentSubscription, currentPrice, startDate);
-                print('Buy button pressed with price: $currentPrice from ${dateFormatter.format(startDate)} to ${dateFormatter.format(endDate)}');
+                sendSubscription(3, startDate, endDate, 0);
               },
               label: 'BUY',
               fontSize: 15,

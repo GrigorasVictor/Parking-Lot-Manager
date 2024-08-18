@@ -13,6 +13,7 @@ public abstract class AbstractController<T, R extends JpaRepository<T, Integer>>
 
     @PostMapping
     public ResponseEntity<T> add(@RequestBody T newEntry) {
+        System.out.println(newEntry);
         repo.save(newEntry);
         return new ResponseEntity<>(newEntry, HttpStatus.OK);
     }

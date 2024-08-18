@@ -14,6 +14,10 @@ public class UserSubscription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "subscription_id")
+    private Integer subscriptionId;
+
+    @JsonProperty("user_id")
     @Column(name = "user_id")
     private Integer userId;
 
