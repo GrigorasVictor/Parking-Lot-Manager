@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/customButton.dart';
 import 'package:front_end/widgets/listCard.dart'; // Import the Listcard widget
 import 'package:front_end/widgets/subscriptionCard.dart';
+import 'package:intl/intl.dart';
 
 class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({super.key});
@@ -23,12 +25,29 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     ListCardItem(title: 'Lifetime Subscription', price: '\$99.99'),
   ];
 
-  String currentPrice = ''; // Mutable state variable for currentPrice
+  String currentPrice = ''; 
+  String currentSubscription = '';
+  DateTime startDate = DateTime.now(); 
+  DateTime endDate = DateTime.now(); 
+
+  void calculateEndDate(String subscription) {
+    DateTime today = DateTime.now();
+    if (subscription == 'Monthly Subscription') {
+      endDate = DateTime(today.year, today.month + 1, today.day);
+    } else if (subscription == 'Yearly Subscription') {
+      endDate = DateTime(today.year + 1, today.month, today.day);
+    } else if (subscription == 'Lifetime Subscription') {
+      endDate = DateTime(today.year + 99, today.month, today.day); 
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
+    // Date format
+    DateFormat dateFormatter = DateFormat('MM/dd/yyyy');
 
     return Scaffold(
       backgroundColor: const Color(itemColor),
@@ -70,11 +89,14 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               flex: 2,
               child: Listcard(
                 items: subscriptionOptions,
-                onItemTap: (selectedPrice) {
+                onItemTap: (selectedPrice, selectedTitle) {
                   setState(() {
                     currentPrice = selectedPrice;
+                    currentSubscription = selectedTitle;
+                    startDate = DateTime.now();
+                    calculateEndDate(currentSubscription);
                   });
-                  print('Selected price: $currentPrice');
+                  print('Selected price: $currentPrice with $currentSubscription');
                 },
               ),
             ),
@@ -142,9 +164,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                         ),
                       ],
                     ),
-                    child: const Column(
+                    child: Column(
                       children: [
-                        AutoSizeText(
+                        const AutoSizeText(
                           'From:',
                           style: TextStyle(
                             fontSize: 16,
@@ -154,15 +176,15 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                           maxLines: 1,
                         ),
                         AutoSizeText(
-                          '00/00/0000',
-                          style: TextStyle(
+                          dateFormatter.format(startDate),
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                           ),
                           maxLines: 1,
                         ),
-                        SizedBox(height: 2),
-                        AutoSizeText(
+                        const SizedBox(height: 2),
+                        const AutoSizeText(
                           'To:',
                           style: TextStyle(
                             fontSize: 16,
@@ -171,10 +193,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                           ),
                           maxLines: 1,
                         ),
-                        SizedBox(height: 5),
+                        const SizedBox(height: 5),
                         AutoSizeText(
-                          '00/00/0000',
-                          style: TextStyle(
+                          dateFormatter.format(endDate),
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                           ),
@@ -192,7 +214,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               height: height * 0.04,
               minHeight: 15,
               onPressed: () {
-                print('Buy button pressed with price: $currentPrice');
+                sendTransaction(5, currentSubscription, currentPrice, startDate);
+                print('Buy button pressed with price: $currentPrice from ${dateFormatter.format(startDate)} to ${dateFormatter.format(endDate)}');
               },
               label: 'BUY',
               fontSize: 15,

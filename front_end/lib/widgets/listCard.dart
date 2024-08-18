@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
+typedef OnItemTapCallback = void Function(String price, String title);
+
 // Model to store title and price
 class ListCardItem {
   final String title;
@@ -9,10 +11,9 @@ class ListCardItem {
   ListCardItem({required this.title, required this.price});
 }
 
-// The Listcard widget
 class Listcard extends StatelessWidget {
   final List<ListCardItem> items;
-  final ValueChanged<String> onItemTap; // Callback to pass the selected price
+  final OnItemTapCallback onItemTap;  
 
   const Listcard({super.key, required this.items, required this.onItemTap});
 
@@ -27,7 +28,7 @@ class Listcard extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 10.0,
             spreadRadius: 2.0,
-            offset: const Offset(0, 5), // Shadow direction: bottom right
+            offset: const Offset(0, 5), 
           ),
         ],
       ),
@@ -54,7 +55,7 @@ class Listcard extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                onItemTap(items[index].price); // Pass the selected price to the callback
+                onItemTap(items[index].price, items[index].title);
               },
             );
           },

@@ -6,7 +6,7 @@ import 'package:front_end/pages/subscriptionPage.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'constants.dart';
-import 'package:front_end/logic/pageNavigationController.dart'; // Import the new controller
+import 'package:front_end/logic/pageNavigationController.dart'; 
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -37,14 +37,14 @@ class _NavbarState extends State<Navbar> {
         title: Text(
           "P A R K W I S E",
           style: TextStyle(
-            color: textColor, // Dynamically set the text color
+            color: textColor, 
           ),
         ),
         leading: SvgPicture.asset(
           'lib/assets/icons/logo.svg',
-          color: textColor, // Set the icon color to match the text color
+          color: textColor, 
         ),
-        backgroundColor: Color(backgroundColorAppBar), // Dynamically set the background color
+        backgroundColor: Color(backgroundColorAppBar), 
       ),
       bottomNavigationBar: GNav(
         selectedIndex: _navigationController.indexPage,
@@ -78,7 +78,7 @@ class _NavbarState extends State<Navbar> {
       
       body: PageView(
         controller: _navigationController.pageController,
-        physics: const NeverScrollableScrollPhysics(), // Disable swiping
+        physics: const NeverScrollableScrollPhysics(), 
         children: const [
           MainPage(),
           SubscriptionPage(),

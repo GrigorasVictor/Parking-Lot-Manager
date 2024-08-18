@@ -13,7 +13,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  // List to keep track of whether each parking widget is active
   final List<bool> _parkingActive = [true, true, true, true];
 
   void _toggleParkingState(int index) {
@@ -36,7 +35,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
     final cardIconHeight = screenWidth * 0.25;
     final cardIconWidth = (screenWidth - 131.8) * 0.33;
 
@@ -68,7 +66,6 @@ class _MainPageState extends State<MainPage> {
                     ],
                   );
                 } else if (snapshot.hasData) {
-                  // Extract the surname from the full name
                   final fullName = snapshot.data?.fullName ?? '';
                   final surname = fullName.split(' ').last;
 
@@ -78,7 +75,7 @@ class _MainPageState extends State<MainPage> {
                       AutoSizeText(
                         'Hi, $surname!',
                         style: const TextStyle(
-                          fontSize: 26, // Large font size
+                          fontSize: 26,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
@@ -113,7 +110,6 @@ class _MainPageState extends State<MainPage> {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Colors.white,
-                  // Rounded corners only at the top
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
@@ -131,7 +127,8 @@ class _MainPageState extends State<MainPage> {
                           width: cardIconWidth,
                           height: cardIconHeight,
                           iconPath: 'lib/assets/icons/account.svg',
-                          onTap: () => print('Pressed Account'),
+                          onTap: () {
+                          },
                         ),
                         CustomCardIcon(
                           title: 'Privacy',
@@ -161,7 +158,6 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ),
                     ),
-                    // Ensure ListView takes all available space
                     Expanded(
                       child: ListView.builder(
                         itemCount: _parkingActive.length,
