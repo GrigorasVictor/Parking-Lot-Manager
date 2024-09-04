@@ -1,6 +1,7 @@
 DROP SCHEMA IF EXISTS parking_management CASCADE;
 CREATE SCHEMA IF NOT EXISTS parking_management;
 
+DROP TABLE IF EXISTS parking_management.user_images;
 DROP TABLE IF EXISTS parking_management.user_subscriptions;
 DROP TABLE IF EXISTS parking_management.vehicle_registration;
 DROP TABLE IF EXISTS parking_management.transaction_records;
@@ -14,6 +15,12 @@ CREATE TABLE parking_management.users (
     password VARCHAR(255) NOT NULL,
     phone_number VARCHAR(10) NOT NULL
 );
+
+CREATE TABLE parking_management.user_images (
+    user_id INTEGER PRIMARY KEY REFERENCES parking_management.users(user_id),
+    image BYTEA
+);
+
 CREATE TABLE parking_management.user_subscriptions (
     subscription_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES parking_management.users(user_id),
@@ -43,6 +50,7 @@ CREATE TABLE parking_management.parking_records (
     leave_time TIMESTAMP,
     parking_space INT
 );
+
 
 INSERT INTO parking_management.users (full_name, email, password, phone_number)
 VALUES

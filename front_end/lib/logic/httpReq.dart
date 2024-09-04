@@ -3,6 +3,7 @@ import 'package:front_end/model/user.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
+
 Future<User> getUser(int userId) async {
   final response = await http.get(Uri.http('localhost:8080', 'users/$userId'));
 

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 
-class PageNavigationController {
+class PageNavigationController extends ValueNotifier<int> {
   final PageController pageController = PageController();
-  int indexPage = 0;
-  void dispose() {
-    pageController.dispose();
+
+  PageNavigationController() : super(0);
+
+  void navigateToPage(int index, VoidCallback onUpdate) {
+    value = index; // Update the index
+    pageController.animateToPage(
+      value,
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.fastEaseInToSlowEaseOut,
+    );
+    onUpdate(); // Trigger the callback to update the UI
   }
 
-  void navigateToPage(int index, Function setStateCallback) {
-    indexPage=index;
-    print(indexPage);
-    setStateCallback(() {
-      pageController.animateToPage(
-          indexPage,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.fastEaseInToSlowEaseOut,
-        );
-    });
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 }

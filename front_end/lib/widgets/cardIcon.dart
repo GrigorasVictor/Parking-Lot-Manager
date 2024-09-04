@@ -13,7 +13,7 @@ class CustomCardIcon extends StatefulWidget {
     required this.onTap,
   });
 
-  final String iconPath; // The path to the SVG asset
+  final String iconPath; 
   final String? title;
   final double? width, height;
   final VoidCallback onTap;

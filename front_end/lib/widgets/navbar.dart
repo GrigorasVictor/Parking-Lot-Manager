@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:front_end/pages/accountPage.dart';
 import 'package:front_end/pages/mainPage.dart';
 import 'package:front_end/pages/mapPage.dart';
 import 'package:front_end/pages/subscriptionPage.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:front_end/logic/pageNavigationController.dart';
 import 'constants.dart';
-import 'package:front_end/logic/pageNavigationController.dart'; 
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -16,18 +16,29 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  final PageNavigationController _navigationController =
-      PageNavigationController();
+  late final PageNavigationController _navigationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _navigationController = PageNavigationController();
+    _navigationController.addListener(_onPageChange);
+  }
 
   @override
   void dispose() {
+    _navigationController.removeListener(_onPageChange);
     _navigationController.dispose();
     super.dispose();
   }
 
+  void _onPageChange() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = _navigationController.indexPage % 2 == 0;  // Example: 
+    bool isDarkMode = _navigationController.value % 2 == 0;
     int backgroundColorAppBar = isDarkMode ? backgroundColor : itemColor;
     Color textColor = isDarkMode ? Colors.white : Colors.black;
 
@@ -37,24 +48,26 @@ class _NavbarState extends State<Navbar> {
         title: Text(
           "P A R K W I S E",
           style: TextStyle(
-            color: textColor, 
+            color: textColor,
           ),
         ),
         leading: SvgPicture.asset(
           'lib/assets/icons/logo.svg',
-          color: textColor, 
+          color: textColor,
         ),
-        backgroundColor: Color(backgroundColorAppBar), 
+        backgroundColor: Color(backgroundColorAppBar),
       ),
       bottomNavigationBar: GNav(
-        selectedIndex: _navigationController.indexPage,
+        selectedIndex: _navigationController.value,
         backgroundColor: const Color(backgroundColor),
         color: const Color(itemColor),
         activeColor: const Color(itemColorHighlighted),
         tabBackgroundColor: const Color(itemColorHighlightedTransparent),
         padding: const EdgeInsets.all(paddingValue),
         onTabChange: (indexPage) {
-          _navigationController.navigateToPage(indexPage, setState);
+          _navigationController.navigateToPage(indexPage, () {
+            // Optional: Handle state updates if needed
+          });
         },
         tabs: const [
           GButton(
@@ -75,12 +88,11 @@ class _NavbarState extends State<Navbar> {
           ),
         ],
       ),
-      
       body: PageView(
         controller: _navigationController.pageController,
-        physics: const NeverScrollableScrollPhysics(), 
-        children: const [
-          MainPage(),
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          MainPage(navigationController: _navigationController),
           SubscriptionPage(),
           MapPage(),
           AccountPage(),

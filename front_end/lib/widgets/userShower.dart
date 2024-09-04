@@ -4,8 +4,8 @@ import 'package:front_end/logic/httpReq.dart';
 import 'card.dart';
 
 FutureBuilder<User> UserShower(int userNo) {
-  const double cardWidth = 500;
-  const double cardHeight = 75;
+  const double cardWidth = double.infinity;
+  const double cardHeight = 50;
 
   return FutureBuilder<User>(
     future: getUser(userNo),

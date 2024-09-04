@@ -4,9 +4,12 @@ import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/parkingInfoList.dart';
+import 'package:front_end/logic/pageNavigationController.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final PageNavigationController navigationController;
+
+  const MainPage({required this.navigationController, super.key});
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -28,7 +31,12 @@ class _MainPageState extends State<MainPage> {
       initialHours: isActive ? 0 : -1,
       initialMinutes: isActive ? 10 * id : -1,
       initialSeconds: isActive ? 0 : -1,
-      onTap: () => _toggleParkingState(id - 1),
+      onTap: () {
+        _toggleParkingState(id - 1);
+        widget.navigationController.navigateToPage(3, () {
+          // No need to call setState here as it is handled by Navbar
+        });
+      },
     );
   }
 
@@ -128,6 +136,9 @@ class _MainPageState extends State<MainPage> {
                           height: cardIconHeight,
                           iconPath: 'lib/assets/icons/account.svg',
                           onTap: () {
+                            widget.navigationController.navigateToPage(3, () {
+                              // Optional: Handle state updates if needed
+                            });
                           },
                         ),
                         CustomCardIcon(
