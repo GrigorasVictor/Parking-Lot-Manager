@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/customButton.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/userShower.dart';
 import 'package:front_end/widgets/uploadPopUp.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:flutter/services.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -22,6 +24,7 @@ class _AccountPageState extends State<AccountPage> {
   File? _image;
   String? _uploadedImageUrl;
   final String _userId = '1'; // Replace with actual user ID
+  final TextEditingController _numberPlateController = TextEditingController();
 
   @override
   void initState() {
@@ -108,8 +111,7 @@ class _AccountPageState extends State<AccountPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor:
-              const Color(backgroundColor), // Set dialog background color
+          backgroundColor: const Color(backgroundColor), // Set dialog background color
           title: const Text(
             'Logout',
             style: TextStyle(
@@ -142,6 +144,131 @@ class _AccountPageState extends State<AccountPage> {
       },
     );
   }
+
+void _showAddCarDialog() {
+  String part1 = ''; // First part (2 letters)
+  String part2 = ''; // Second part (2 numbers)
+  String part3 = ''; // Third part (3 letters)
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white, // Set a visible background color
+        title: const Text(
+          'Add Car',
+          style: TextStyle(
+            color: Colors.black, // Ensure text is visible
+          ),
+        ),
+        content: Row(
+          children: [
+            // First input: 2 letters
+            Expanded(
+              flex: 2,
+              child: TextField(
+                maxLength: 2, // Limit to 2 characters
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
+                ],
+                onChanged: (value) {
+                  part1 = value;
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Letter',
+                  counterText: '', // Hide character counter
+                  labelStyle: TextStyle(color: Colors.grey),
+                ),
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+            const SizedBox(width: 10),
+
+            // Second input: 2 numbers
+            Expanded(
+              flex: 2,
+              child: TextField(
+                maxLength: 2, // Limit to 2 characters
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly, // Only numbers
+                ],
+                onChanged: (value) {
+                  part2 = value;
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Number',
+                  counterText: '', // Hide character counter
+                  labelStyle: TextStyle(color: Colors.grey),
+                ),
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+            const SizedBox(width: 10),
+
+            // Third input: 3 letters
+            Expanded(
+              flex: 3,
+              child: TextField(
+                maxLength: 3, // Limit to 3 characters
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
+                ],
+                onChanged: (value) {
+                  part3 = value;
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Letter',
+                  counterText: '', // Hide character counter
+                  labelStyle: TextStyle(color: Colors.grey),
+                ),
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              // Combine all parts of the number plate
+              final String numberPlate = '$part1$part2$part3';
+
+              if (part1.length == 2 && part2.length == 2 && part3.length == 3) {
+                try {
+                  print("Number Plate: $numberPlate");
+                  await sendNumberPlate(numberPlate, 1); // Send number plate API
+                  Navigator.of(context).pop(); // Close the dialog
+                  setState(() {}); // Refresh the page
+                  _showUploadPopup('Car added successfully!', true); // Show success popup
+                } catch (e) {
+                  Navigator.of(context).pop(); // Close the dialog
+                  _showUploadPopup('Failed to add car: $e', false); // Show error popup
+                }
+              } else {
+                _showUploadPopup('Please fill all fields correctly.', false);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(itemColorHighlighted),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Add'),
+          ),
+        ],
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +343,7 @@ class _AccountPageState extends State<AccountPage> {
                           width: 400,
                           height: 50,
                           minHeight: 50,
-                          onPressed: () {},
+                          onPressed: _showAddCarDialog, // Show popup
                           label: "Add Car"),
                       const SizedBox(height: 10),
                     ],
