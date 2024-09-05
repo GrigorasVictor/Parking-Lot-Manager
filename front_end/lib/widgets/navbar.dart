@@ -27,9 +27,9 @@ class _NavbarState extends State<Navbar> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = _navigationController.indexPage % 2 == 0;  // Example: 
-    int backgroundColorAppBar = isDarkMode ? backgroundColor : itemColor;
-    Color textColor = isDarkMode ? Colors.white : Colors.black;
+    List<bool> navbarColor = [true, false, true, true];
+    int backgroundColorAppBar = navbarColor[_navigationController.indexPage] ? backgroundColor : itemColor;
+    Color textColor = navbarColor[_navigationController.indexPage] ? Colors.white : Colors.black;
 
     return Scaffold(
       appBar: AppBar(
