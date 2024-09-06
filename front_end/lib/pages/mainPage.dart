@@ -161,6 +161,7 @@ class _MainPageState extends State<MainPage> {
                           height: cardIconHeight,
                           iconPath: 'lib/assets/icons/help.svg',
                           onTap: () {
+                            
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -23,7 +23,7 @@ class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
   String? _uploadedImageUrl;
-  final String _userId = '1'; // Replace with actual user ID
+  final int _userId = 1; // Replace with actual user ID
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _AccountPageState extends State<AccountPage> {
         _image = File(pickedFile.path);
       });
       try {
-        final imageUrl = await uploadImage(_image!, int.parse(_userId));
+        final imageUrl = await uploadImage(_image!, _userId);
         setState(() {
           _uploadedImageUrl = imageUrl;
         });
@@ -244,12 +244,12 @@ void _showAddCarDialog() {
               if (part1.length == 2 && part2.length == 2 && part3.length == 3) {
                 try {
                   print("Number Plate: $numberPlate");
-                  await sendNumberPlate(numberPlate, _userId as int);
+                  await sendNumberPlate(numberPlate, _userId);
                   Navigator.of(context).pop();
                   setState(() {});
                   _showUploadPopup('Car added successfully!', true); 
                 } catch (e) {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                   _showUploadPopup('Failed to add car: $e', false);
                 }
               } else {
@@ -336,7 +336,7 @@ void _showAddCarDialog() {
                   child: SingleChildScrollView(
                       child: Column(
                     children: [
-                      UserShower(int.parse(_userId)),
+                      UserShower(_userId),
                       CustomElevatedButton(
                           width: 400,
                           height: 50,
