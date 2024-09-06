@@ -113,3 +113,24 @@ Future<void> sendNumberPlate(String numberPlate, int userId) async {
     print('Error sending NumberPlate: $e');
   }
 }
+
+Future<void> deleteLicencePlate(String numberPlate, int userId) async {
+  final String apiUrl = 'http://your-backend-api-url.com/users/$userId/licenceplates/$numberPlate';
+
+  try {
+    final response = await http.delete(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+
+    } else {
+      // Show error popup
+    }
+  } catch (e) {
+    // Show error popup
+  }
+}

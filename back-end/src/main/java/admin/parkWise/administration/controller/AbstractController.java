@@ -32,5 +32,6 @@ public abstract class AbstractController<T, R extends JpaRepository<T, Integer>>
     public ResponseEntity<Optional<T>> get(@PathVariable Integer id){
         return new ResponseEntity<>(repo.findById(id), HttpStatus.OK);
     }
+
 }
 

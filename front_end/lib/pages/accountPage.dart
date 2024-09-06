@@ -24,7 +24,6 @@ class _AccountPageState extends State<AccountPage> {
   File? _image;
   String? _uploadedImageUrl;
   final String _userId = '1'; // Replace with actual user ID
-  final TextEditingController _numberPlateController = TextEditingController();
 
   @override
   void initState() {
@@ -240,19 +239,18 @@ void _showAddCarDialog() {
           ),
           ElevatedButton(
             onPressed: () async {
-              // Combine all parts of the number plate
               final String numberPlate = '$part1$part2$part3';
 
               if (part1.length == 2 && part2.length == 2 && part3.length == 3) {
                 try {
                   print("Number Plate: $numberPlate");
-                  await sendNumberPlate(numberPlate, 1); // Send number plate API
-                  Navigator.of(context).pop(); // Close the dialog
-                  setState(() {}); // Refresh the page
-                  _showUploadPopup('Car added successfully!', true); // Show success popup
+                  await sendNumberPlate(numberPlate, _userId as int);
+                  Navigator.of(context).pop();
+                  setState(() {});
+                  _showUploadPopup('Car added successfully!', true); 
                 } catch (e) {
                   Navigator.of(context).pop(); // Close the dialog
-                  _showUploadPopup('Failed to add car: $e', false); // Show error popup
+                  _showUploadPopup('Failed to add car: $e', false);
                 }
               } else {
                 _showUploadPopup('Please fill all fields correctly.', false);
