@@ -4,9 +4,19 @@ import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/parkingInfoList.dart';
+import 'package:front_end/logic/pageNavigationController.dart';
+import 'package:front_end/pages/privacyPage.dart';
+import 'package:front_end/pages/faqPage.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  final PageNavigationController navigationController;
+  final Function updateNavbar; // Added this callback to update the navbar
+
+  const MainPage({
+    super.key,
+    required this.navigationController,
+    required this.updateNavbar, // Required this parameter
+  });
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -84,10 +94,9 @@ class _MainPageState extends State<MainPage> {
                       const AutoSizeText(
                         'Welcome Back!',
                         style: TextStyle(
-                          fontSize: 44,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w100
-                        ),
+                            fontSize: 44,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w100),
                         maxLines: 1,
                       ),
                     ],
@@ -128,6 +137,8 @@ class _MainPageState extends State<MainPage> {
                           height: cardIconHeight,
                           iconPath: 'lib/assets/icons/account.svg',
                           onTap: () {
+                            widget.updateNavbar(3);
+                            widget.navigationController.navigateToPage(3);
                           },
                         ),
                         CustomCardIcon(
@@ -135,14 +146,28 @@ class _MainPageState extends State<MainPage> {
                           width: cardIconWidth,
                           height: cardIconHeight,
                           iconPath: 'lib/assets/icons/privacy.svg',
-                          onTap: () => print('Pressed Privacy'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PrivacyPage(),
+                              ),
+                            );
+                          },
                         ),
                         CustomCardIcon(
                           title: 'Help',
                           width: cardIconWidth,
                           height: cardIconHeight,
                           iconPath: 'lib/assets/icons/help.svg',
-                          onTap: () => print('Pressed Help'),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HelpPage(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

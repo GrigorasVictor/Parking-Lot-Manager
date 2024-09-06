@@ -25,6 +25,12 @@ class _NavbarState extends State<Navbar> {
     super.dispose();
   }
 
+  void updateNavbar(int newIndex) {
+    setState(() {
+      _navigationController.indexPage = newIndex;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<bool> navbarColor = [true, false, true, true];
@@ -54,7 +60,7 @@ class _NavbarState extends State<Navbar> {
         tabBackgroundColor: const Color(itemColorHighlightedTransparent),
         padding: const EdgeInsets.all(paddingValue),
         onTabChange: (indexPage) {
-          _navigationController.navigateToPage(indexPage, setState);
+          _navigationController.navigateToPage(indexPage);
         },
         tabs: const [
           GButton(
@@ -79,11 +85,14 @@ class _NavbarState extends State<Navbar> {
       body: PageView(
         controller: _navigationController.pageController,
         physics: const NeverScrollableScrollPhysics(), 
-        children: const [
-          MainPage(),
-          SubscriptionPage(),
-          MapPage(),
-          AccountPage(),
+        children: [
+          MainPage(
+            navigationController: _navigationController,
+            updateNavbar: updateNavbar, // Passing the updateNavbar function here
+          ),
+          const SubscriptionPage(),
+          const MapPage(),
+          const AccountPage(),
         ],
       ),
     );
