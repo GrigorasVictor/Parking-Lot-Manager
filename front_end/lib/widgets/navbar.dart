@@ -19,17 +19,29 @@ class _NavbarState extends State<Navbar> {
   final PageNavigationController _navigationController =
       PageNavigationController();
 
+  final Map<int, List<Color>> _navbarColors = { // background and text
+    0: [const Color(backgroundColor), Colors.white],      // Home
+    1: [Colors.white, Colors.black],            // Subscription
+    2: [const Color(backgroundColor), Colors.white],      // Location
+    3: [const Color(backgroundColor), Colors.white],      // Account
+  };
+
   @override
   void dispose() {
     _navigationController.dispose();
     super.dispose();
   }
 
+  void updateNavbar(int newIndex) {
+    setState(() {
+      _navigationController.indexPage = newIndex;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode = _navigationController.indexPage % 2 == 0;  // Example: 
-    int backgroundColorAppBar = isDarkMode ? backgroundColor : itemColor;
-    Color textColor = isDarkMode ? Colors.white : Colors.black;
+    // Get the colors for the current page
+    List<Color> currentColors = _navbarColors[_navigationController.indexPage]!;
 
     return Scaffold(
       appBar: AppBar(
@@ -37,14 +49,14 @@ class _NavbarState extends State<Navbar> {
         title: Text(
           "P A R K W I S E",
           style: TextStyle(
-            color: textColor, 
+            color: currentColors[1],  // Text color from the map
           ),
         ),
         leading: SvgPicture.asset(
           'lib/assets/icons/logo.svg',
-          color: textColor, 
+          color: currentColors[1],   // Icon color from the map
         ),
-        backgroundColor: Color(backgroundColorAppBar), 
+        backgroundColor: currentColors[0], // Background color from the map
       ),
       bottomNavigationBar: GNav(
         selectedIndex: _navigationController.indexPage,
@@ -54,7 +66,8 @@ class _NavbarState extends State<Navbar> {
         tabBackgroundColor: const Color(itemColorHighlightedTransparent),
         padding: const EdgeInsets.all(paddingValue),
         onTabChange: (indexPage) {
-          _navigationController.navigateToPage(indexPage, setState);
+          _navigationController.navigateToPage(indexPage);
+          updateNavbar(indexPage);
         },
         tabs: const [
           GButton(
@@ -75,15 +88,14 @@ class _NavbarState extends State<Navbar> {
           ),
         ],
       ),
-      
       body: PageView(
         controller: _navigationController.pageController,
-        physics: const NeverScrollableScrollPhysics(), 
-        children: const [
-          MainPage(),
-          SubscriptionPage(),
-          MapPage(),
-          AccountPage(),
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          MainPage(navigationController: _navigationController, updateNavbar: updateNavbar),
+          const SubscriptionPage(),
+          const MapPage(),
+          const AccountPage(),
         ],
       ),
     );

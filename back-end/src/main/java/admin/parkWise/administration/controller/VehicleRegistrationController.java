@@ -8,4 +8,5 @@ import java.util.List;
 @RestController
 @RequestMapping("/vehicleRegistration")
 public class VehicleRegistrationController extends AbstractController<VehicleRegistration, VehicleRegistrationRepo>{
+
 }

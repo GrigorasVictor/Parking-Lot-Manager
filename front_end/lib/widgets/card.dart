@@ -17,7 +17,6 @@ class CustomCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             if (title != null)
-              // maybe icon display
               Text(title!, style: const TextStyle(fontWeight: FontWeight.bold)),
             Card(
               shape: RoundedRectangleBorder(

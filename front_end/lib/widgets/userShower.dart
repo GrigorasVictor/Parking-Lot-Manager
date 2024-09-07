@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:front_end/model/user.dart';
 import 'package:front_end/logic/httpReq.dart';
 import 'card.dart';
+import 'dart:async';
 
 FutureBuilder<User> UserShower(int userNo) {
   const double cardWidth = 500;
-  const double cardHeight = 75;
+  const double cardHeight = 50;
 
   return FutureBuilder<User>(
     future: getUser(userNo),
@@ -42,12 +43,23 @@ FutureBuilder<User> UserShower(int userNo) {
                   'Registered licence plates:'),
             ),
             for (var registration in snapshot.data!.registrations)
-              CustomCard(
-                content: registration.licencePlate,
-                width: cardWidth - 100,
-                height: cardHeight,
-              )
-            // TODO: Also show the number plates in a separate column
+              GestureDetector(
+                onSecondaryTap: () {
+                  // Right-click will trigger the delete dialog on desktop
+                  _showDeleteDialog(context, registration.licencePlate, userNo);
+                },
+                onTapDown: (details) {
+                  Timer(Duration(milliseconds: 500), () {
+                    _showDeleteDialog(
+                        context, registration.licencePlate, userNo);
+                  });
+                },
+                child: CustomCard(
+                  content: registration.licencePlate,
+                  width: cardWidth - 100,
+                  height: cardHeight,
+                ),
+              ),
           ],
         );
       } else if (snapshot.hasError) {
@@ -57,4 +69,50 @@ FutureBuilder<User> UserShower(int userNo) {
       }
     },
   );
+}
+
+void _showDeleteDialog(BuildContext context, String licencePlate, int userNo) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Delete Licence Plate"),
+        content: Text("Are you sure you want to delete $licencePlate?"),
+        actions: <Widget>[
+          TextButton(
+            child: const Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+          TextButton(
+            child: const Text("Delete"),
+            onPressed: () {
+              _deleteLicencePlate(context, licencePlate,
+                  userNo); // Call the delete function and pass context
+              Navigator.of(context).pop(); // Close the dialog after deletion
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _deleteLicencePlate(
+    BuildContext context, String licencePlate, int userNo) async {
+  try {
+    await deleteLicencePlate(licencePlate,
+        userNo); // Assuming you have a function like this in httpReq
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text('Licence plate $licencePlate deleted successfully')),
+    );
+    // Optionally refresh the user data here, if necessary
+  } catch (error) {
+    // Show error message using a snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error deleting licence plate: $error')),
+    );
+  }
 }
