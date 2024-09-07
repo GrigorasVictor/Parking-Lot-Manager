@@ -46,8 +46,7 @@ class _AccountPageState extends State<AccountPage> {
       if (response.statusCode == 200) {
         final responseData = await response.stream.bytesToString();
         final data = jsonDecode(responseData);
-        return data[
-            'image_url']; // Extract and return the image URL from response
+        return data['image_url']; // Extract and return the image URL from response
       } else {
         throw Exception('Failed to upload image: ${response.statusCode}');
       }
@@ -144,129 +143,129 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-void _showAddCarDialog() {
-  String part1 = ''; // First part (2 letters)
-  String part2 = ''; // Second part (2 numbers)
-  String part3 = ''; // Third part (3 letters)
+  void _showAddCarDialog() {
+    String part1 = ''; // First part (2 letters)
+    String part2 = ''; // Second part (2 numbers)
+    String part3 = ''; // Third part (3 letters)
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Colors.white, // Set a visible background color
-        title: const Text(
-          'Add Car',
-          style: TextStyle(
-            color: Colors.black, // Ensure text is visible
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white, // Set a visible background color
+          title: const Text(
+            'Add Car',
+            style: TextStyle(
+              color: Colors.black, // Ensure text is visible
+            ),
           ),
-        ),
-        content: Row(
-          children: [
-            // First input: 2 letters
-            Expanded(
-              flex: 2,
-              child: TextField(
-                maxLength: 2, // Limit to 2 characters
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
-                ],
-                onChanged: (value) {
-                  part1 = value;
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Letter',
-                  counterText: '', // Hide character counter
-                  labelStyle: TextStyle(color: Colors.grey),
+          content: Row(
+            children: [
+              // First input: 2 letters
+              Expanded(
+                flex: 2,
+                child: TextField(
+                  maxLength: 2, // Limit to 2 characters
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
+                  ],
+                  onChanged: (value) {
+                    part1 = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Letter',
+                    counterText: '', // Hide character counter
+                    labelStyle: TextStyle(color: Colors.grey),
+                  ),
+                  style: const TextStyle(color: Colors.black),
                 ),
-                style: const TextStyle(color: Colors.black),
+              ),
+              const SizedBox(width: 10),
+
+              // Second input: 2 numbers
+              Expanded(
+                flex: 2,
+                child: TextField(
+                  maxLength: 2, // Limit to 2 characters
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly, // Only numbers
+                  ],
+                  onChanged: (value) {
+                    part2 = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Number',
+                    counterText: '', // Hide character counter
+                    labelStyle: TextStyle(color: Colors.grey),
+                  ),
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+              const SizedBox(width: 10),
+
+              // Third input: 3 letters
+              Expanded(
+                flex: 3,
+                child: TextField(
+                  maxLength: 3, // Limit to 3 characters
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
+                  ],
+                  onChanged: (value) {
+                    part3 = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Letter',
+                    counterText: '', // Hide character counter
+                    labelStyle: TextStyle(color: Colors.grey),
+                  ),
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.redAccent,
+                ),
               ),
             ),
-            const SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () async {
+                final String numberPlate = '$part1$part2$part3';
 
-            // Second input: 2 numbers
-            Expanded(
-              flex: 2,
-              child: TextField(
-                maxLength: 2, // Limit to 2 characters
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly, // Only numbers
-                ],
-                onChanged: (value) {
-                  part2 = value;
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Number',
-                  counterText: '', // Hide character counter
-                  labelStyle: TextStyle(color: Colors.grey),
-                ),
-                style: const TextStyle(color: Colors.black),
+                if (part1.length == 2 && part2.length == 2 && part3.length == 3) {
+                  try {
+                    print("Number Plate: $numberPlate");
+                    await sendNumberPlate(numberPlate, _userId);
+                    Navigator.of(context).pop();
+                    setState(() {});
+                    _showUploadPopup('Car added successfully!', true);
+                  } catch (e) {
+                    Navigator.of(context).pop();
+                    _showUploadPopup('Failed to add car: $e', false);
+                  }
+                } else {
+                  _showUploadPopup('Please fill all fields correctly.', false);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(itemColorHighlighted),
+                foregroundColor: Colors.white,
               ),
-            ),
-            const SizedBox(width: 10),
-
-            // Third input: 3 letters
-            Expanded(
-              flex: 3,
-              child: TextField(
-                maxLength: 3, // Limit to 3 characters
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
-                ],
-                onChanged: (value) {
-                  part3 = value;
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Letter',
-                  counterText: '', // Hide character counter
-                  labelStyle: TextStyle(color: Colors.grey),
-                ),
-                style: const TextStyle(color: Colors.black),
-              ),
+              child: const Text('Add'),
             ),
           ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(
-                color: Colors.redAccent,
-              ),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final String numberPlate = '$part1$part2$part3';
-
-              if (part1.length == 2 && part2.length == 2 && part3.length == 3) {
-                try {
-                  print("Number Plate: $numberPlate");
-                  await sendNumberPlate(numberPlate, _userId);
-                  Navigator.of(context).pop();
-                  setState(() {});
-                  _showUploadPopup('Car added successfully!', true); 
-                } catch (e) {
-                  Navigator.of(context).pop();
-                  _showUploadPopup('Failed to add car: $e', false);
-                }
-              } else {
-                _showUploadPopup('Please fill all fields correctly.', false);
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(itemColorHighlighted),
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Add'),
-          ),
-        ],
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -284,8 +283,8 @@ void _showAddCarDialog() {
                   alignment: Alignment.center,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 100,
+                      width: MediaQuery.of(context).size.width - 100,
+                      height: 80,
                       decoration: const BoxDecoration(
                         color: Color(backgroundColor),
                         borderRadius: BorderRadius.only(
@@ -294,19 +293,29 @@ void _showAddCarDialog() {
                         ),
                       ),
                     ),
-                    // Profile Avatar
+                    // Tappable avatar
                     GestureDetector(
-                      onTap: _pickImage,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Color(itemColorHighlighted),
-                        backgroundImage: _uploadedImageUrl != null
-                            ? NetworkImage(_uploadedImageUrl!)
-                            : (_image != null ? FileImage(_image!) : null),
-                        child: _uploadedImageUrl == null && _image == null
-                            ? const Icon(Icons.person,
-                                size: 60, color: Colors.black)
-                            : null,
+                      onTap: _pickImage, // Open image picker when tapped
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 4), // White border
+                        ),
+                        child: Center(
+                          child: CircleAvatar(
+                            radius: 100,
+                            backgroundColor: Color(itemColorHighlighted),
+                            backgroundImage: _uploadedImageUrl != null
+                                ? NetworkImage(_uploadedImageUrl!)
+                                : (_image != null ? FileImage(_image!) : null),
+                            child: _uploadedImageUrl == null && _image == null
+                                ? const Icon(Icons.person,
+                                    size: 60, color: Colors.black)
+                                : null,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -323,15 +332,15 @@ void _showAddCarDialog() {
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Align(
+                const SizedBox(height: 5),
+                /*const Align(
                   alignment: Alignment.centerLeft,
                   child: AutoSizeText(
                     "  Details",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.left,
                   ),
-                ),
+                ),*/
                 Expanded(
                   child: SingleChildScrollView(
                       child: Column(

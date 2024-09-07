@@ -13,7 +13,7 @@ class ListCardItem {
 
 class Listcard extends StatelessWidget {
   final List<ListCardItem> items;
-  final OnItemTapCallback onItemTap;  
+  final OnItemTapCallback onItemTap;
 
   const Listcard({super.key, required this.items, required this.onItemTap});
 
@@ -28,22 +28,28 @@ class Listcard extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 10.0,
             spreadRadius: 2.0,
-            offset: const Offset(0, 5), 
+            offset: const Offset(0, 5),
           ),
         ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.0),
         child: ListView.separated(
-          padding: const EdgeInsets.all(1.0),
+          padding: const EdgeInsets.all(8.0),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
           separatorBuilder: (context, index) =>
-              const Divider(height: 0.5, color: Color.fromARGB(255, 187, 187, 187)),
+              const Divider(height: 1.0, color: Color.fromARGB(255, 187, 187, 187)),
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Center(
+            return GestureDetector(
+              onTap: () {
+                onItemTap(items[index].price, items[index].title);
+              },
+              child: Container(
+                height: 60, // Fixed height for even distribution
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                alignment: Alignment.center, // Centering the content
                 child: AutoSizeText(
                   items[index].title,
                   style: const TextStyle(
@@ -54,9 +60,6 @@ class Listcard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              onTap: () {
-                onItemTap(items[index].price, items[index].title);
-              },
             );
           },
         ),
