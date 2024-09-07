@@ -21,7 +21,7 @@ public class PhotoController {
 
         String uploadsDir = "/uploads/";
         String realPathToUploads = servletRequest.getServletContext().getRealPath(uploadsDir);
-        if(! new File(realPathToUploads).exists()) {
+        if(!new File(realPathToUploads).exists()) {
             new File(realPathToUploads).mkdir();
         }
 

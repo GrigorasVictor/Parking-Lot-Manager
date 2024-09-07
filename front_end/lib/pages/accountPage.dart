@@ -6,7 +6,6 @@ import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/customButton.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/userShower.dart';
 import 'package:front_end/widgets/uploadPopUp.dart';
 import 'package:http_parser/http_parser.dart';
@@ -306,7 +305,7 @@ class _AccountPageState extends State<AccountPage> {
                         child: Center(
                           child: CircleAvatar(
                             radius: 100,
-                            backgroundColor: Color(itemColorHighlighted),
+                            backgroundColor: const Color(itemColorHighlighted),
                             backgroundImage: _uploadedImageUrl != null
                                 ? NetworkImage(_uploadedImageUrl!)
                                 : (_image != null ? FileImage(_image!) : null),

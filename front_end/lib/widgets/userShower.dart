@@ -49,7 +49,7 @@ FutureBuilder<User> UserShower(int userNo) {
                   _showDeleteDialog(context, registration.licencePlate, userNo);
                 },
                 onTapDown: (details) {
-                  Timer(Duration(milliseconds: 500), () {
+                  Timer(const Duration(milliseconds: 500), () {
                     _showDeleteDialog(
                         context, registration.licencePlate, userNo);
                   });

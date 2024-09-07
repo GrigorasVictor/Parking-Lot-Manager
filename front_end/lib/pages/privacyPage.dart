@@ -5,7 +5,7 @@ import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/customListTile.dart'; // Import the custom ListTile widget
 
 class PrivacyPage extends StatelessWidget {
-  const PrivacyPage({Key? key}) : super(key: key);
+  const PrivacyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +26,14 @@ class PrivacyPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width, // Fill screen width
               fit: BoxFit.cover,
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Center(
                 child: Column(
                   children: [
                     AutoSizeText(
                       'Although we have excellent services, we want to extend these services by ensuring that your belongings, such as your car, remain safe.',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
@@ -42,37 +42,37 @@ class PrivacyPage extends StatelessWidget {
                       textAlign: TextAlign.center,
                       minFontSize: 18,
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10),
                     AutoSizeText.rich(
                       TextSpan(
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 22,
                           color: Colors.black,
                         ),
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text: 'Here are some ',
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                           TextSpan(
                             text: 'tips',
-                            style: const TextStyle(
-                              color: Colors.blue,
+                            style: TextStyle(
+                              color: Colors.green,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text: ' for ',
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                           TextSpan(
                             text: 'protecting',
-                            style: const TextStyle(
-                              color: Colors.red,
+                            style: TextStyle(
+                              color: Colors.green,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text: ' your car from theft:',
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
@@ -86,8 +86,8 @@ class PrivacyPage extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
                   CustomListTile(

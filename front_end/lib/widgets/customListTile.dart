@@ -6,10 +6,10 @@ class CustomListTile extends StatelessWidget {
   final String text;
 
   const CustomListTile({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

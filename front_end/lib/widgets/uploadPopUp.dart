@@ -6,11 +6,11 @@ class UploadPopup extends StatelessWidget {
   final VoidCallback onPressed;
 
   const UploadPopup({
-    Key? key,
+    super.key,
     required this.message,
     required this.isSuccess,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class UploadPopup extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: onPressed,
-          child: Text('OK'),
+          child: const Text('OK'),
         ),
       ],
     );
