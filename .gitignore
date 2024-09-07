@@ -17,3 +17,4 @@
 /PythonAI/yoloAssets/runs
 *.localconfig
 /back-end/src/main/resources/application.properties
+*/.idea
