@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:front_end/widgets/constants.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart'; 
+import 'package:front_end/widgets/constants.dart'; 
+import 'package:auto_size_text/auto_size_text.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -14,29 +16,44 @@ class _MapPageState extends State<MapPage> {
   final String font = 'Inter';
   final double iconSize = 60;
 
-  static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(46.7712, 23.6236), // Cluj-Napoca
-    zoom: 12, 
-  );
-
-  late GoogleMapController mapController;
+  // Coordinates for Cluj-Napoca
+  final LatLng clujNapocaLatLng = LatLng(46.7712, 23.6236);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(backgroundColor),
-      body: GoogleMap(
-        initialCameraPosition: _initialPosition,
-        onMapCreated: (GoogleMapController controller) {
-          mapController = controller;
-        },
+      backgroundColor: const Color(backgroundColor), 
+      body: Column(
+        children: [
+          // The map widget should take up most of the screen space
+          Expanded(
+            child: FlutterMap(
+              options: MapOptions(
+                initialCenter: clujNapocaLatLng, // Center map on Cluj-Napoca
+                initialZoom: 13.0, 
+              ),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  subdomains: ['a', 'b', 'c'],
+                ),
+              ],
+            ),
+          ),
+          // The container with a height of 50
+          Container(
+            height: 15,
+            color: Colors.grey[300], // You can change the color if needed
+            child: const Center(
+              child: AutoSizeText(
+                "© OpenStreetMap contributors",
+                style: TextStyle(fontSize: 16),
+                maxLines: 1,
+              ),
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    mapController.dispose();
-    super.dispose();
   }
 }

@@ -22,7 +22,7 @@ class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
   String? _uploadedImageUrl;
-  final int _userId = 1; // Replace with actual user ID
+  final int _userId = 3; // Replace with actual user ID
 
   @override
   void initState() {

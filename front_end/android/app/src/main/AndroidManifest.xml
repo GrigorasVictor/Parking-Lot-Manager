@@ -44,12 +44,4 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
-
-    <!-- Google Map Api-->
-    <application>
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY"/>
-    </application>
-
 </manifest>
