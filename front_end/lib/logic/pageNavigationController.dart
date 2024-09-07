@@ -7,15 +7,12 @@ class PageNavigationController {
     pageController.dispose();
   }
 
-  void navigateToPage(int index, Function setStateCallback) {
-    indexPage=index;
-    print(indexPage);
-    setStateCallback(() {
-      pageController.animateToPage(
-          indexPage,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.fastEaseInToSlowEaseOut,
-        );
-    });
+ void navigateToPage(int index) {
+    indexPage = index;
+    pageController.animateToPage(
+      indexPage,
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.fastEaseInToSlowEaseOut,
+    );
   }
 }
