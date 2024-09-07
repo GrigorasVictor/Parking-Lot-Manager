@@ -14,8 +14,6 @@ public class VehicleRegistration {
     @Column(name = "registration_id")
     private Integer registrationId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)
     @Column(name = "user_id")
     @JsonProperty("user_id")
     private Integer user;

@@ -8,23 +8,15 @@ def check_registration_number_exists(registration_number):
     with open(FILE_PATH, 'r') as file:
         conn_params = json.load(file)
 
-    # = {
-    #     'dbname': 'postgres',
-    #     'user': 'postgres',
-    #     'password': 'changeme',
-    #     'host': 'localhost',  # e.g., 'localhost'
-    #     'port': '5432'   # e.g., '5432'
-    # }
-
     connection = None
     try:
         # Connect to the PostgreSQL database
         connection = psycopg2.connect(**conn_params)
         cursor = connection.cursor()
 
-        query = """SELECT user_id
+        query = '''SELECT user_id
             FROM parking_management.vehicle_registration
-            WHERE registration_number = %s;"""
+            WHERE registration_number = %s;'''
 
         cursor.execute(query, (registration_number,))
         result = cursor.fetchone()

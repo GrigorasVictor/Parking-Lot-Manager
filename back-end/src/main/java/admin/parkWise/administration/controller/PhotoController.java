@@ -1,22 +1,20 @@
 package admin.parkWise.administration.controller;
 
-import admin.parkWise.administration.model.User;
-import admin.parkWise.administration.repository.UserRepo;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
-public class UserController extends AbstractController<User, UserRepo>{
-    @PostMapping("/upload-photo")
+public class PhotoController {
+
+//    @PostMapping("/upload-photo")
     public ResponseEntity<String> handleFileUpload(@RequestParam("photo") MultipartFile photo, HttpServletRequest servletRequest) {
 
         if(photo.isEmpty()) return new ResponseEntity<>("Photo empty", HttpStatus.BAD_REQUEST);
