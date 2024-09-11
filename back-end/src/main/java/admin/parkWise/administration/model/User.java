@@ -28,9 +28,9 @@ public class User {
     @JsonProperty("email")
     private String email;
 
-    @Column(name = "password", nullable = false)
-    @JsonProperty("password")
-    private String password;
+//    @Column(name = "password", nullable = false)
+//    @JsonProperty("password")
+//    private String password;
 
     @Column(name = "phone_number", nullable = false)
     @JsonProperty("phone_number")
