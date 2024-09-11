@@ -27,6 +27,13 @@ public class User {
     @JsonProperty("email")
     private String email;
 
+<<<<<<< HEAD:back-end/src/main/java/admin/parkWise/administration/models/User.java
+=======
+//    @Column(name = "password", nullable = false)
+//    @JsonProperty("password")
+//    private String password;
+
+>>>>>>> 3522140b63e507ca1f979ace265ee83b18bf6ef5:back-end/src/main/java/admin/parkWise/administration/model/User.java
     @Column(name = "phone_number", nullable = false)
     @JsonProperty("phone_number")
     private String phoneNumber;
