@@ -25,6 +25,8 @@ public class UserAuthController {
     @PostMapping("/signUp")
     public ResponseEntity<UserAuth> signIn(@RequestBody UserAuth newEntry) {
         System.out.println(newEntry);
+        //UserAuth userAuth = new UserAuth(0, newEntry.getEmail(), newEntry.getPassword(), null, null);
+
 
         return new ResponseEntity<>(newEntry, HttpStatus.OK);
     }
