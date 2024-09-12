@@ -28,10 +28,6 @@ public class User {
     @JsonProperty("email")
     private String email;
 
-//    @Column(name = "password", nullable = false)
-//    @JsonProperty("password")
-//    private String password;
-
     @Column(name = "phone_number", nullable = false)
     @JsonProperty("phone_number")
     private String phoneNumber;
@@ -39,6 +35,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("licencePlates")
     private List<VehicleRegistration> licencePlates = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty("subscriptions")
+    private List<UserSubscription> userSubscriptions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty("parkingRecords")
+    private List<ParkingRecord> parkingRecords = new ArrayList<>();
 
     public User(Integer id){
         this.userId = id;
