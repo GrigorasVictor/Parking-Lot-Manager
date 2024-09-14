@@ -42,8 +42,6 @@ public class JwtService {
         return Jwts.builder()
                 .claims()
                 .add(claims)
-//                .subject(authData.getUserId().toString())
-//                .subject(authData.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 100 * 60 * 5))
                 .and()

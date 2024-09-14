@@ -23,7 +23,8 @@ public class UserAuthDBService {
 
     private BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder(10);
 
-    public void register(UserAuth userAuth){
+    public void register(UserAuth userAuth) throws Exception {
+        ValidatorsService.validate(userAuth);
         userAuth.setPassword(bCryptEncoder.encode(userAuth.getPassword()));
         authRepo.save(userAuth);
     }
@@ -36,7 +37,6 @@ public class UserAuthDBService {
 
         if(authentication.isAuthenticated())
             return JwtService.genToken(authDataWithId);
-//            return "wow";
         return "failed";
     }
 }
