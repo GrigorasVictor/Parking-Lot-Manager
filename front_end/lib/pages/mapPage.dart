@@ -17,7 +17,7 @@ class _MapPageState extends State<MapPage> {
   final double iconSize = 60;
 
   // Coordinates for Cluj-Napoca
-  final LatLng clujNapocaLatLng = LatLng(46.7712, 23.6236);
+  final LatLng clujNapocaLatLng = const LatLng(46.7712, 23.6236);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _MapPageState extends State<MapPage> {
               children: [
                 TileLayer(
                   urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: ['a', 'b', 'c'],
+                  subdomains: const ['a', 'b', 'c'],
                 ),
               ],
             ),

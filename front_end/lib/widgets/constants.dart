@@ -13,4 +13,6 @@ void setScreenWidth(BuildContext context) {
   fontSize = screenWidth * 0.10;
 }
 
+// login/signin page
 
+const backgroundLogColor = 0xFF202A36;

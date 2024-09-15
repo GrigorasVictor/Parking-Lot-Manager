@@ -127,6 +127,7 @@ class _AccountPageState extends State<AccountPage> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
+                Navigator.pushReplacementNamed(context, '/login');
               },
               child: const Text(
                 'OK',
@@ -344,7 +345,7 @@ class _AccountPageState extends State<AccountPage> {
                   child: SingleChildScrollView(
                       child: Column(
                     children: [
-                      UserShower(_userId),
+                      UserShower(userNo: _userId),
                       CustomElevatedButton(
                           width: 400,
                           height: 50,
