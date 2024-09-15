@@ -46,7 +46,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (optToken.isEmpty()) {
             //TODO: maybe throw an error or smth
+            filterChain.doFilter(request, response);
             System.out.println("null");
+            return;
         } else {
             token = optToken.get();
             System.out.println(token);

@@ -55,7 +55,12 @@ public class JwtService {
     }
 
     public static Optional<String> getToken(HttpServletRequest request){
-        return Arrays.stream(request.getCookies())
+        Cookie[] cookies = request.getCookies();
+        if(cookies == null){
+            return Optional.empty();
+        }
+
+        return Arrays.stream(cookies)
                 .filter(cookie->cookie.getName().equals("jwToken"))
                 .map(Cookie::getValue)
                 .findAny();
