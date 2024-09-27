@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:front_end/widgets/constants.dart'; // Import flutter_svg for the SVG image
+import 'package:front_end/widgets/constants.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -17,10 +17,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final logoSize = MediaQuery.of(context).size.width * 0.3; // Size for the logo
+    final logoSize = MediaQuery.of(context).size.width * 0.3; 
 
     return Scaffold(
-      backgroundColor: const Color(backgroundLogColor), // Dark background color as per the image
+      backgroundColor: const Color(backgroundLogColor), 
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   const SizedBox(height: 50), 
                   SvgPicture.asset(
-                    'lib/assets/icons/logoV2.svg', // Replace with your actual SVG asset
+                    'lib/assets/icons/logoV2.svg', 
                     height: logoSize,
                     width: logoSize,
                   ),
@@ -45,9 +45,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  // Email Input Field
                   TextFormField(
-                    style: const TextStyle(color: Colors.white), // White text for input
+                    style: const TextStyle(color: Colors.white), 
                     decoration: InputDecoration(
                       labelText: 'E-mail',
                       labelStyle: const TextStyle(color: Colors.white),
@@ -74,9 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  // Password Input Field
                   TextFormField(
-                    style: const TextStyle(color: Colors.white), // White text for input
+                    style: const TextStyle(color: Colors.white), 
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: const TextStyle(color: Colors.white),
@@ -102,12 +100,10 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
-                  // Forgot Password
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        // Handle forgot password
                       },
                       child: const Text(
                         'Have you forgotten the password?',
@@ -116,7 +112,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Login Button
                   isLoading
                       ? const CircularProgressIndicator()
                       : SizedBox(
@@ -145,7 +140,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                   const SizedBox(height: 20),
-                  // Sign-up Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -183,14 +177,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Helper for Social Media Buttons
   Widget _buildSocialButton(String text, String logoPath) {
   return SizedBox(
     width: double.infinity,
     height: 50,
     child: ElevatedButton(
       onPressed: () {
-        // Handle social media login
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,

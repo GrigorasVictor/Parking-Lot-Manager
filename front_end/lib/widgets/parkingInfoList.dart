@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:front_end/pages/reservationPage.dart';
 import 'package:intl/intl.dart';
 import 'constants.dart';
 import 'dart:async';
@@ -33,7 +34,6 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
   late String _formattedTime;
   late String _formattedDate;
   bool _isLoading = true;
-  bool _isActive = false;
 
   @override
   void initState() {
@@ -46,9 +46,8 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
         if (widget.initialHours == -1 ||
             widget.initialMinutes == -1 ||
             widget.initialSeconds == -1) {
-          _setInactive();
+          _formattedTime = 'Inactive';
         } else {
-          _isActive = true;
           _startTimerWithInitialTime();
         }
         _isLoading = false;
@@ -63,8 +62,6 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
 
     if (initialSeconds >= 0) {
       _startTimer(initialSeconds: initialSeconds);
-    } else {
-      _setInactive(); // Handle invalid time
     }
   }
 
@@ -83,43 +80,28 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
     });
   }
 
-  void _setInactive() {
-    setState(() {
-      _isActive = false;
-      _formattedTime = 'Inactive';
-      widget.parkingSpot = '-';
-      _timer?.cancel();
-    });
-  }
-
-  void _setActive() {
-    setState(() {
-      _isActive = true;
-      _formattedTime = '00:00:00';
-      widget.parkingSpot = 'A${widget.parkingId}';
-    });
-
-    final int initialSeconds = (widget.initialHours ?? 0) * 3600 +
-        (widget.initialMinutes ?? 0) * 60 +
-        (widget.initialSeconds ?? 0);
-        
-    if (initialSeconds >= 0) {
-      _startTimer(initialSeconds: initialSeconds);
-    } else {
-      _setInactive(); // Handle invalid time
-    }
+  void _navigateToDetailsPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReservationPage(
+          parkingId: widget.parkingId,
+          parkingSpot: widget.parkingSpot,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent, // Transparent background for the container
+      color: Colors.transparent,
       child: Stack(
         children: [
           SizedBox(
             width: double.infinity,
             child: Container(
-              padding: EdgeInsets.zero, // Ensure no padding
+              padding: EdgeInsets.zero,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8.0),
@@ -132,9 +114,9 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                     height: 50,
                     width: 50,
                     child: SvgPicture.asset(
-                      _isActive
-                          ? 'lib/assets/icons/active.svg'
-                          : 'lib/assets/icons/inactive.svg',
+                      widget.initialHours == -1 ? 
+                      'lib/assets/icons/inactive.svg' :
+                      'lib/assets/icons/active.svg',
                       width: 50,
                       height: 50,
                     ),
@@ -169,7 +151,6 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                     ),
                   ),
                   const SizedBox(width: 15),
-                  // Added padding on the right side
                   Padding(
                     padding: const EdgeInsets.only(right: 16.0),
                     child: SizedBox(
@@ -195,16 +176,12 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                                 AutoSizeText(
                                   _formattedDate,
                                   style: TextStyle(
-                                    color: _isActive
-                                        ? const Color(0xFFADBBB9)
-                                        : const Color(0xFFADBBB9)
-                                            .withOpacity(0.5),
+                                    color: widget.initialHours == -1
+                                        ? const Color(0xFFADBBB9).withOpacity(0.5)
+                                        : const Color(0xFFADBBB9),
                                     fontFamily: 'Inter',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
-                                    decoration: _isActive
-                                        ? TextDecoration.none
-                                        : TextDecoration.lineThrough,
                                   ),
                                   maxLines: 1,
                                   textAlign: TextAlign.right,
@@ -219,18 +196,11 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
           ),
           Positioned.fill(
             child: Material(
-              color: Colors.transparent, // Transparent material
+              color: Colors.transparent,
               child: InkWell(
-                onTap: () {
-                  if (_isActive) {
-                    _setInactive(); // Set to inactive if currently active
-                  } else {
-                    _setActive(); // Set to active if currently inactive
-                  }
-                  widget.onTap(); // Call the parent callback
-                },
+                onTap: _navigateToDetailsPage, // Navigate to details page
                 splashColor: const Color(itemColorHighlightedTransparent),
-                highlightColor: Colors.transparent, // No highlight color
+                highlightColor: Colors.transparent,
               ),
             ),
           ),

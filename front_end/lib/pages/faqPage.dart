@@ -9,6 +9,7 @@ class HelpPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Help'),
       ),
+      body: Text("Maybe a chatBot or cartonase cu FAQ(asta la final sa vedem cum legam totul)"),
     );
   }
 }

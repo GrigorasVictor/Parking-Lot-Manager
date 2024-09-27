@@ -26,11 +26,11 @@ class CustomListTile extends StatelessWidget {
           ),
         ],
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10.0), // Rounded corners
+        borderRadius: BorderRadius.circular(10.0), 
       ),
       child: ListTile(
         leading: Padding(
-          padding: const EdgeInsets.only(left: 0), // Move icon 2 pixels to the left
+          padding: const EdgeInsets.only(left: 0), 
           child: Icon(icon, color: Colors.green),
         ),
         title: AutoSizeText(

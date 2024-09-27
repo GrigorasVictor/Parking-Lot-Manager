@@ -103,9 +103,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             const SizedBox(height: 15),
             Row(
               children: [
-                // Total Price Card
                 Expanded(
-                  flex: 4, // 40% of the available width
+                  flex: 4, 
                   child: Container(
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
@@ -147,7 +146,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                // Calendar Card
                 Expanded(
                   flex: 6, 
                   child: Container(

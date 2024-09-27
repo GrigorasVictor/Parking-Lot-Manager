@@ -21,7 +21,6 @@ class SubscriptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate sizes
     double backgroundContainerWidth = width * 0.4; 
     double svgSize = backgroundContainerWidth * 0.67; 
     double svgIconSize = svgSize * 0.67; 
@@ -116,7 +115,7 @@ class SubscriptionCard extends StatelessWidget {
                     minHeight: minButtonHeight,
                     fontSize: 2,
                     onPressed: () {
-                      // Define your button action here
+                      // maybe later
                     },
                     label: "LEARN MORE",
                   ),

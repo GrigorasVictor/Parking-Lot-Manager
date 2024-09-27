@@ -13,7 +13,7 @@ class CustomCardIcon extends StatefulWidget {
     required this.onTap,
   });
 
-  final String iconPath; // The path to the SVG asset
+  final String iconPath; 
   final String? title;
   final double? width, height;
   final VoidCallback onTap;
@@ -26,19 +26,15 @@ class _CustomCardIconState extends State<CustomCardIcon> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
-    // Calculate icon size based on screen dimensions
-    double iconSize = screenWidth * 0.1; // 10% of screen width for icon size
-
-    // Calculate font size based on screen dimensions
-    double fontSize = screenWidth * 0.05; // 5% of screen width for font size
+    double iconSize = screenWidth * 0.1; 
+    double fontSize = screenWidth * 0.05; 
 
     return Container(
-      margin: const EdgeInsets.all(16.0), // Adjust margin to your needs
+      margin: const EdgeInsets.all(16.0), 
       child: Center(
         child: Column(
           crossAxisAlignment:
-              CrossAxisAlignment.center, // Center the icon and text
+              CrossAxisAlignment.center, 
           children: <Widget>[
             Card(
               shape: RoundedRectangleBorder(
@@ -61,9 +57,9 @@ class _CustomCardIconState extends State<CustomCardIcon> {
                         height: iconSize,
                         width: iconSize,
                         fit: BoxFit
-                            .contain, // Ensure the icon scales proportionally
+                            .contain, 
                       ),
-                      const SizedBox(height: 10), // Space between icon and text
+                      const SizedBox(height: 10), 
                       AutoSizeText(
                         widget.title ?? 'error',
                         style: TextStyle(
@@ -71,9 +67,9 @@ class _CustomCardIconState extends State<CustomCardIcon> {
                           fontSize: fontSize,
                           fontWeight: FontWeight.w700,
                         ),
-                        maxLines: 1, // Restricts the text to 1 line
+                        maxLines: 1, 
                         overflow: TextOverflow
-                            .ellipsis, // Handles text overflow with an ellipsis
+                            .ellipsis, 
                       ),
                     ],
                   ),

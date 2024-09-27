@@ -14,5 +14,4 @@ void setScreenWidth(BuildContext context) {
 }
 
 // login/signin page
-
 const backgroundLogColor = 0xFF202A36;

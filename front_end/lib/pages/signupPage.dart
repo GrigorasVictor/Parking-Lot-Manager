@@ -6,7 +6,7 @@ import 'package:front_end/widgets/constants.dart';
 import 'dart:convert';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -52,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Stack(
                     children: [
                       CustomPaint(
-                        size: Size(double.infinity, 40),
+                        size: const Size(double.infinity, 40),
                         painter: CaptchaPainter(captchaText),
                       ),
                       Center(
@@ -100,16 +100,15 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.green,
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
-              child: const Text('Submit'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
@@ -124,6 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   });
                 }
               },
+              child: const Text('Submit'),
             ),
           ],
         );
@@ -132,7 +132,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _signUpUser() async {
-    final url = 'https://your-backend-api.com/signup'; // Replace with your API
+    const url = 'https://your-backend-api.com/signup'; 
     setState(() {
       isLoading = true;
       error = '';
@@ -149,7 +149,6 @@ class _SignUpPageState extends State<SignUpPage> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         if (responseData['success']) {
-          // Navigate to login page after successful sign-up
           Navigator.pushReplacementNamed(context, '/login');
         } else {
           setState(() {
@@ -308,7 +307,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                _showCaptchaDialog(); // Show CAPTCHA dialog
+                                _showCaptchaDialog(); 
                               }
                             },
                             child: const Text(

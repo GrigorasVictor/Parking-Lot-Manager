@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/constants.dart';
-import 'package:front_end/widgets/customListTile.dart'; // Import the custom ListTile widget
+import 'package:front_end/widgets/customListTile.dart'; 
 
 class PrivacyPage extends StatelessWidget {
   const PrivacyPage({super.key});
@@ -19,11 +19,11 @@ class PrivacyPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment:
-              CrossAxisAlignment.stretch, // Stretch to full width
+              CrossAxisAlignment.stretch, 
           children: [
             SvgPicture.asset(
               'lib/assets/icons/securityBanner.svg',
-              width: MediaQuery.of(context).size.width, // Fill screen width
+              width: MediaQuery.of(context).size.width, 
               fit: BoxFit.cover,
             ),
             const Padding(
@@ -124,15 +124,15 @@ class PrivacyPage extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     'lib/assets/icons/securityLogosvg.svg',
-                    width: 40, // Adjust width as needed
-                    height: 40, // Adjust height as needed
-                    fit: BoxFit.scaleDown, // Ensure the SVG fits within the given dimensions
+                    width: 40, 
+                    height: 40, 
+                    fit: BoxFit.scaleDown, 
                   ),
                   SvgPicture.asset(
                     'lib/assets/icons/securityLogosvg2.svg',
-                    width: 40, // Adjust width as needed
-                    height: 40, // Adjust height as needed
-                    fit: BoxFit.scaleDown, // Ensure the SVG fits within the given dimensions
+                    width: 40, 
+                    height: 40, 
+                    fit: BoxFit.scaleDown,
                   ),
                 ],
               ),

@@ -25,7 +25,6 @@ class _MapPageState extends State<MapPage> {
       backgroundColor: const Color(backgroundColor), 
       body: Column(
         children: [
-          // The map widget should take up most of the screen space
           Expanded(
             child: FlutterMap(
               options: MapOptions(
@@ -40,10 +39,9 @@ class _MapPageState extends State<MapPage> {
               ],
             ),
           ),
-          // The container with a height of 50
           Container(
             height: 15,
-            color: Colors.grey[300], // You can change the color if needed
+            color: Colors.grey[300], 
             child: const Center(
               child: AutoSizeText(
                 "© OpenStreetMap contributors",

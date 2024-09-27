@@ -32,7 +32,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Future<String> uploadImage(File image, int id) async {
     final uri = Uri.parse(
-        'https://your-server-url/upload/$id'); // Replace with your server URL
+        'https://your-server-url/upload/$id'); 
     final request = http.MultipartRequest('POST', uri)
       ..files.add(await http.MultipartFile.fromPath(
         'image',
@@ -45,7 +45,7 @@ class _AccountPageState extends State<AccountPage> {
       if (response.statusCode == 200) {
         final responseData = await response.stream.bytesToString();
         final data = jsonDecode(responseData);
-        return data['image_url']; // Extract and return the image URL from response
+        return data['image_url']; 
       } else {
         throw Exception('Failed to upload image: ${response.statusCode}');
       }
@@ -74,7 +74,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Future<void> _fetchUserImage() async {
     final uri = Uri.parse(
-        'https://your-server-url/user/$_userId'); // Replace with your server URL
+        'https://your-server-url/user/$_userId'); 
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -108,31 +108,31 @@ class _AccountPageState extends State<AccountPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color(backgroundColor), // Set dialog background color
+          backgroundColor: const Color(backgroundColor), 
           title: const Text(
             'Logout',
             style: TextStyle(
-              color: Colors.white, // Set title text color
+              color: Colors.white, 
               fontSize: 22,
             ),
           ),
           content: const Text(
             'You have been logged out.',
             style: TextStyle(
-              color: Colors.white70, // Set content text color
+              color: Colors.white70, 
               fontSize: 18,
             ),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
                 Navigator.pushReplacementNamed(context, '/login');
               },
               child: const Text(
                 'OK',
                 style: TextStyle(
-                  color: Colors.redAccent, // Customize button text color
+                  color: Colors.redAccent, 
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -152,20 +152,19 @@ class _AccountPageState extends State<AccountPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, // Set a visible background color
+          backgroundColor: Colors.white, 
           title: const Text(
             'Add Car',
             style: TextStyle(
-              color: Colors.black, // Ensure text is visible
+              color: Colors.black,
             ),
           ),
           content: Row(
             children: [
-              // First input: 2 letters
               Expanded(
                 flex: 2,
                 child: TextField(
-                  maxLength: 2, // Limit to 2 characters
+                  maxLength: 2, 
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
                   ],
@@ -174,7 +173,7 @@ class _AccountPageState extends State<AccountPage> {
                   },
                   decoration: const InputDecoration(
                     labelText: 'Letter',
-                    counterText: '', // Hide character counter
+                    counterText: '', 
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
                   style: const TextStyle(color: Colors.black),
@@ -182,20 +181,19 @@ class _AccountPageState extends State<AccountPage> {
               ),
               const SizedBox(width: 10),
 
-              // Second input: 2 numbers
               Expanded(
                 flex: 2,
                 child: TextField(
-                  maxLength: 2, // Limit to 2 characters
+                  maxLength: 2, 
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly, // Only numbers
+                    FilteringTextInputFormatter.digitsOnly, 
                   ],
                   onChanged: (value) {
                     part2 = value;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Number',
-                    counterText: '', // Hide character counter
+                    counterText: '', 
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
                   style: const TextStyle(color: Colors.black),
@@ -203,20 +201,20 @@ class _AccountPageState extends State<AccountPage> {
               ),
               const SizedBox(width: 10),
 
-              // Third input: 3 letters
+              
               Expanded(
                 flex: 3,
                 child: TextField(
-                  maxLength: 3, // Limit to 3 characters
+                  maxLength: 3, 
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
+                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")), 
                   ],
                   onChanged: (value) {
                     part3 = value;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Letter',
-                    counterText: '', // Hide character counter
+                    counterText: '', 
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
                   style: const TextStyle(color: Colors.black),
@@ -227,7 +225,7 @@ class _AccountPageState extends State<AccountPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
               child: const Text(
                 'Cancel',
@@ -293,7 +291,6 @@ class _AccountPageState extends State<AccountPage> {
                         ),
                       ),
                     ),
-                    // Tappable avatar
                     GestureDetector(
                       onTap: _pickImage, // Open image picker when tapped
                       child: Container(
@@ -301,7 +298,7 @@ class _AccountPageState extends State<AccountPage> {
                         height: 150,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 4), // White border
+                          border: Border.all(color: Colors.white, width: 4), 
                         ),
                         child: Center(
                           child: CircleAvatar(
@@ -321,9 +318,8 @@ class _AccountPageState extends State<AccountPage> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                // Logout button with the logout functionality
                 OutlinedButton(
-                  onPressed: _logout, // Triggers the logout function
+                  onPressed: _logout, 
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.red),
                   ),
@@ -333,14 +329,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                /*const Align(
-                  alignment: Alignment.centerLeft,
-                  child: AutoSizeText(
-                    "  Details",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.left,
-                  ),
-                ),*/
+  
                 Expanded(
                   child: SingleChildScrollView(
                       child: Column(
@@ -350,7 +339,7 @@ class _AccountPageState extends State<AccountPage> {
                           width: 400,
                           height: 50,
                           minHeight: 50,
-                          onPressed: _showAddCarDialog, // Show popup
+                          onPressed: _showAddCarDialog, 
                           label: "Add Car"),
                       const SizedBox(height: 10),
                     ],

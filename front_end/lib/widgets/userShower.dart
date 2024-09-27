@@ -64,7 +64,6 @@ class _UserShowerState extends State<UserShower> {
               for (var registration in snapshot.data!.registrations)
                 GestureDetector(
                   onSecondaryTap: () {
-                    // Right-click will trigger the delete dialog on desktop
                     _showDeleteDialog(context, registration.licencePlate, registration.registrationId);
                   },
                   onTapDown: (details) {
@@ -100,13 +99,13 @@ class _UserShowerState extends State<UserShower> {
             TextButton(
               child: const Text("Cancel"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text("Delete"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop(); 
                 _deleteLicencePlate(context, licencePlate, plateId);
               },
             ),
@@ -124,7 +123,7 @@ class _UserShowerState extends State<UserShower> {
             content: Text('Licence plate $licencePlate deleted successfully')),
       );
       setState(() {
-        _userFuture = getUser(widget.userNo); // Refresh the user data
+        _userFuture = getUser(widget.userNo); 
       });
     } catch (error) {
       // Show error message using a snackbar

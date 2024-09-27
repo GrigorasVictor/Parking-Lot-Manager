@@ -10,12 +10,12 @@ import 'package:front_end/pages/faqPage.dart';
 
 class MainPage extends StatefulWidget {
   final PageNavigationController navigationController;
-  final Function updateNavbar; // Added this callback to update the navbar
+  final Function updateNavbar; 
 
   const MainPage({
     super.key,
     required this.navigationController,
-    required this.updateNavbar, // Required this parameter
+    required this.updateNavbar, 
   });
 
   @override
@@ -57,7 +57,7 @@ class _MainPageState extends State<MainPage> {
           children: [
             const SizedBox(height: 30),
             FutureBuilder(
-              future: getUser(3),
+              future: getUser(3), //TODO:AUTOMATIZATION
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();

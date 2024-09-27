@@ -19,9 +19,9 @@ class _NavbarState extends State<Navbar> {
   final PageNavigationController _navigationController =
       PageNavigationController();
 
-  final Map<int, List<Color>> _navbarColors = { // background and text
+  final Map<int, List<Color>> _navbarColors = { 
     0: [const Color(backgroundColor), Colors.white],      // Home
-    1: [Colors.white, Colors.black],            // Subscription
+    1: [Colors.white, Colors.black],                      // Subscription
     2: [const Color(backgroundColor), Colors.white],      // Location
     3: [const Color(backgroundColor), Colors.white],      // Account
   };
@@ -40,7 +40,6 @@ class _NavbarState extends State<Navbar> {
 
   @override
   Widget build(BuildContext context) {
-    // Get the colors for the current page
     List<Color> currentColors = _navbarColors[_navigationController.indexPage]!;
 
     return Scaffold(
@@ -49,14 +48,14 @@ class _NavbarState extends State<Navbar> {
         title: Text(
           "P A R K W I S E",
           style: TextStyle(
-            color: currentColors[1],  // Text color from the map
+            color: currentColors[1], 
           ),
         ),
         leading: SvgPicture.asset(
           'lib/assets/icons/logo.svg',
-          color: currentColors[1],   // Icon color from the map
+          color: currentColors[1],   
         ),
-        backgroundColor: currentColors[0], // Background color from the map
+        backgroundColor: currentColors[0], 
       ),
       bottomNavigationBar: GNav(
         selectedIndex: _navigationController.indexPage,

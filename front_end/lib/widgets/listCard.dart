@@ -3,7 +3,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 
 typedef OnItemTapCallback = void Function(String price, String title);
 
-// Model to store title and price
 class ListCardItem {
   final String title;
   final String price;
@@ -47,9 +46,9 @@ class Listcard extends StatelessWidget {
                 onItemTap(items[index].price, items[index].title);
               },
               child: Container(
-                height: 60, // Fixed height for even distribution
+                height: 60, 
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                alignment: Alignment.center, // Centering the content
+                alignment: Alignment.center, 
                 child: AutoSizeText(
                   items[index].title,
                   style: const TextStyle(
