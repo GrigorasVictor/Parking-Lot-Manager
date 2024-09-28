@@ -36,4 +36,4 @@ public abstract class AbstractController<T, R extends JpaRepository<T, Integer>>
 ///login -- nesecrizae
 //
 ///signup -- nesecrizae
-
+// ce?
