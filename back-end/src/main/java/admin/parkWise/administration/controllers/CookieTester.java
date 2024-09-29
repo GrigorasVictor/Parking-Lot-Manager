@@ -30,6 +30,8 @@ public class CookieTester {
             return new ResponseEntity<String>(token, HttpStatus.OK);
         }
 
+        System.out.println("am ajuns aici");
+
         String token = mToken.get();
         System.out.println(token);
 

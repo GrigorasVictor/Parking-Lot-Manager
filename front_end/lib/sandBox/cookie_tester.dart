@@ -1,11 +1,9 @@
 import 'package:http/http.dart' as http;
 
 Future<void> sendRequestWithCookies(String cookies) async {
-  print("aici");
-
   final response = await http.post(
     Uri.parse('http://localhost:8080/send'),
-    headers: {'jwToken': 'successful'},
+    headers: {'Cookie': 'jwToken=successful'},
   );
 
   print("primit rsp");
