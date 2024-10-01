@@ -2,8 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:front_end/widgets/constants.dart';
 import 'dart:convert';
+import 'package:front_end/widgets/constants.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -16,6 +16,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
+  String confirmPassword = '';
   String phoneNumber = '';
   bool isLoading = false;
   String error = '';
@@ -38,7 +39,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Future<void> _showCaptchaDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // User must tap a button to close the dialog
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('CAPTCHA Verification'),
@@ -70,17 +71,14 @@ class _SignUpPageState extends State<SignUpPage> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Enter CAPTCHA',
-                  labelStyle: const TextStyle(
-                      color: Colors.grey), 
+                  labelStyle: const TextStyle(color: Colors.grey),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Colors.green), 
+                    borderSide: const BorderSide(color: Colors.green),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Colors.green,
-                        width: 2.0),
+                    borderSide:
+                        const BorderSide(color: Colors.green, width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
@@ -132,43 +130,33 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _signUpUser() async {
-    const url = 'https://your-backend-api.com/signup'; 
+    const url = 'http://localhost:8080/register';
     setState(() {
       isLoading = true;
       error = '';
     });
+    Map<String, dynamic> dataToSend = {
+      'email': email,
+      'password': password,
+      'phone': phoneNumber
+    };
 
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(
-            {'email': email, 'password': password, 'phone': phoneNumber}),
-      );
-
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        if (responseData['success']) {
-          Navigator.pushReplacementNamed(context, '/login');
-        } else {
-          setState(() {
-            error = 'Sign-up failed. Please try again.';
-          });
-        }
-      } else {
-        setState(() {
-          error = 'Sign-up failed. Please check your connection.';
-        });
-      }
-    } catch (e) {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(dataToSend),
+    );
+    print(dataToSend);
+    if (response.statusCode == 200) {
+      Navigator.pushReplacementNamed(context, '/login');
+    } else {
       setState(() {
-        error = 'An error occurred. Please try again later.';
-      });
-    } finally {
-      setState(() {
-        isLoading = false;
+        error = 'Sign-up failed. Please try again.';
       });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -225,6 +213,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value!.isEmpty) {
                         return 'Please enter your email';
                       }
+                      // Email format validation
+                      if (!RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                          .hasMatch(value)) {
+                        return 'Please enter a valid email (e.g., example@domain.com)';
+                      }
                       return null;
                     },
                   ),
@@ -253,6 +247,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please enter your phone number';
+                      }
+                      // Phone number format validation
+                      if (!RegExp(r'^07\d{8}$').hasMatch(value)) {
+                        return 'Phone number must be 10 digits and start with 07';
                       }
                       return null;
                     },
@@ -283,6 +281,43 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value!.isEmpty) {
                         return 'Please enter your password';
                       }
+                      // Password length validation
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters long';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // Confirmation Password Input Field
+                  TextFormField(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      labelStyle: const TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.green),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    obscureText: true,
+                    onChanged: (value) {
+                      setState(() {
+                        confirmPassword = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please confirm your password';
+                      }
+                      // Confirm password match validation
+                      if (value != password) {
+                        return 'Passwords do not match';
+                      }
                       return null;
                     },
                   ),
@@ -294,7 +329,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   const SizedBox(height: 10),
                   isLoading
-                      ? const CircularProgressIndicator()
+                      ? SizedBox(
+                          width: double.infinity,
+                          child: LinearProgressIndicator(
+                            color: Colors.green,
+                            backgroundColor: Colors.white54,
+                          ),
+                        )
                       : SizedBox(
                           width: double.infinity,
                           height: 50,
@@ -307,7 +348,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                _showCaptchaDialog(); 
+                                _showCaptchaDialog();
                               }
                             },
                             child: const Text(
@@ -350,38 +391,27 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildSocialButton(String text, String logoPath) {
+  Widget _buildSocialButton(String text, String iconPath) {
     return SizedBox(
       width: double.infinity,
       height: 50,
-      child: ElevatedButton(
-        onPressed: () {
-          // Handle social media login
-        },
+      child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: SvgPicture.asset(logoPath, height: 24),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                text,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.black),
-              ),
-            ),
-            const SizedBox(width: 24),
-          ],
+        onPressed: () {
+          // Handle social sign-up logic here
+        },
+        icon: SvgPicture.asset(
+          iconPath,
+          height: 24.0,
+          width: 24.0,
         ),
+        label: Text(text),
       ),
     );
   }
@@ -398,33 +428,42 @@ class CaptchaPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: captchaText,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      textAlign: TextAlign.center,
-      textDirection: TextDirection.ltr,
-    )..layout();
-
-    textPainter.paint(
-        canvas,
-        Offset(size.width / 2 - textPainter.width / 2,
-            size.height / 2 - textPainter.height / 2));
-
-    // Add distortion lines
     final random = Random();
-    for (int i = 0; i < 10; i++) {
-      double startX = random.nextDouble() * size.width;
-      double startY = random.nextDouble() * size.height;
-      double endX = random.nextDouble() * size.width;
-      double endY = random.nextDouble() * size.height;
 
-      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), paint);
+    // Calculate the center point of the canvas
+    double centerX = size.width / 2;
+    double centerY = size.height / 2;
+
+    // Draw two diagonal lines from the center
+    for (int i = 0; i < 2; i++) {
+      // Random length
+      double length = random.nextDouble() * 60 + 10;
+
+      // Random angle in radians
+      double angle = random.nextDouble() * 2 * pi;
+
+      // Calculate the end position based on the angle and length
+      double endX = centerX + length * cos(angle);
+      double endY = centerY + length * sin(angle);
+
+      // Draw the line
+      canvas.drawLine(Offset(centerX, centerY), Offset(endX, endY), paint);
+    }
+
+    // Draw three random diagonal lines
+    for (int i = 0; i < 3; i++) {
+      // Random length
+      double length = random.nextDouble() * 60 + 10;
+
+      // Random angle in radians
+      double angle = random.nextDouble() * 2 * pi;
+
+      // Calculate the end position based on the angle and length
+      double endX = centerX + length * cos(angle);
+      double endY = centerY + length * sin(angle);
+
+      // Draw the line
+      canvas.drawLine(Offset(centerX, centerY), Offset(endX, endY), paint);
     }
   }
 

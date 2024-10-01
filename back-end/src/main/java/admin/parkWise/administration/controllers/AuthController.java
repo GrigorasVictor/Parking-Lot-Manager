@@ -24,12 +24,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> signup(@RequestBody UserAuth authData){
+        System.out.println(authData);
         try {
             authDBService.register(authData);
         } catch (Exception e) {
             return new ResponseEntity<>("Invalid email",HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("succes", HttpStatus.OK);
     }
 
     @PostMapping("/login")

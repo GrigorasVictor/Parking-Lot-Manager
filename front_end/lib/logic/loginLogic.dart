@@ -23,6 +23,7 @@ Future<bool> sendLoginRequest(String email, String password) async {
     print(response.statusCode);
     if (response.statusCode == 200) {
       print("Login Successfully ${response.body}");
+      storeJwtCookie(response.body);
       return true;
     }
   } catch (e) {
@@ -32,7 +33,6 @@ Future<bool> sendLoginRequest(String email, String password) async {
 }
 
 Future<void> appEntryPoint(BuildContext context) async {
-  storeJwtCookie("notEmpty");
   String cookie = await readJwtCookie();
   if (cookie.contains("empty")) {
     Navigator.pushNamed(context, '/login');
@@ -50,11 +50,4 @@ Future<void> appEntryPoint(BuildContext context) async {
     return;
   }
   Navigator.pushNamed(context, '/main');
-  // if NO stay on login page
-
-  // if YES make req
-
-  // if cookie EXP stay on login (maybe inform user)
-
-  // if req stat == 200 GOTO main
 }
