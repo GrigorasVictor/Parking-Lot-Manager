@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:front_end/logic/loginLogic.dart';
 import 'package:front_end/widgets/constants.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    appEntryPoint(context);
+
     final logoSize = MediaQuery.of(context).size.width * 0.3; 
 
     return Scaffold(
