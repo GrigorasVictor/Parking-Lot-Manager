@@ -8,13 +8,15 @@ Future<void> sendRequestWithCookies(String cookies) async {
   );
 
   print("cookies:\n");
-  getJwtCookie(response.headers.values);
+  String? cookie = getJwtCookie(response.headers.values);
+  //storeJwtCookie(null);
+  storeJwtCookie(cookie);
+  String answer = await readJwtCookie();
+  print("Read: ${answer}");
 
   if (response.statusCode == 200) {
-    // Handle response
     print(response.body);
   } else {
-    // Handle error
     print('Request failed with status: ${response.statusCode}');
   }
 }

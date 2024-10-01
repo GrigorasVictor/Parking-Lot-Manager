@@ -13,11 +13,9 @@ class HelpPage extends StatelessWidget {
       // body: Text("Maybe a chatBot or cartonase cu FAQ(asta la final sa vedem cum legam totul)"),
       body: FutureBuilder<void>(
         future:
-            sendRequestWithCookies("nice"), // The Future function to fetch data
+            sendRequestWithCookies("nice"), 
         builder: (context, snapshot) {
-          // Check the state of the Future
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // While waiting, show a loading indicator
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             // If an error occurred, display an error message

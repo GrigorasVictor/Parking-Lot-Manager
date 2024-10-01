@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 String? getJwtCookie(Iterable<String> cookies) {
   Iterator<String> it = cookies.iterator;
   String? curCookie;
@@ -11,4 +13,19 @@ String? getJwtCookie(Iterable<String> cookies) {
     }
   }
   return curCookie; 
+}
+
+void storeJwtCookie(String? cookie) async {
+  if(cookie == null){
+    print("The cookie trying to be stored is null\n");
+    return;
+  }
+  
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('cookie', cookie);
+}
+
+Future<String> readJwtCookie() async{
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('cookie') ?? 'empty';
 }
