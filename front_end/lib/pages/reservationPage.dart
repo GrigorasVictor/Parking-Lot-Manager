@@ -6,12 +6,12 @@ class ReservationPage extends StatefulWidget {
   final String? parkingSpot;
   final bool isActive;
 
-  ReservationPage({
-    Key? key,
+  const ReservationPage({
+    super.key,
     required this.parkingId,
     this.parkingSpot,
     this.isActive = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ReservationPage> createState() => _ReservationPageState();
@@ -54,11 +54,11 @@ class _ReservationPageState extends State<ReservationPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 6,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -86,11 +86,11 @@ class _ReservationPageState extends State<ReservationPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 6,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -117,11 +117,11 @@ class _ReservationPageState extends State<ReservationPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12.0),
-                boxShadow: [
-                  const BoxShadow(
+                boxShadow: const [
+                  BoxShadow(
                     color: Colors.black12,
                     blurRadius: 6,
-                    offset: const Offset(0, 2),
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
@@ -160,15 +160,15 @@ class _ReservationPageState extends State<ReservationPage> {
                               onPressed: () {
                                 Navigator.of(context).pop(); 
                                 Navigator.of(context).pushNamed('/main'); 
-                              },
-                              child: const Text("OK", style: TextStyle(color: Colors.white)), 
+                              }, 
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green, 
-                                padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0), 
+                                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0), 
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0), 
                                 ),
                               ),
+                              child: const Text("OK", style: TextStyle(color: Colors.white)),
                             ),
                           ],
                         );
@@ -181,17 +181,17 @@ class _ReservationPageState extends State<ReservationPage> {
                     );
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, 
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(
                     'Make The Reservation',
                     style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green, 
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
               ),

@@ -122,10 +122,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   isLoading
-                      ? SizedBox(
+                      ? const SizedBox(
                           width: double.infinity,  
                           height: 5, 
-                          child: const LinearProgressIndicator(
+                          child: LinearProgressIndicator(
                             color: Colors.green,  
                             backgroundColor: Colors.white24,  
                           ),

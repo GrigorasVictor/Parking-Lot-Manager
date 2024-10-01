@@ -329,7 +329,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   const SizedBox(height: 10),
                   isLoading
-                      ? SizedBox(
+                      ? const SizedBox(
                           width: double.infinity,
                           child: LinearProgressIndicator(
                             color: Colors.green,

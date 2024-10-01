@@ -41,7 +41,7 @@ class _CalendarCardState extends State<CalendarCard> {
                   child: Theme(
                     data: Theme.of(context).copyWith(
                       cardColor: Colors.white,
-                      colorScheme: ColorScheme.light(
+                      colorScheme: const ColorScheme.light(
                         primary: Colors.green, 
                         onPrimary: Colors.white, 
                         onSurface: Colors.black, 

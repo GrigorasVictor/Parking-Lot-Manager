@@ -12,7 +12,7 @@ Future<void> sendRequestWithCookies(String cookies) async {
   //storeJwtCookie(null);
   storeJwtCookie(cookie);
   String answer = await readJwtCookie();
-  print("Read: ${answer}");
+  print("Read: $answer");
 
   if (response.statusCode == 200) {
     print(response.body);

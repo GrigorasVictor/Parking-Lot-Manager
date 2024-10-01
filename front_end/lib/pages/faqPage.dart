@@ -16,7 +16,7 @@ class HelpPage extends StatelessWidget {
             sendRequestWithCookies("nice"), 
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             // If an error occurred, display an error message
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -34,7 +34,7 @@ class HelpPage extends StatelessWidget {
             );
           } else {
             // If there's no data, display a "No data" message
-            return Center(child: Text('No data available'));
+            return const Center(child: Text('No data available'));
           }
         },
       ),
