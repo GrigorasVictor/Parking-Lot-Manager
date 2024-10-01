@@ -15,15 +15,14 @@ class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
   bool isLoading = false;
+  String? errorMessage; // Error message to display if login fails
 
   @override
   Widget build(BuildContext context) {
-    appEntryPoint(context);
-
-    final logoSize = MediaQuery.of(context).size.width * 0.3; 
+    final logoSize = MediaQuery.of(context).size.width * 0.3;
 
     return Scaffold(
-      backgroundColor: const Color(backgroundLogColor), 
+      backgroundColor: const Color(backgroundLogColor),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -33,9 +32,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(height: 50), 
+                  const SizedBox(height: 50),
                   SvgPicture.asset(
-                    'lib/assets/icons/logoV2.svg', 
+                    'lib/assets/icons/logoV2.svg',
                     height: logoSize,
                     width: logoSize,
                   ),
@@ -49,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
-                    style: const TextStyle(color: Colors.white), 
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       labelText: 'E-mail',
                       labelStyle: const TextStyle(color: Colors.white),
@@ -77,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
-                    style: const TextStyle(color: Colors.white), 
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       labelText: 'Password',
                       labelStyle: const TextStyle(color: Colors.white),
@@ -106,8 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {
-                      },
+                      onPressed: () {},
                       child: const Text(
                         'Have you forgotten the password?',
                         style: TextStyle(color: Colors.white),
@@ -115,10 +113,25 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  if (errorMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        errorMessage!,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    ),
                   isLoading
-                      ? const CircularProgressIndicator()
+                      ? SizedBox(
+                          width: double.infinity,  // Match button width
+                          height: 5, // Slim height for linear progress
+                          child: const LinearProgressIndicator(
+                            color: Colors.green,  // Green color
+                            backgroundColor: Colors.white24,  // Slightly visible background
+                          ),
+                        )
                       : SizedBox(
-                          width: double.infinity, 
+                          width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -127,10 +140,23 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  isLoading = true;
+                                  errorMessage = null;
+                                });
+                                bool success = await sendLoginRequest(email, password);
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                if (success) {
                                   Navigator.pushReplacementNamed(context, '/main');
-                                  //TODO: make actual logic for login/sign in
+                                } else {
+                                  setState(() {
+                                    errorMessage = 'Incorrect email or password';
+                                  });
+                                }
                               }
                             },
                             child: const Text(
@@ -165,7 +191,6 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 20),
                   const Text('or', style: TextStyle(color: Colors.white)),
                   const SizedBox(height: 20),
-
                   _buildSocialButton('Access with Gmail', 'lib/assets/icons/google.svg'),
                   const SizedBox(height: 2),
                   _buildSocialButton('Access with an Apple ID', 'lib/assets/icons/apple.svg'),
@@ -181,38 +206,36 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildSocialButton(String text, String logoPath) {
-  return SizedBox(
-    width: double.infinity,
-    height: 50,
-    child: ElevatedButton(
-      onPressed: () {
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: SvgPicture.asset(logoPath, height: 24),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+            const SizedBox(width: 24),
+          ],
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SvgPicture.asset(logoPath, height: 24),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-          const SizedBox(width: 24), 
-        ],
-      ),
-    ),
-  );
-}
-
+    );
+  }
 }

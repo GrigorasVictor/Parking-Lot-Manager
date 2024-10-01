@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/pages/entryLoadingScreen.dart';
 import 'package:front_end/pages/loginPage.dart'; 
 import 'package:front_end/pages/signupPage.dart'; 
 import 'package:front_end/widgets/navbar.dart'; 
@@ -16,8 +17,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login', // Start with the login page
+      initialRoute: '/load', // Start with the load page
       routes: {
+        '/load': (context) => const EntryLoading(),
         '/login': (context) => const LoginPage(),
         '/signup': (context) => const SignUpPage(),
         '/main': (context) => const MyHomePage(title: 'ParkWise'),
