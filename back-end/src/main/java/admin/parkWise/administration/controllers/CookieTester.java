@@ -22,7 +22,7 @@ public class CookieTester {
         Optional<String> mToken = JwtService.getToken(request);
 
         if(mToken.isEmpty()){
-            String token = "successful";
+            String token = "doar_acum_e_succ";
             response.addCookie(new Cookie("jwToken", token));
 
             System.out.println("nu avea cookie");
