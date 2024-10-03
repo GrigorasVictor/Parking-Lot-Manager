@@ -14,6 +14,9 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  
+  // Added fullName variable
+  String fullName = ''; 
   String email = '';
   String password = '';
   String confirmPassword = '';
@@ -136,6 +139,7 @@ class _SignUpPageState extends State<SignUpPage> {
       error = '';
     });
     Map<String, dynamic> dataToSend = {
+      'fullName': fullName, // Added fullName to the data being sent
       'email': email,
       'password': password,
       'phone': phoneNumber
@@ -188,6 +192,37 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
+
+                  // Full Name Input Field
+                  TextFormField(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Full Name',
+                      labelStyle: const TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.green),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        fullName = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your full name';
+                      }
+                      return null;
+                    },
+                  ),
+                  
+                  const SizedBox(height: 20),
+
                   // Email Input Field
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
@@ -213,7 +248,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value!.isEmpty) {
                         return 'Please enter your email';
                       }
-                      // Email format validation
                       if (!RegExp(
                               r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
                           .hasMatch(value)) {
@@ -223,6 +257,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                   const SizedBox(height: 20),
+
                   // Phone Number Input Field
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
@@ -248,7 +283,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value!.isEmpty) {
                         return 'Please enter your phone number';
                       }
-                      // Phone number format validation
                       if (!RegExp(r'^07\d{8}$').hasMatch(value)) {
                         return 'Phone number must be 10 digits and start with 07';
                       }
@@ -256,6 +290,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                   ),
                   const SizedBox(height: 20),
+
                   // Password Input Field
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
@@ -279,17 +314,17 @@ class _SignUpPageState extends State<SignUpPage> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Please enter a password';
                       }
-                      // Password length validation
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters long';
+                        return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 20),
-                  // Confirmation Password Input Field
+
+                  // Confirm Password Input Field
                   TextFormField(
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -314,53 +349,44 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (value!.isEmpty) {
                         return 'Please confirm your password';
                       }
-                      // Confirm password match validation
                       if (value != password) {
                         return 'Passwords do not match';
                       }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
+
+                  // Error Message
                   if (error.isNotEmpty)
                     Text(
                       error,
                       style: const TextStyle(color: Colors.red),
                     ),
                   const SizedBox(height: 10),
+
+                  // Sign Up Button
                   isLoading
-                      ? const SizedBox(
-                          width: double.infinity,
-                          child: LinearProgressIndicator(
-                            color: Colors.green,
-                            backgroundColor: Colors.white54,
+                      ? const LinearProgressIndicator(
+                            color: Colors.green,  
+                            backgroundColor: Colors.white24,  
+                          )
+                      : ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 10),
                           ),
-                        )
-                      : SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                            ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _showCaptchaDialog();
-                              }
-                            },
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _showCaptchaDialog();
+                            }
+                          },
+                          child: const Text('Sign Up',
+                          style: const TextStyle(color: Colors.white)),
                         ),
-                  const SizedBox(height: 20),
+
+                  const SizedBox(height: 10),
                   TextButton(
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, '/login');
@@ -370,48 +396,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('or', style: TextStyle(color: Colors.white)),
-                  const SizedBox(height: 20),
-                  // Social Media Buttons
-                  _buildSocialButton(
-                      'Sign Up with Gmail', 'lib/assets/icons/google.svg'),
-                  const SizedBox(height: 2),
-                  _buildSocialButton(
-                      'Sign Up with an Apple ID', 'lib/assets/icons/apple.svg'),
-                  const SizedBox(height: 2),
-                  _buildSocialButton(
-                      'Sign Up with Facebook', 'lib/assets/icons/facebook.svg'),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSocialButton(String text, String iconPath) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-        onPressed: () {
-          // Handle social sign-up logic here
-        },
-        icon: SvgPicture.asset(
-          iconPath,
-          height: 24.0,
-          width: 24.0,
-        ),
-        label: Text(text),
       ),
     );
   }
@@ -424,51 +414,22 @@ class CaptchaPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.stroke
+      ..color = Colors.green
       ..strokeWidth = 2;
 
     final random = Random();
 
-    // Calculate the center point of the canvas
-    double centerX = size.width / 2;
-    double centerY = size.height / 2;
-
-    // Draw two diagonal lines from the center
-    for (int i = 0; i < 2; i++) {
-      // Random length
-      double length = random.nextDouble() * 60 + 10;
-
-      // Random angle in radians
-      double angle = random.nextDouble() * 2 * pi;
-
-      // Calculate the end position based on the angle and length
-      double endX = centerX + length * cos(angle);
-      double endY = centerY + length * sin(angle);
-
-      // Draw the line
-      canvas.drawLine(Offset(centerX, centerY), Offset(endX, endY), paint);
-    }
-
-    // Draw three random diagonal lines
-    for (int i = 0; i < 3; i++) {
-      // Random length
-      double length = random.nextDouble() * 60 + 10;
-
-      // Random angle in radians
-      double angle = random.nextDouble() * 2 * pi;
-
-      // Calculate the end position based on the angle and length
-      double endX = centerX + length * cos(angle);
-      double endY = centerY + length * sin(angle);
-
-      // Draw the line
-      canvas.drawLine(Offset(centerX, centerY), Offset(endX, endY), paint);
+    for (int i = 0; i < 8; i++) {
+      final x1 = random.nextDouble() * size.width;
+      final y1 = random.nextDouble() * size.height;
+      final x2 = random.nextDouble() * size.width;
+      final y2 = random.nextDouble() * size.height;
+      canvas.drawLine(Offset(x1, y1), Offset(x2, y2), paint);
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+  bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
   }
 }

@@ -39,10 +39,11 @@ Future<void> appEntryPoint(BuildContext context) async {
     print("empty");
     return;
   }
-  final response = await http.post(
-    Uri.parse('http://localhost:8080/login'),
+  final response = await http.get(
+    Uri.parse('http://localhost:8080/users'),
     headers: {'Cookie': 'jwToken=$cookie'},
   );
+  print(cookie);
   print("response: ${response.statusCode}");
   if (response.statusCode == 401) {
     print("401\n");
