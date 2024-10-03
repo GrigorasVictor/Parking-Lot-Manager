@@ -49,7 +49,7 @@ public class JwtService {
                 .compact();
     }
 
-    private static SecretKey getKey() {
+    public static SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretkey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -87,7 +87,7 @@ public class JwtService {
         return extractAllClaims(token).getExpiration();
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getKey())
                 .build()
