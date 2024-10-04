@@ -55,12 +55,8 @@ UserController{
         if(token.isEmpty()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        //maybe structure code better?
-        Integer id = Jwts.parser()
-                .verifyWith(JwtService.getKey())
-                .build()
-                .parseSignedClaims(token.get())
-                .getPayload().get("id", Number.class).intValue();
+
+        Integer id = JwtService.staticExtractId(token.get());
 
         Optional<User> optUser = repo.findById(id);
         return optUser.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));

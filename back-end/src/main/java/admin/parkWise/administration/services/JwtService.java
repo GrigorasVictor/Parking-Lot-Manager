@@ -94,4 +94,15 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
+    public static Integer staticExtractId(String token){ // TODO: needs renaming
+        return
+                Jwts.parser()
+                .verifyWith(getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("id", Number.class)
+                .intValue();
+    }
 }

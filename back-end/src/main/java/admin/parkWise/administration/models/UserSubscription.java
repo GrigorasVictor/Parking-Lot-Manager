@@ -21,6 +21,10 @@ public class UserSubscription {
     @Column(name = "user_id")
     private Integer userId;
 
+    @JsonProperty("subscription_type")
+    @Column(name = "subscription_type")
+    private Integer subscriptionType;
+
     @Column(name="start_date")
     @JsonProperty("start_date")
     private LocalDate startDate;
