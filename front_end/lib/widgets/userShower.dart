@@ -72,7 +72,9 @@ class _UserShowerState extends State<UserShower> {
 
   // Function to build CustomCard with icon
   Widget _buildCustomCard(String title, String? content, IconData icon, double width, double height) {
-    return Column(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -91,7 +93,8 @@ class _UserShowerState extends State<UserShower> {
             height: height,
           ),
         ],
-      );
+      ),
+    );
   }
 
   // Dialog to confirm deletion of a license plate

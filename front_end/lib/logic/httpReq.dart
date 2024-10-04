@@ -1,7 +1,11 @@
+import 'package:front_end/logic/userSingleTon.dart';
+import 'package:front_end/model/registration.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/model/user.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+
+User? user = UserSingleton.getUser();
 
 Future<User> getUser(int userId) async {
   final response = await http.get(Uri.http('localhost:8080', 'users/$userId'));
@@ -84,15 +88,13 @@ Future<void> sendSubscription(
   }
 }
 
-Future<void> sendNumberPlate(String numberPlate, int userId) async {
-  //TODO: regex verification
+Future<bool> sendNumberPlate(String numberPlate) async {
   final Map<String, dynamic> dataToSend = {
-    'user_id': userId,
+    'user_id': user!.userId,
     'registration_number': numberPlate,
   };
 
   final Uri url = Uri.http('localhost:8080', '/vehicleRegistration');
-
   try {
     final response = await http.post(
       url,
@@ -101,20 +103,23 @@ Future<void> sendNumberPlate(String numberPlate, int userId) async {
       },
       body: jsonEncode(dataToSend),
     );
+    print(dataToSend);
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
-      print('NumberPlate sent successfully!');
-      // Handle success (response.body contains the server response)
-    } else {
-      print('Failed to send NumberPlate. Status code: ${response.statusCode}');
-      // Handle error
+      VehicleRegistration regJson = jsonDecode(response.body);
+      UserSingleton.addNumberPlate(regJson);
+      return true;
     }
   } catch (e) {
     print('Error sending NumberPlate: $e');
   }
+  return false;
 }
 
 Future<void> deleteLicencePlate(String numberPlate, int userId) async {
-  final String apiUrl = 'http://your-backend-api-url.com/users/$userId/licenceplates/$numberPlate';
+  final String apiUrl =
+      'http://your-backend-api-url.com/users/$userId/licenceplates/$numberPlate';
 
   try {
     final response = await http.delete(
@@ -125,7 +130,6 @@ Future<void> deleteLicencePlate(String numberPlate, int userId) async {
     );
 
     if (response.statusCode == 200) {
-
     } else {
       // Show error popup
     }

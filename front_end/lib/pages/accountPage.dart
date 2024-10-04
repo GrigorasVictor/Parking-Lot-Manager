@@ -33,8 +33,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Future<String> uploadImage(File image, int id) async {
-    final uri = Uri.parse(
-        'https://your-server-url/upload/$id'); 
+    final uri = Uri.parse('https://your-server-url/upload/$id');
     final request = http.MultipartRequest('POST', uri)
       ..files.add(await http.MultipartFile.fromPath(
         'image',
@@ -47,7 +46,7 @@ class _AccountPageState extends State<AccountPage> {
       if (response.statusCode == 200) {
         final responseData = await response.stream.bytesToString();
         final data = jsonDecode(responseData);
-        return data['image_url']; 
+        return data['image_url'];
       } else {
         throw Exception('Failed to upload image: ${response.statusCode}');
       }
@@ -75,8 +74,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Future<void> _fetchUserImage() async {
-    final uri = Uri.parse(
-        'https://your-server-url/user/${user!.userId}'); 
+    final uri = Uri.parse('https://your-server-url/user/${user!.userId}');
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -109,31 +107,31 @@ class _AccountPageState extends State<AccountPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color(backgroundColor), 
+          backgroundColor: const Color(backgroundColor),
           title: const Text(
             'Logout',
             style: TextStyle(
-              color: Colors.white, 
+              color: Colors.white,
               fontSize: 22,
             ),
           ),
           content: const Text(
             'You have been logged out.',
             style: TextStyle(
-              color: Colors.white70, 
+              color: Colors.white70,
               fontSize: 18,
             ),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
                 Navigator.pushReplacementNamed(context, '/login');
               },
               child: const Text(
                 'OK',
                 style: TextStyle(
-                  color: Colors.redAccent, 
+                  color: Colors.redAccent,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -153,7 +151,7 @@ class _AccountPageState extends State<AccountPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, 
+          backgroundColor: Colors.white,
           title: const Text(
             'Add Car',
             style: TextStyle(
@@ -165,57 +163,55 @@ class _AccountPageState extends State<AccountPage> {
               Expanded(
                 flex: 2,
                 child: TextField(
-                  maxLength: 2, 
+                  maxLength: 2,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")), // Only letters
+                    FilteringTextInputFormatter.allow(
+                        RegExp("[A-Z]")), // Only letters
                   ],
                   onChanged: (value) {
                     part1 = value;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Letter',
-                    counterText: '', 
+                    counterText: '',
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
                   style: const TextStyle(color: Colors.black),
                 ),
               ),
               const SizedBox(width: 10),
-
               Expanded(
                 flex: 2,
                 child: TextField(
-                  maxLength: 2, 
+                  maxLength: 2,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly, 
+                    FilteringTextInputFormatter.digitsOnly,
                   ],
                   onChanged: (value) {
                     part2 = value;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Number',
-                    counterText: '', 
+                    counterText: '',
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
                   style: const TextStyle(color: Colors.black),
                 ),
               ),
               const SizedBox(width: 10),
-
-              
               Expanded(
                 flex: 3,
                 child: TextField(
-                  maxLength: 3, 
+                  maxLength: 3,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")), 
+                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")),
                   ],
                   onChanged: (value) {
                     part3 = value;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Letter',
-                    counterText: '', 
+                    counterText: '',
                     labelStyle: TextStyle(color: Colors.grey),
                   ),
                   style: const TextStyle(color: Colors.black),
@@ -226,7 +222,7 @@ class _AccountPageState extends State<AccountPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
               child: const Text(
                 'Cancel',
@@ -239,12 +235,14 @@ class _AccountPageState extends State<AccountPage> {
               onPressed: () async {
                 final String numberPlate = '$part1$part2$part3';
 
-                if (part1.length == 2 && part2.length == 2 && part3.length == 3) {
+                if (part1.length == 2 &&
+                    part2.length == 2 &&
+                    part3.length == 3) {
                   try {
-                    print("Number Plate: $numberPlate");
-                    await sendNumberPlate(numberPlate, user!.userId);
-                    Navigator.of(context).pop();
+                    bool answer = await sendNumberPlate(numberPlate);
+                    print("answer = $answer");
                     setState(() {});
+                    Navigator.of(context).pop();
                     _showUploadPopup('Car added successfully!', true);
                   } catch (e) {
                     Navigator.of(context).pop();
@@ -299,7 +297,7 @@ class _AccountPageState extends State<AccountPage> {
                         height: 150,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 4), 
+                          border: Border.all(color: Colors.white, width: 4),
                         ),
                         child: Center(
                           child: CircleAvatar(
@@ -320,7 +318,7 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 const SizedBox(height: 10),
                 OutlinedButton(
-                  onPressed: _logout, 
+                  onPressed: _logout,
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.red),
                   ),
@@ -330,7 +328,6 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(height: 5),
-  
                 Expanded(
                   child: SingleChildScrollView(
                       child: Column(
@@ -340,7 +337,7 @@ class _AccountPageState extends State<AccountPage> {
                           width: 400,
                           height: 50,
                           minHeight: 50,
-                          onPressed: _showAddCarDialog, 
+                          onPressed: _showAddCarDialog,
                           label: "Add Car"),
                       const SizedBox(height: 10),
                     ],

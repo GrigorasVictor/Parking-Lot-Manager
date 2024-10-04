@@ -1,3 +1,4 @@
+import 'package:front_end/model/registration.dart';
 import 'package:front_end/model/user.dart';
 
 class UserSingleton {
@@ -18,4 +19,7 @@ class UserSingleton {
     return _user;
   }
 
+  static void addNumberPlate(VehicleRegistration vehicleRegistration){
+    _user!.registrations.add(vehicleRegistration);
+  }
 }
