@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/user.dart';
-import 'package:front_end/logic/httpReq.dart';
-import 'card.dart';
-import 'dart:async';
+import 'package:front_end/widgets/card.dart'; // Assuming this is where your `CustomCard` widget is located.
+import 'package:http/http.dart' as http;
 
 class UserShower extends StatefulWidget {
-  final int userNo;
-
-  const UserShower({super.key, required this.userNo});
+  const UserShower({super.key});
 
   @override
   _UserShowerState createState() => _UserShowerState();
 }
 
 class _UserShowerState extends State<UserShower> {
-  late Future<User> _userFuture;
+  User? _user;
 
   @override
   void initState() {
     super.initState();
-    _userFuture = getUser(widget.userNo);
+    _user = UserSingleton.getUser(); // Get user from singleton on init
   }
 
   @override
@@ -27,67 +25,76 @@ class _UserShowerState extends State<UserShower> {
     const double cardWidth = 500;
     const double cardHeight = 50;
 
-    return FutureBuilder<User>(
-      future: _userFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasData) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CustomCard(
-                title: 'Name',
-                content: snapshot.data?.fullName ?? 'name not found',
-                width: cardWidth,
+    if (_user == null) {
+      return const Center(child: Text('No user data available'));
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _buildCustomCard('Name', _user!.fullName, Icons.person, cardWidth, cardHeight),
+        _buildCustomCard('Email', _user!.email, Icons.email, cardWidth, cardHeight),
+        _buildCustomCard('Phone Number', _user!.phoneNumber, Icons.phone, cardWidth, cardHeight),
+
+        const Padding(
+          padding: EdgeInsets.fromLTRB(25, 0, 0, 0), 
+          child: Text(
+            style: TextStyle(fontWeight: FontWeight.bold),
+            'Registered Licence Plates:',
+          ),
+        ),
+
+        if (_user!.registrations.isNotEmpty)
+          for (var registration in _user!.registrations)
+            GestureDetector(
+              onTap: () {
+                _showDeleteDialog(
+                  context,
+                  registration.licencePlate,
+                  registration.registrationId,
+                );
+              },
+              child: CustomCard(
+                content: registration.licencePlate,
+                width: cardWidth - 100,
                 height: cardHeight,
               ),
-              CustomCard(
-                title: 'Email',
-                content: snapshot.data?.email ?? 'email not found',
-                width: cardWidth,
-                height: cardHeight,
-              ),
-              CustomCard(
-                title: 'Phone Number',
-                content: snapshot.data?.phoneNumber ?? 'phone number not found',
-                width: cardWidth,
-                height: cardHeight,
-              ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                child: Text(
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                    'Registered licence plates:'),
-              ),
-              for (var registration in snapshot.data!.registrations)
-                GestureDetector(
-                  onSecondaryTap: () {
-                    _showDeleteDialog(context, registration.licencePlate, registration.registrationId);
-                  },
-                  onTapDown: (details) {
-                    Timer(const Duration(milliseconds: 500), () {
-                      _showDeleteDialog(context, registration.licencePlate, registration.registrationId);
-                    });
-                  },
-                  child: CustomCard(
-                    content: registration.licencePlate,
-                    width: cardWidth - 100,
-                    height: cardHeight,
-                  ),
-                ),
-            ],
-          );
-        } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        } else {
-          return const Text('No data found');
-        }
-      },
+            )
+        else
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('No registered license plates found.'),
+          ),
+      ],
     );
   }
 
+  // Function to build CustomCard with icon
+  Widget _buildCustomCard(String title, String? content, IconData icon, double width, double height) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 24),
+              const SizedBox(width: 8), 
+              Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ],
+          ),
+          CustomCard(
+            content: content ?? 'Not available',
+            width: width,
+            height: height,
+          ),
+        ],
+      );
+  }
+
+  // Dialog to confirm deletion of a license plate
   void _showDeleteDialog(BuildContext context, String licencePlate, int plateId) {
     showDialog(
       context: context,
@@ -99,14 +106,14 @@ class _UserShowerState extends State<UserShower> {
             TextButton(
               child: const Text("Cancel"),
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop(); // Close dialog without action
               },
             ),
             TextButton(
               child: const Text("Delete"),
               onPressed: () {
-                Navigator.of(context).pop(); 
-                _deleteLicencePlate(context, licencePlate, plateId);
+                Navigator.of(context).pop(); // Close the dialog
+                _deleteLicencePlate(licencePlate, plateId); // Perform deletion
               },
             ),
           ],
@@ -115,21 +122,48 @@ class _UserShowerState extends State<UserShower> {
     );
   }
 
-  Future<void> _deleteLicencePlate(BuildContext context, String licencePlate, int plateId) async {
+  // Method to delete license plate
+  Future<void> _deleteLicencePlate(String licencePlate, int plateId) async {
     try {
-      await deleteLicencePlate(licencePlate, plateId); 
+      await deleteLicencePlate(plateId); // Call delete function
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('Licence plate $licencePlate deleted successfully')),
+          content: Text('Licence plate $licencePlate deleted successfully'),
+        ),
       );
+
       setState(() {
-        _userFuture = getUser(widget.userNo); 
+        _user!.registrations.removeWhere(
+            (registration) => registration.registrationId == plateId);
       });
     } catch (error) {
-      // Show error message using a snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error deleting licence plate: $error')),
       );
     }
+  }
+}
+
+// This function sends a DELETE request to the backend API to delete a license plate.
+Future<void> deleteLicencePlate(int plateId) async {
+  final String apiUrl = 'https://your-api-url.com/delete-plate/$plateId'; // Replace with your actual API URL
+
+  try {
+    final response = await http.delete(Uri.parse(apiUrl), headers: {
+      'Authorization': 'Bearer your-auth-token', // Add authentication token if needed
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode == 200) {
+      // Successful deletion
+      print('Licence plate deleted successfully');
+    } else {
+      // Error from the server
+      throw Exception(
+          'Failed to delete the licence plate. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Handle errors during the request
+    throw Exception('Error deleting licence plate: $e');
   }
 }

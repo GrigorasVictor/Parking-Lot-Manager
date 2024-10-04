@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:front_end/logic/userSingleTon.dart';
+import 'package:front_end/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/logic/jwtLogic.dart';
 
@@ -22,8 +24,16 @@ Future<bool> sendLoginRequest(String email, String password) async {
     );
     print(response.statusCode);
     if (response.statusCode == 200) {
-      print("Login Successfully ${response.body}");
-      storeJwtCookie(response.body);
+      String cookie = response.body;
+      storeJwtCookie(cookie);
+
+      final userRequest = await http.get(
+        Uri.parse('http://localhost:8080/users'),
+        headers: {'Cookie': 'jwToken=$cookie'},
+      );
+      Map<String, dynamic> userJson = jsonDecode(userRequest.body);
+      UserSingleton.setUser(User.fromJson(userJson));
+
       return true;
     }
   } catch (e) {
@@ -43,12 +53,15 @@ Future<void> appEntryPoint(BuildContext context) async {
     Uri.parse('http://localhost:8080/users'),
     headers: {'Cookie': 'jwToken=$cookie'},
   );
-  print(cookie);
+
   print("response: ${response.statusCode}");
   if (response.statusCode == 401) {
     print("401\n");
     Navigator.pushNamed(context, '/login');
     return;
   }
+
+  Map<String, dynamic> userJson = jsonDecode(response.body);
+  UserSingleton.setUser(User.fromJson(userJson));
   Navigator.pushNamed(context, '/main');
 }

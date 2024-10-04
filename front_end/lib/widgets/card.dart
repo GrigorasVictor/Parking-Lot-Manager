@@ -10,7 +10,7 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.fromLTRB(3, 5, 3, 25),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

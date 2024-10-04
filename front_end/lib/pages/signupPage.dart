@@ -383,7 +383,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             }
                           },
                           child: const Text('Sign Up',
-                          style: const TextStyle(color: Colors.white)),
+                          style: TextStyle(color: Colors.white)),
                         ),
 
                   const SizedBox(height: 10),

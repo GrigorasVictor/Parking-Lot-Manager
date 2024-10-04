@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:front_end/logic/httpReq.dart';
+import 'package:front_end/logic/userSingleTon.dart';
+import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/customButton.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +24,7 @@ class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
   String? _uploadedImageUrl;
-  final int _userId = 3; // Replace with actual user ID
+  User? user = UserSingleton.getUser();
 
   @override
   void initState() {
@@ -61,7 +63,7 @@ class _AccountPageState extends State<AccountPage> {
         _image = File(pickedFile.path);
       });
       try {
-        final imageUrl = await uploadImage(_image!, _userId);
+        final imageUrl = await uploadImage(_image!, user!.userId);
         setState(() {
           _uploadedImageUrl = imageUrl;
         });
@@ -74,7 +76,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Future<void> _fetchUserImage() async {
     final uri = Uri.parse(
-        'https://your-server-url/user/$_userId'); 
+        'https://your-server-url/user/${user!.userId}'); 
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -101,7 +103,6 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  // Mock Logout Function
   void _logout() {
     print("User logged out");
     showDialog(
@@ -241,7 +242,7 @@ class _AccountPageState extends State<AccountPage> {
                 if (part1.length == 2 && part2.length == 2 && part3.length == 3) {
                   try {
                     print("Number Plate: $numberPlate");
-                    await sendNumberPlate(numberPlate, _userId);
+                    await sendNumberPlate(numberPlate, user!.userId);
                     Navigator.of(context).pop();
                     setState(() {});
                     _showUploadPopup('Car added successfully!', true);
@@ -334,7 +335,7 @@ class _AccountPageState extends State<AccountPage> {
                   child: SingleChildScrollView(
                       child: Column(
                     children: [
-                      UserShower(userNo: _userId),
+                      const UserShower(),
                       CustomElevatedButton(
                           width: 400,
                           height: 50,
