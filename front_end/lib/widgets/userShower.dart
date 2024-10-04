@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/card.dart'; // Assuming this is where your `CustomCard` widget is located.
-import 'package:http/http.dart' as http;
 
 class UserShower extends StatefulWidget {
   const UserShower({super.key});
@@ -17,7 +16,7 @@ class _UserShowerState extends State<UserShower> {
   @override
   void initState() {
     super.initState();
-    _user = UserSingleton.getUser(); // Get user from singleton on init
+    _user = UserSingleton.getUser(); 
   }
 
   @override
@@ -116,7 +115,7 @@ class _UserShowerState extends State<UserShower> {
               child: const Text("Delete"),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
-                _deleteLicencePlate(licencePlate, plateId); // Perform deletion
+                //_deleteLicencePlate(licencePlate, plateId); // Perform deletion
               },
             ),
           ],
@@ -124,49 +123,7 @@ class _UserShowerState extends State<UserShower> {
       },
     );
   }
-
-  // Method to delete license plate
-  Future<void> _deleteLicencePlate(String licencePlate, int plateId) async {
-    try {
-      await deleteLicencePlate(plateId); // Call delete function
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Licence plate $licencePlate deleted successfully'),
-        ),
-      );
-
-      setState(() {
-        _user!.registrations.removeWhere(
-            (registration) => registration.registrationId == plateId);
-      });
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting licence plate: $error')),
-      );
-    }
-  }
 }
 
-// This function sends a DELETE request to the backend API to delete a license plate.
-Future<void> deleteLicencePlate(int plateId) async {
-  final String apiUrl = 'https://your-api-url.com/delete-plate/$plateId'; // Replace with your actual API URL
+  
 
-  try {
-    final response = await http.delete(Uri.parse(apiUrl), headers: {
-      'Authorization': 'Bearer your-auth-token', // Add authentication token if needed
-      'Content-Type': 'application/json',
-    });
-
-    if (response.statusCode == 200) {
-      // Successful deletion
-      print('Licence plate deleted successfully');
-    } else {
-      // Error from the server
-      throw Exception(
-          'Failed to delete the licence plate. Status code: ${response.statusCode}');
-    }
-  } catch (e) {
-    // Handle errors during the request
-    throw Exception('Error deleting licence plate: $e');
-  }
-}

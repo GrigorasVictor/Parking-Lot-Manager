@@ -1,20 +1,21 @@
+import 'dart:io';
+
+import 'package:front_end/logic/jwtLogic.dart';
 import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/registration.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/model/user.dart';
+import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
 User? user = UserSingleton.getUser();
 
-Future<User> getUser(int userId) async {
-  final response = await http.get(Uri.http('localhost:8080', 'users/$userId'));
-
-  if (response.statusCode == 200) {
-    return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-  } else {
-    throw Exception('Failed to load data');
-  }
+Future<Map<String, String>> getHeaderCoockie() async {
+  String cookie = await readJwtCookie();
+  return {
+    'Cookie': 'jwToken=$cookie',
+  };
 }
 
 Future<void> sendTransaction(
@@ -100,14 +101,14 @@ Future<bool> sendNumberPlate(String numberPlate) async {
       url,
       headers: {
         'Content-Type': 'application/json',
+        ...await getHeaderCoockie(), // Spread the Map here
       },
       body: jsonEncode(dataToSend),
     );
-    print(dataToSend);
-    print(response.body);
-    print(response.statusCode);
+
     if (response.statusCode == 200) {
-      VehicleRegistration regJson = jsonDecode(response.body);
+      VehicleRegistration regJson =
+          VehicleRegistration.fromJson(jsonDecode(response.body));
       UserSingleton.addNumberPlate(regJson);
       return true;
     }
@@ -135,5 +136,28 @@ Future<void> deleteLicencePlate(String numberPlate, int userId) async {
     }
   } catch (e) {
     // Show error popup
+  }
+}
+
+Future<String> uploadImage(File image, int id) async {
+  final uri = Uri.parse('https://your-server-url/upload/$id');
+  final request = http.MultipartRequest('POST', uri)
+    ..files.add(await http.MultipartFile.fromPath(
+      'image',
+      image.path,
+      contentType: MediaType('image', 'jpeg'),
+    ));
+
+  try {
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.bytesToString();
+      final data = jsonDecode(responseData);
+      return data['image_url'];
+    } else {
+      throw Exception('Failed to upload image: ${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Image upload failed: $e');
   }
 }

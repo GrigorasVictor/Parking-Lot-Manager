@@ -10,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/widgets/userShower.dart';
 import 'package:front_end/widgets/uploadPopUp.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:flutter/services.dart';
 
 class AccountPage extends StatefulWidget {
@@ -32,29 +31,7 @@ class _AccountPageState extends State<AccountPage> {
     _fetchUserImage();
   }
 
-  Future<String> uploadImage(File image, int id) async {
-    final uri = Uri.parse('https://your-server-url/upload/$id');
-    final request = http.MultipartRequest('POST', uri)
-      ..files.add(await http.MultipartFile.fromPath(
-        'image',
-        image.path,
-        contentType: MediaType('image', 'jpeg'),
-      ));
-
-    try {
-      final response = await request.send();
-      if (response.statusCode == 200) {
-        final responseData = await response.stream.bytesToString();
-        final data = jsonDecode(responseData);
-        return data['image_url'];
-      } else {
-        throw Exception('Failed to upload image: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Image upload failed: $e');
-    }
-  }
-
+  /// Method to handle the image picking and uploading logic
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -73,6 +50,7 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
+  /// Fetches the user's image from the server
   Future<void> _fetchUserImage() async {
     final uri = Uri.parse('https://your-server-url/user/${user!.userId}');
     final response = await http.get(uri);
@@ -86,6 +64,15 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
+  /// Refreshes the entire page by re-fetching data
+  Future<void> _refreshData() async {
+    await _fetchUserImage(); // Refresh profile image
+    setState(() {
+      user = UserSingleton.getUser(); // Refresh user data
+    });
+  }
+
+  /// Shows a popup for image upload success or failure
   void _showUploadPopup(String message, bool isSuccess) {
     showDialog(
       context: context,
@@ -101,6 +88,7 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
+  /// Logout the user
   void _logout() {
     print("User logged out");
     showDialog(
@@ -142,10 +130,11 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
+  /// Show the "Add Car" dialog
   void _showAddCarDialog() {
-    String part1 = ''; // First part (2 letters)
-    String part2 = ''; // Second part (2 numbers)
-    String part3 = ''; // Third part (3 letters)
+    String part1 = '';
+    String part2 = '';
+    String part3 = '';
 
     showDialog(
       context: context,
@@ -165,8 +154,7 @@ class _AccountPageState extends State<AccountPage> {
                 child: TextField(
                   maxLength: 2,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(
-                        RegExp("[A-Z]")), // Only letters
+                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")),
                   ],
                   onChanged: (value) {
                     part1 = value;
@@ -184,9 +172,7 @@ class _AccountPageState extends State<AccountPage> {
                 flex: 2,
                 child: TextField(
                   maxLength: 2,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) {
                     part2 = value;
                   },
@@ -204,7 +190,7 @@ class _AccountPageState extends State<AccountPage> {
                 child: TextField(
                   maxLength: 3,
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[A-Z]")),
+                    FilteringTextInputFormatter.allow(RegExp("[A-Z]"))
                   ],
                   onChanged: (value) {
                     part3 = value;
@@ -240,12 +226,15 @@ class _AccountPageState extends State<AccountPage> {
                     part3.length == 3) {
                   try {
                     bool answer = await sendNumberPlate(numberPlate);
-                    print("answer = $answer");
-                    setState(() {});
-                    Navigator.of(context).pop();
-                    _showUploadPopup('Car added successfully!', true);
+                    Navigator.of(context).pop(); // Close the dialog
+                    if (answer) {
+                      _showUploadPopup('Car added successfully!', true);
+                      setState(() {}); // Rebuild UI after adding car
+                    } else {
+                      _showUploadPopup('Failed to add car.', false);
+                    }
                   } catch (e) {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(); // Close the dialog
                     _showUploadPopup('Failed to add car: $e', false);
                   }
                 } else {
@@ -329,19 +318,26 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 const SizedBox(height: 5),
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: RefreshIndicator(
+                    onRefresh: _refreshData,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       child: Column(
-                    children: [
-                      const UserShower(),
-                      CustomElevatedButton(
-                          width: 400,
-                          height: 50,
-                          minHeight: 50,
-                          onPressed: _showAddCarDialog,
-                          label: "Add Car"),
-                      const SizedBox(height: 10),
-                    ],
-                  )),
+                        children: [
+                          // ignore: prefer_const_constructors
+                          UserShower(),
+                          CustomElevatedButton(
+                            width: 400,
+                            height: 50,
+                            minHeight: 50,
+                            onPressed: _showAddCarDialog,
+                            label: "Add Car",
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

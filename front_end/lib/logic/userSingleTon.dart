@@ -22,4 +22,8 @@ class UserSingleton {
   static void addNumberPlate(VehicleRegistration vehicleRegistration){
     _user!.registrations.add(vehicleRegistration);
   }
+
+  static List<VehicleRegistration> getVehicleRegistrations(){
+    return _user!.registrations;
+  }
 }
