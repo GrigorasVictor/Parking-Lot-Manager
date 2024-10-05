@@ -326,6 +326,7 @@ class _AccountPageState extends State<AccountPage> {
                         children: [
                           // ignore: prefer_const_constructors
                           UserShower(),
+                          const SizedBox(height: 15),
                           CustomElevatedButton(
                             width: 400,
                             height: 50,

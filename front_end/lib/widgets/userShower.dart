@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/user.dart';
-import 'package:front_end/widgets/card.dart'; // Assuming this is where your `CustomCard` widget is located.
+import 'package:front_end/widgets/carCard.dart';
+import 'package:front_end/widgets/card.dart';
 
 class UserShower extends StatefulWidget {
   const UserShower({super.key});
@@ -21,7 +22,6 @@ class _UserShowerState extends State<UserShower> {
 
   @override
   Widget build(BuildContext context) {
-    const double cardWidth = 500;
     const double cardHeight = 50;
 
     if (_user == null) {
@@ -32,34 +32,39 @@ class _UserShowerState extends State<UserShower> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _buildCustomCard('Name', _user!.fullName, Icons.person, cardWidth, cardHeight),
-        _buildCustomCard('Email', _user!.email, Icons.email, cardWidth, cardHeight),
-        _buildCustomCard('Phone Number', _user!.phoneNumber, Icons.phone, cardWidth, cardHeight),
+        _buildCustomCard('Name', _user!.fullName, Icons.person, cardHeight),
+        _buildCustomCard('Email', _user!.email, Icons.email, cardHeight),
+        _buildCustomCard('Phone Number', _user!.phoneNumber, Icons.phone, cardHeight),
 
         const Padding(
           padding: EdgeInsets.fromLTRB(25, 0, 0, 0), 
           child: Text(
-            style: TextStyle(fontWeight: FontWeight.bold),
             'Registered Licence Plates:',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
 
+        // Horizontal list for registered license plates
         if (_user!.registrations.isNotEmpty)
-          for (var registration in _user!.registrations)
-            GestureDetector(
-              onTap: () {
-                _showDeleteDialog(
-                  context,
-                  registration.licencePlate,
-                  registration.registrationId,
+          SizedBox(
+            height: 150, // Set a height for the sliding cards
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _user!.registrations.length,
+              itemBuilder: (context, index) {
+                final registration = _user!.registrations[index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10.0), // Space between cards
+                  child: CarCard(
+                    descriptionText: registration.licencePlate,
+                    onClose: () {
+                      _showDeleteDialog(context, registration.licencePlate, registration.registrationId);
+                    },
+                  ),
                 );
               },
-              child: CustomCard(
-                content: registration.licencePlate,
-                width: cardWidth - 100,
-                height: cardHeight,
-              ),
-            )
+            ),
+          )
         else
           const Padding(
             padding: EdgeInsets.all(8.0),
@@ -70,7 +75,7 @@ class _UserShowerState extends State<UserShower> {
   }
 
   // Function to build CustomCard with icon
-  Widget _buildCustomCard(String title, String? content, IconData icon, double width, double height) {
+  Widget _buildCustomCard(String title, String? content, IconData icon, double height) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
       child: Column(
@@ -88,7 +93,7 @@ class _UserShowerState extends State<UserShower> {
           ),
           CustomCard(
             content: content ?? 'Not available',
-            width: width,
+            width: double.infinity, // Use full width
             height: height,
           ),
         ],
@@ -108,14 +113,14 @@ class _UserShowerState extends State<UserShower> {
             TextButton(
               child: const Text("Cancel"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog without action
+                Navigator.of(context).pop(); 
               },
             ),
             TextButton(
               child: const Text("Delete"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                //_deleteLicencePlate(licencePlate, plateId); // Perform deletion
+                _deleteLicencePlate(plateId); 
+                Navigator.of(context).pop(); 
               },
             ),
           ],
@@ -123,7 +128,10 @@ class _UserShowerState extends State<UserShower> {
       },
     );
   }
+
+  void _deleteLicencePlate(int plateId) {
+    setState(() {
+      _user!.registrations.removeWhere((reg) => reg.registrationId == plateId);
+    });
+  }
 }
-
-  
-
