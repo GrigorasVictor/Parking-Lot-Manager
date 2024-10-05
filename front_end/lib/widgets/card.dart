@@ -19,6 +19,7 @@ class CustomCard extends StatelessWidget {
             if (title != null)
               Text(title!, style: const TextStyle(fontWeight: FontWeight.bold)),
             Card(
+              color: const Color.fromARGB(255, 247, 247, 247),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0),
               ),

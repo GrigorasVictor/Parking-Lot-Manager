@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/logic/userSingleTon.dart';
+import 'package:front_end/model/ParkingLot.dart';
 import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/constants.dart';
@@ -24,21 +26,34 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final List<bool> _parkingActive = [true, true, true, true];
+  late List<bool> _parkingActive;
+  late Future<List<ParkingLot>> futureParkingLots;
+
+  @override
+  void initState() {
+    super.initState();
+    futureParkingLots = getParkingLots(); 
+    _parkingActive = []; 
+  }
 
   void _toggleParkingState(int index) {
     setState(() {
-      _parkingActive[index] = !_parkingActive[index];
+      for (int i = 0; i < _parkingActive.length; i++) {
+        _parkingActive[i] = i == index;
+      }
     });
   }
 
-  ParkingInfoList _buildParkingInfoList(int id, bool isActive) {
+  // Function to build parking info list dynamically
+  ParkingInfoList _buildParkingInfoList(int id, bool isActive, int activeCars, int totalSpots) {
     return ParkingInfoList(
       parkingId: id.toString(),
       parkingSpot: isActive ? 'A$id' : null,
       initialHours: isActive ? 0 : -1,
       initialMinutes: isActive ? 10 * id : -1,
       initialSeconds: isActive ? 0 : -1,
+      activeCars: activeCars,
+      totalSpots: totalSpots,
       onTap: () => _toggleParkingState(id - 1),
     );
   }
@@ -138,7 +153,7 @@ class _MainPageState extends State<MainPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const HelpPage(), 
+                                builder: (context) => const HelpPage(),
                               ),
                             );
                           },
@@ -151,7 +166,7 @@ class _MainPageState extends State<MainPage> {
                     Container(
                       padding: const EdgeInsets.all(18),
                       child: const AutoSizeText(
-                        'Available Parking Lot',
+                        'Available Parking Lots',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -162,15 +177,41 @@ class _MainPageState extends State<MainPage> {
 
                     // Parking Info List
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: _parkingActive.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: _buildParkingInfoList(
-                              index + 1,
-                              _parkingActive[index],
-                            ),
+                      child: FutureBuilder<List<ParkingLot>>(
+                        future: futureParkingLots,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(color: Colors.green),
+                            );
+                          }
+                          if (snapshot.hasError || !snapshot.hasData) {
+                            return const Center(
+                              child: Text('Error loading parking lots'),
+                            );
+                          }
+
+                          final List<ParkingLot> parkingLots = snapshot.data!;
+                          print(parkingLots);
+                          // Initialize _parkingActive list if it's not already
+                          if (_parkingActive.isEmpty) {
+                            _parkingActive = List<bool>.filled(parkingLots.length, false);
+                            _parkingActive[0] = true; // Activate the first parking lot by default
+                          }
+
+                          return ListView.builder(
+                            itemCount: parkingLots.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: _buildParkingInfoList(
+                                  index + 1,
+                                  _parkingActive[index],
+                                  parkingLots[index].availableParkingSpaces ?? 0,
+                                  parkingLots[index].totalParkingSpaces ?? 0
+                                ),
+                              );
+                            },
                           );
                         },
                       ),

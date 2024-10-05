@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'constants.dart';
 import 'dart:async';
 
+// ignore: must_be_immutable
 class ParkingInfoList extends StatefulWidget {
   ParkingInfoList({
     super.key,
@@ -15,6 +16,8 @@ class ParkingInfoList extends StatefulWidget {
     this.initialHours,
     this.initialMinutes,
     this.initialSeconds,
+    required this.activeCars, 
+    required this.totalSpots, 
   });
 
   final String parkingId;
@@ -23,6 +26,8 @@ class ParkingInfoList extends StatefulWidget {
   final int? initialHours;
   final int? initialMinutes;
   final int? initialSeconds;
+  final int activeCars; 
+  final int totalSpots; 
 
   @override
   _ParkingInfoListState createState() => _ParkingInfoListState();
@@ -114,9 +119,9 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                     height: 50,
                     width: 50,
                     child: SvgPicture.asset(
-                      widget.initialHours == -1 ? 
-                      'lib/assets/icons/inactive.svg' :
-                      'lib/assets/icons/active.svg',
+                      widget.initialHours == -1
+                          ? 'lib/assets/icons/inactive.svg'
+                          : 'lib/assets/icons/active.svg',
                       width: 50,
                       height: 50,
                     ),
@@ -137,15 +142,30 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                           ),
                           maxLines: 1,
                         ),
-                        AutoSizeText(
-                          'Parking Spot: ${widget.parkingSpot ?? '-'}',
-                          style: const TextStyle(
-                            color: Color(0xFFADBBB9),
-                            fontFamily: 'Inter',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          maxLines: 1,
+                        Row(
+                          children: [
+                            AutoSizeText(
+                              'Parking Spot: ${widget.parkingSpot ?? '-'}',
+                              style: const TextStyle(
+                                color: Color(0xFFADBBB9),
+                                fontFamily: 'Inter',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              maxLines: 1,
+                            ),
+                            const SizedBox(width: 10),
+                            AutoSizeText(
+                              '${widget.activeCars}/${widget.totalSpots}', // Display active cars/total spots
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Inter',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              maxLines: 1,
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -177,7 +197,8 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                                   _formattedDate,
                                   style: TextStyle(
                                     color: widget.initialHours == -1
-                                        ? const Color(0xFFADBBB9).withOpacity(0.5)
+                                        ? const Color(0xFFADBBB9)
+                                            .withOpacity(0.5)
                                         : const Color(0xFFADBBB9),
                                     fontFamily: 'Inter',
                                     fontSize: 12,

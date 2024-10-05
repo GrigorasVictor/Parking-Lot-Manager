@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:front_end/logic/jwtLogic.dart';
 import 'package:front_end/logic/userSingleTon.dart';
+import 'package:front_end/model/ParkingLot.dart';
 import 'package:front_end/model/registration.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/model/user.dart';
@@ -119,8 +120,7 @@ Future<bool> sendNumberPlate(String numberPlate) async {
 }
 
 Future<bool> deleteLicencePlate(int id) async {
-  final String apiUrl =
-      'http://localhost:8080/vehicleRegistration/$id';
+  final String apiUrl = 'http://localhost:8080/vehicleRegistration/$id';
 
   try {
     final response = await http.delete(
@@ -130,10 +130,9 @@ Future<bool> deleteLicencePlate(int id) async {
       },
     );
     print(response.statusCode);
-    if (response.statusCode == 200) 
-      return true;
+    if (response.statusCode == 200) return true;
   } catch (e) {}
-    return false;
+  return false;
 }
 
 Future<String> uploadImage(File image, int id) async {
@@ -157,4 +156,25 @@ Future<String> uploadImage(File image, int id) async {
   } catch (e) {
     throw Exception('Image upload failed: $e');
   }
+}
+
+Future<List<ParkingLot>> getParkingLots() async {
+  final Uri url = Uri.http('localhost:8080', '/parkingLot');
+  try {
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        ...await getHeaderCoockie(), // Spread the Map here
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> parkingJson = jsonDecode(response.body);
+      return parkingJson.map((json) => ParkingLot.fromJson(json)).toList();
+    }
+  } catch (e) {
+    print('Error sending NumberPlate: $e');
+  }
+  return [];
 }
