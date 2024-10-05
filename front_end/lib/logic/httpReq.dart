@@ -118,25 +118,22 @@ Future<bool> sendNumberPlate(String numberPlate) async {
   return false;
 }
 
-Future<void> deleteLicencePlate(String numberPlate, int userId) async {
+Future<bool> deleteLicencePlate(int id) async {
   final String apiUrl =
-      'http://your-backend-api-url.com/users/$userId/licenceplates/$numberPlate';
+      'http://localhost:8080/vehicleRegistration/$id';
 
   try {
     final response = await http.delete(
       Uri.parse(apiUrl),
       headers: {
-        'Content-Type': 'application/json',
+        ...await getHeaderCoockie(), // Spread the Map here
       },
     );
-
-    if (response.statusCode == 200) {
-    } else {
-      // Show error popup
-    }
-  } catch (e) {
-    // Show error popup
-  }
+    print(response.statusCode);
+    if (response.statusCode == 200) 
+      return true;
+  } catch (e) {}
+    return false;
 }
 
 Future<String> uploadImage(File image, int id) async {

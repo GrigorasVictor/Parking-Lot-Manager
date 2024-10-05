@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/carCard.dart';
 import 'package:front_end/widgets/card.dart';
+import 'package:front_end/widgets/constants.dart';
 
 class UserShower extends StatefulWidget {
   const UserShower({super.key});
@@ -101,25 +103,37 @@ class _UserShowerState extends State<UserShower> {
     );
   }
 
-  // Dialog to confirm deletion of a license plate
   void _showDeleteDialog(BuildContext context, String licencePlate, int plateId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Delete Licence Plate"),
-          content: Text("Are you sure you want to delete $licencePlate?"),
+          backgroundColor: const Color(backgroundColor), 
+          title: const Text(
+            "Delete Licence Plate",
+            style: TextStyle(color: Colors.white), 
+          ),
+          content: Text(
+            "Are you sure you want to delete $licencePlate?",
+            style: const TextStyle(color: Colors.white),  
+          ),
           actions: <Widget>[
             TextButton(
-              child: const Text("Cancel"),
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.green), 
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); 
               },
             ),
             TextButton(
-              child: const Text("Delete"),
+              child: const Text(
+                "Delete",
+                style: TextStyle(color: Colors.green), 
+              ),
               onPressed: () {
-                _deleteLicencePlate(plateId); 
+                _deleteLicencePlate(plateId, context); 
                 Navigator.of(context).pop(); 
               },
             ),
@@ -129,9 +143,45 @@ class _UserShowerState extends State<UserShower> {
     );
   }
 
-  void _deleteLicencePlate(int plateId) {
-    setState(() {
-      _user!.registrations.removeWhere((reg) => reg.registrationId == plateId);
-    });
+  Future<void> _deleteLicencePlate(int plateId, BuildContext context) async {
+    bool answer = await deleteLicencePlate(plateId);
+    if (answer) {
+      setState(() {
+        _user!.registrations.removeWhere((reg) => reg.registrationId == plateId);
+      });
+    } else {
+      _showDeletionFailedDialog(context); // Show failure dialog
+    }
+  }
+
+  // New method to show deletion failure dialog
+  void _showDeletionFailedDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(backgroundColor), 
+          title: const Text(
+            "Deletion Failed",
+            style: TextStyle(color: Colors.white),
+          ),
+          content: const Text(
+            "Failed to delete the license plate. Please try again.",
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                "OK",
+                style: TextStyle(color: Colors.green),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
