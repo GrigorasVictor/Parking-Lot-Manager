@@ -56,7 +56,7 @@ UserController{
         if(optUser.isEmpty()) return new ResponseEntity<>("Missing user!", HttpStatus.BAD_REQUEST);
         User user = optUser.get();
 
-        user.setImage(realPathToUploads);
+        user.setImage(filePath);
 
         repo.save(user);
 
