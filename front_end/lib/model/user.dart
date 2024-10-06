@@ -20,10 +20,10 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       userId: json['userId'] as int,
-      fullName: json['full_name'] as String,
+      fullName: json['fullName'] as String,
       image: json['image'] as String,
       email: json['email'] as String,
-      phoneNumber: json['phone_number'] as String,
+      phoneNumber: json['phoneNumber'] as String,
       registrations: (json['licencePlates'] as List<dynamic>)
           .map((item) =>
               VehicleRegistration.fromJson(item as Map<String, dynamic>))
@@ -34,10 +34,10 @@ class User {
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
-      'full_name': fullName,
+      'fullName': fullName,
       'image': image,
       'email': email,
-      'phone_number': phoneNumber,
+      'phoneNumber': phoneNumber,
       'licencePlates':
           registrations.map((registration) => registration.toJson()).toList(),
     };
