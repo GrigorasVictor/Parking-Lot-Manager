@@ -23,7 +23,7 @@ public class UserSubscription {
 
     @JsonProperty("subscription_type")
     @Column(name = "subscription_type")
-    private String subscriptionType;
+    private Integer subscriptionType;
 
     @Column(name="start_date")
     @JsonProperty("start_date")

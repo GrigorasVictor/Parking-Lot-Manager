@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/logic/userSingleTon.dart';
-import 'package:front_end/model/user.dart';
+import 'package:front_end/model/subscription.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/customButton.dart';
-import 'package:front_end/widgets/listCard.dart'; 
+import 'package:front_end/widgets/listCard.dart';
 import 'package:front_end/widgets/subscriptionCard.dart';
 import 'package:intl/intl.dart';
+
+// Define a constant mapping for subscription types
+const Map<int, String> subscriptionTypeMap = { //TODO: daca schimb 0 cu 1 pusca
+  1: 'Monthly Subscription',
+  2: 'Yearly Subscription',
+  3: 'Lifetime Subscription',
+};
 
 class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({super.key});
@@ -20,36 +27,37 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   final double textSize = 50;
   final String font = 'Inter';
   final double iconSize = 60;
-  final User? user = UserSingleton.getUser();
 
   final List<ListCardItem> subscriptionOptions = [
-    ListCardItem(title: 'Monthly Subscription', price: '\$4.99'),
-    ListCardItem(title: 'Yearly Subscription', price: '\$49.99'),
-    ListCardItem(title: 'Lifetime Subscription', price: '\$99.99'),
+    ListCardItem(
+        title: subscriptionTypeMap[1]!,
+        price: '\$4.99'), // Monthly Subscription
+    ListCardItem(
+        title: subscriptionTypeMap[2]!,
+        price: '\$49.99'), // Yearly Subscription
+    ListCardItem(
+        title: subscriptionTypeMap[3]!,
+        price: '\$99.99'), // Lifetime Subscription
   ];
 
-  String currentPrice = ''; 
+  String currentPrice = '';
   String currentSubscription = '';
-  DateTime startDate = DateTime.now(); 
-  DateTime endDate = DateTime.now(); 
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now();
 
-  void calculateEndDate(String subscription) {
+  void calculateEndDate(int subscriptionType) {
     DateTime today = DateTime.now();
-    if (subscription == 'Monthly Subscription') {
+    if (subscriptionType == 1) {
+      // Monthly Subscription
       endDate = DateTime(today.year, today.month + 1, today.day);
-    } else if (subscription == 'Yearly Subscription') {
+    } else if (subscriptionType == 2) {
+      // Yearly Subscription
       endDate = DateTime(today.year + 1, today.month, today.day);
-    } else if (subscription == 'Lifetime Subscription') {
-      endDate = DateTime(today.year + 99, today.month, today.day); 
+    } else if (subscriptionType == 3) {
+      // Lifetime Subscription
+      endDate = DateTime(today.year + 99, today.month, today.day);
     }
   }
-
-  // Sample user subscriptions data, you might want to fetch this from an API
-  final List<SubscriptionCardData> userSubscriptions = [
-    SubscriptionCardData(title: "Monthly Subscription", expirationDate: "12/31/2024"),
-    SubscriptionCardData(title: "Yearly Subscription", expirationDate: "12/31/2025"),
-    SubscriptionCardData(title: "Lifetime Subscription", expirationDate: "12/31/3024"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +67,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     // Date format
     DateFormat dateFormatter = DateFormat('MM/dd/yyyy');
 
+    List<UserSubscription> userSubscriptions =
+        UserSingleton.getUser()!.subscriptions;
+    print(userSubscriptions);
     return Scaffold(
       backgroundColor: const Color(itemColor),
       body: Padding(
@@ -77,19 +88,30 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               maxLines: 1,
             ),
             const SizedBox(height: 5),
-            
+
             // Swipeable Cards for User Subscriptions
             Expanded(
               child: PageView.builder(
                 itemCount: userSubscriptions.length,
                 itemBuilder: (context, index) {
                   final subscription = userSubscriptions[index];
-                  return SubscriptionCard(
-                    width: width * 0.9,
-                    height: height * 0.2,
-                    subscriptionText: subscription.title,
-                    expirationDate: subscription.expirationDate,
-                    svgBackgroundColor: const Color(itemColorHighlighted),
+                  String title =
+                      subscriptionTypeMap[subscription.subscriptionType] ??
+                          'Unknown Subscription';
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                    decoration: BoxDecoration(
+                      color: const Color(itemColorHighlighted),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: SubscriptionCard(
+                      width: width * 0.9,
+                      height: height * 0.2,
+                      subscriptionText: title.toUpperCase(),
+                      expirationDate:
+                          dateFormatter.format(subscription.endDate),
+                      svgBackgroundColor: const Color(itemColorHighlighted),
+                    ),
                   );
                 },
               ),
@@ -115,9 +137,17 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     currentPrice = selectedPrice;
                     currentSubscription = selectedTitle;
                     startDate = DateTime.now();
-                    calculateEndDate(currentSubscription);
+                    // Calculate the end date based on the selected subscription
+                    final subscriptionType = subscriptionTypeMap.entries
+                        .firstWhere(
+                          (entry) => entry.value == selectedTitle,
+                          orElse: () => const MapEntry(0, 'Unknown'),
+                        ).key;
+                    calculateEndDate(subscriptionType);
+
                   });
-                  print('Selected price: $currentPrice with $currentSubscription');
+                  print(
+                      'Selected price: $currentPrice with $currentSubscription');
                 },
               ),
             ),
@@ -125,7 +155,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             Row(
               children: [
                 Expanded(
-                  flex: 4, 
+                  flex: 4,
                   child: Container(
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
@@ -168,7 +198,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  flex: 6, 
+                  flex: 6,
                   child: Container(
                     padding: const EdgeInsets.all(2.0),
                     decoration: BoxDecoration(
@@ -244,12 +274,4 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       ),
     );
   }
-}
-
-// Sample data class for subscriptions
-class SubscriptionCardData {
-  final String title;
-  final String expirationDate;
-
-  SubscriptionCardData({required this.title, required this.expirationDate});
 }

@@ -40,14 +40,7 @@ class SubscriptionCard extends StatelessWidget {
           color: Colors.grey.shade300,
           width: 1.0,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(2, 2),
-          ),
-        ],
+      
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,9 +77,9 @@ class SubscriptionCard extends StatelessWidget {
           ),
           const SizedBox(width: 5.0), 
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0), 
-              child: Column(
+            child: 
+              
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -122,7 +115,7 @@ class SubscriptionCard extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+        
         ],
       ),
     );

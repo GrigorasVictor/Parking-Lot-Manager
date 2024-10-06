@@ -17,7 +17,7 @@ class UserSubscription {
   final DateTime endDate;
 
   @JsonKey(name: 'parking_space')
-  final int parkingSpace;
+  final int? parkingSpace;
 
   UserSubscription({
     this.subscriptionId,
@@ -25,7 +25,7 @@ class UserSubscription {
     required this.subscriptionType,
     required this.startDate,
     required this.endDate,
-    required this.parkingSpace,
+    this.parkingSpace,
   });
 
   factory UserSubscription.fromJson(Map<String, dynamic> json) {
@@ -35,7 +35,7 @@ class UserSubscription {
       subscriptionType: json['subscription_type'] as int,
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
-      parkingSpace: json['parking_space'] as int,
+      parkingSpace: json['parking_space'] as int?,
     );
   }
 
