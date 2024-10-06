@@ -4,6 +4,8 @@ import admin.parkWise.administration.models.User;
 import admin.parkWise.administration.repository.UserRepo;
 import admin.parkWise.administration.services.JwtService;
 import io.jsonwebtoken.Jwts;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.Cookie;
@@ -23,7 +25,7 @@ UserController{
     UserRepo repo;
 
     @PostMapping("/upload-photo")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("photo") MultipartFile photo, HttpServletRequest servletRequest) {
+    public ResponseEntity<String> handleFileUpload(HttpServletRequest req, @RequestParam("photo") MultipartFile photo, HttpServletRequest servletRequest) {
 
         if(photo.isEmpty()) return new ResponseEntity<>("Photo empty", HttpStatus.BAD_REQUEST);
 
@@ -45,6 +47,18 @@ UserController{
             e.printStackTrace();
         }
 
+        Optional<String> token = JwtService.getToken(req);
+
+        if(token.isEmpty()) return new ResponseEntity<>("Missing token!", HttpStatus.BAD_REQUEST);
+        Integer userId = JwtService.staticExtractId(token.get());
+
+        Optional<User> optUser = repo.findById(userId);
+        if(optUser.isEmpty()) return new ResponseEntity<>("Missing user!", HttpStatus.BAD_REQUEST);
+        User user = optUser.get();
+
+        user.setImage(realPathToUploads);
+
+        repo.save(user);
 
         return new ResponseEntity<>("Photo received", HttpStatus.OK);
     }

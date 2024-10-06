@@ -20,14 +20,18 @@ public class User {
     private Integer userId;
 
     @Column(name = "full_name", nullable = false)
-    @JsonProperty("full_name")
+    @JsonProperty("fullName")
     private String fullName;
+
+    @Column(name = "image")
+    @JsonProperty("image")
+    private String image;
 
     @Column(name = "email", nullable = false)
     @JsonProperty("email")
     private String email;
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phoneNumber", nullable = false)
     @JsonProperty("phone_number")
     private String phoneNumber;
 
