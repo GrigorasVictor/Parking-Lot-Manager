@@ -136,7 +136,7 @@ Future<bool> deleteLicencePlate(int id) async {
 }
 
 Future<String> uploadImage(File image, int id) async {
-  final uri = Uri.parse('https://your-server-url/upload/$id');
+  final uri = Uri.parse('http://localhost:8080/users/upload-photo');
   final request = http.MultipartRequest('POST', uri)
     ..files.add(await http.MultipartFile.fromPath(
       'image',
