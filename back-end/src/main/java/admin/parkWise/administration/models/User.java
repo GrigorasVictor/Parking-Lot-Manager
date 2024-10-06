@@ -31,8 +31,8 @@ public class User {
     @JsonProperty("email")
     private String email;
 
-    @Column(name = "phoneNumber", nullable = false)
-    @JsonProperty("phone_number")
+    @Column(name = "phone_number", nullable = false)
+    @JsonProperty("phoneNumber")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

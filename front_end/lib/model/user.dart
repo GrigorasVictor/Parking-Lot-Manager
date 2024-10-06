@@ -3,7 +3,7 @@ import 'registration.dart';
 class User {
   final int userId;
   final String fullName;
-  final String image;
+  final String? image;
   final String email;
   final String phoneNumber;
   final List<VehicleRegistration> registrations;
@@ -11,7 +11,7 @@ class User {
   const User({
     required this.userId,
     required this.fullName,
-    required this.image,
+    this.image,
     required this.email,
     required this.phoneNumber,
     required this.registrations,
@@ -21,7 +21,7 @@ class User {
     return User(
       userId: json['userId'] as int,
       fullName: json['fullName'] as String,
-      image: json['image'] as String,
+      image: json['image'] as String?,
       email: json['email'] as String,
       phoneNumber: json['phoneNumber'] as String,
       registrations: (json['licencePlates'] as List<dynamic>)

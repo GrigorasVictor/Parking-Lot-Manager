@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/logic/httpReq.dart';
+import 'package:front_end/logic/userSingleTon.dart';
+import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/customButton.dart';
@@ -18,6 +20,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   final double textSize = 50;
   final String font = 'Inter';
   final double iconSize = 60;
+  final User? user = UserSingleton.getUser();
 
   final List<ListCardItem> subscriptionOptions = [
     ListCardItem(title: 'Monthly Subscription', price: '\$4.99'),
@@ -40,6 +43,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       endDate = DateTime(today.year + 99, today.month, today.day); 
     }
   }
+
+  // Sample user subscriptions data, you might want to fetch this from an API
+  final List<SubscriptionCardData> userSubscriptions = [
+    SubscriptionCardData(title: "Monthly Subscription", expirationDate: "12/31/2024"),
+    SubscriptionCardData(title: "Yearly Subscription", expirationDate: "12/31/2025"),
+    SubscriptionCardData(title: "Lifetime Subscription", expirationDate: "12/31/3024"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +77,24 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               maxLines: 1,
             ),
             const SizedBox(height: 5),
-            SubscriptionCard(
-              width: width * 0.9,
-              height: height * 0.14,
-              subscriptionText: "PREMIUM SUBSCRIPTION",
-              expirationDate: "12/31/2024",
-              svgBackgroundColor: const Color(itemColorHighlighted),
+            
+            // Swipeable Cards for User Subscriptions
+            Expanded(
+              child: PageView.builder(
+                itemCount: userSubscriptions.length,
+                itemBuilder: (context, index) {
+                  final subscription = userSubscriptions[index];
+                  return SubscriptionCard(
+                    width: width * 0.9,
+                    height: height * 0.2,
+                    subscriptionText: subscription.title,
+                    expirationDate: subscription.expirationDate,
+                    svgBackgroundColor: const Color(itemColorHighlighted),
+                  );
+                },
+              ),
             ),
+
             const SizedBox(height: 15),
             const AutoSizeText(
               'Buy subscription',
@@ -223,4 +244,12 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       ),
     );
   }
+}
+
+// Sample data class for subscriptions
+class SubscriptionCardData {
+  final String title;
+  final String expirationDate;
+
+  SubscriptionCardData({required this.title, required this.expirationDate});
 }
