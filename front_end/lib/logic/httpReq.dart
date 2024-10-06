@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:front_end/logic/jwtLogic.dart';
 import 'package:front_end/logic/userSingleTon.dart';
-import 'package:front_end/model/ParkingLot.dart';
+import 'package:front_end/model/parkingLot.dart';
 import 'package:front_end/model/registration.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/model/user.dart';

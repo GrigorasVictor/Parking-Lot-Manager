@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/logic/userSingleTon.dart';
-import 'package:front_end/model/ParkingLot.dart';
+import 'package:front_end/model/parkingLot.dart';
 import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/cardIcon.dart';
 import 'package:front_end/widgets/constants.dart';
@@ -32,8 +32,8 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    futureParkingLots = getParkingLots(); 
-    _parkingActive = []; 
+    futureParkingLots = getParkingLots(); // Asynchronous fetching of parking lots
+    _parkingActive = []; // Manage active states for parking lots
   }
 
   void _toggleParkingState(int index) {
@@ -64,8 +64,8 @@ class _MainPageState extends State<MainPage> {
     final cardIconHeight = screenWidth * 0.25;
     final cardIconWidth = (screenWidth - 131.8) * 0.33;
 
-    User? user = UserSingleton.getUser(); 
-    final surname = user != null ? user.fullName.split(' ').last : 'User'; 
+    User? user = UserSingleton.getUser(); // Singleton pattern for User
+    final surname = user != null ? user.fullName.split(' ').last : 'User';
 
     return Scaffold(
       backgroundColor: const Color(backgroundColor),
@@ -180,23 +180,39 @@ class _MainPageState extends State<MainPage> {
                       child: FutureBuilder<List<ParkingLot>>(
                         future: futureParkingLots,
                         builder: (context, snapshot) {
+                          // Handle loading state
                           if (snapshot.connectionState == ConnectionState.waiting) {
                             return const Center(
                               child: CircularProgressIndicator(color: Colors.green),
                             );
                           }
-                          if (snapshot.hasError || !snapshot.hasData) {
-                            return const Center(
-                              child: Text('Error loading parking lots'),
+                          
+                          // Handle error state
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                'Error: ${snapshot.error}',
+                                style: const TextStyle(color: Colors.red),
+                              ),
                             );
                           }
 
+                          // Handle no data state
+                          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                'No parking lots available',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            );
+                          }
+
+                          // Data is successfully loaded
                           final List<ParkingLot> parkingLots = snapshot.data!;
-                          print(parkingLots);
-                          // Initialize _parkingActive list if it's not already
+                          print(parkingLots.toString());
                           if (_parkingActive.isEmpty) {
                             _parkingActive = List<bool>.filled(parkingLots.length, false);
-                            _parkingActive[0] = true; // Activate the first parking lot by default
+                            _parkingActive[0] = true;
                           }
 
                           return ListView.builder(
@@ -208,7 +224,7 @@ class _MainPageState extends State<MainPage> {
                                   index + 1,
                                   _parkingActive[index],
                                   parkingLots[index].availableParkingSpaces ?? 0,
-                                  parkingLots[index].totalParkingSpaces ?? 0
+                                  parkingLots[index].totalParkingSpaces ?? 0,
                                 ),
                               );
                             },

@@ -26,8 +26,8 @@ class ParkingLot {
       address: json['address'] as String,
       lat: (json['lat'] as num).toDouble(),
       lng: (json['lng'] as num).toDouble(),
-      totalParkingSpaces: json['total_parking_spaces'] as int?,
-      availableParkingSpaces: json['available_parking_spaces'] as int?,
+      totalParkingSpaces: json['totalParkingSpaces'] as int?,
+      availableParkingSpaces: json['availableParkingSpaces'] as int?,
     );
   }
 
@@ -38,8 +38,15 @@ class ParkingLot {
       'address': address,
       'lat': lat,
       'lng': lng,
-      'total_parking_spaces': totalParkingSpaces,
-      'available_parking_spaces': availableParkingSpaces,
+      'totalParkingSpaces': totalParkingSpaces,
+      'availableParkingSpaces': availableParkingSpaces,
     };
+  }
+
+  @override
+  String toString() {
+    return 'ParkingLot(id: $id, name: "$name", address: "$address", '
+        'lat: $lat, lng: $lng, totalParkingSpaces: $totalParkingSpaces, '
+        'availableParkingSpaces: $availableParkingSpaces)';
   }
 }

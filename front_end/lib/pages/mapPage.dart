@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:front_end/logic/httpReq.dart';
-import 'package:front_end/model/ParkingLot.dart';
+import 'package:front_end/model/parkingLot.dart';
 import 'package:latlong2/latlong.dart'; 
 import 'package:front_end/widgets/constants.dart'; 
 import 'package:auto_size_text/auto_size_text.dart';
