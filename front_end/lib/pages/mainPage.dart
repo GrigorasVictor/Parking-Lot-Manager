@@ -32,8 +32,8 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    futureParkingLots = getParkingLots(); // Asynchronous fetching of parking lots
-    _parkingActive = []; // Manage active states for parking lots
+    futureParkingLots = getParkingLots(); 
+    _parkingActive = []; 
   }
 
   void _toggleParkingState(int index) {
@@ -209,7 +209,6 @@ class _MainPageState extends State<MainPage> {
 
                           // Data is successfully loaded
                           final List<ParkingLot> parkingLots = snapshot.data!;
-                          print(parkingLots.toString());
                           if (_parkingActive.isEmpty) {
                             _parkingActive = List<bool>.filled(parkingLots.length, false);
                             _parkingActive[0] = true;

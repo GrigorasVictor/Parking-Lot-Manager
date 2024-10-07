@@ -23,10 +23,9 @@ Future<void> sendTransaction(
     int userId, String subscription, String price, DateTime startDate) async {
   final Uri url = Uri.http('localhost:8080', '/transactionRecord');
 
-  // Remove the dollar sign and convert the price
   int amountInDollars = double.parse(price.replaceAll('\$', '')).ceil();
-
   DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
+
 
   final Map<String, dynamic> dataToSend = {
     'user_id': userId,
@@ -40,6 +39,7 @@ Future<void> sendTransaction(
       url,
       headers: {
         'Content-Type': 'application/json',
+        ...await getHeaderCoockie(), 
       },
       body: jsonEncode(dataToSend),
     );
@@ -56,8 +56,8 @@ Future<void> sendTransaction(
   }
 }
 
-Future<void> sendSubscription(
-    int userId, DateTime startDate, DateTime endDate, int parkingSpace) async {
+Future<bool> sendSubscription(
+    int userId, DateTime startDate, DateTime endDate, int parkingSpace, int subscriptionType) async {
   final Uri url = Uri.http('localhost:8080', '/userSubscriptions');
 
   DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
@@ -67,6 +67,7 @@ Future<void> sendSubscription(
     'start_date': dateFormatter.format(startDate),
     'end_date': dateFormatter.format(endDate),
     'parking_space': parkingSpace,
+    'subscription_type': subscriptionType
   };
   print(dataToSend);
   try {
@@ -74,20 +75,18 @@ Future<void> sendSubscription(
       url,
       headers: {
         'Content-Type': 'application/json',
+        ...await getHeaderCoockie(), 
       },
       body: jsonEncode(dataToSend),
     );
 
     if (response.statusCode == 200) {
-      print('Subscription sent successfully!');
-      // Handle success (response.body contains the server response)
-    } else {
-      print('Failed to send subscription. Status code: ${response.statusCode}');
-      // Handle error
+      return true;
     }
   } catch (e) {
     print('Error sending subscription: $e');
   }
+  return false;
 }
 
 Future<bool> sendNumberPlate(String numberPlate) async {
@@ -102,7 +101,7 @@ Future<bool> sendNumberPlate(String numberPlate) async {
       url,
       headers: {
         'Content-Type': 'application/json',
-        ...await getHeaderCoockie(), // Spread the Map here
+        ...await getHeaderCoockie(), 
       },
       body: jsonEncode(dataToSend),
     );
@@ -126,7 +125,7 @@ Future<bool> deleteLicencePlate(int id) async {
     final response = await http.delete(
       Uri.parse(apiUrl),
       headers: {
-        ...await getHeaderCoockie(), // Spread the Map here
+        ...await getHeaderCoockie(), 
       },
     );
     print(response.statusCode);
@@ -165,8 +164,8 @@ Future<List<ParkingLot>> getParkingLots() async {
       url,
       headers: {
         'Content-Type': 'application/json',
-        ...await getHeaderCoockie(), // Spread the Map here
-      },
+        ...await getHeaderCoockie(), 
+      },  
     );
 
     if (response.statusCode == 200) {

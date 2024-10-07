@@ -75,11 +75,9 @@ class SubscriptionCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 5.0), 
+          const SizedBox(width: 30.0), 
           Expanded(
-            child: 
-              
-              Column(
+            child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/subscription.dart';
+import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:front_end/widgets/customButton.dart';
@@ -10,7 +11,7 @@ import 'package:front_end/widgets/subscriptionCard.dart';
 import 'package:intl/intl.dart';
 
 // Define a constant mapping for subscription types
-const Map<int, String> subscriptionTypeMap = { //TODO: daca schimb 0 cu 1 pusca
+const Map<int, String> subscriptionTypeMap = {
   1: 'Monthly Subscription',
   2: 'Yearly Subscription',
   3: 'Lifetime Subscription',
@@ -44,20 +45,38 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   String currentSubscription = '';
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
+  int selectedSubscriptionType = 0;
 
+  // Function to calculate the end date based on subscription type
   void calculateEndDate(int subscriptionType) {
-    DateTime today = DateTime.now();
     if (subscriptionType == 1) {
       // Monthly Subscription
-      endDate = DateTime(today.year, today.month + 1, today.day);
+      endDate = DateTime(startDate.year, startDate.month + 1, startDate.day);
     } else if (subscriptionType == 2) {
       // Yearly Subscription
-      endDate = DateTime(today.year + 1, today.month, today.day);
+      endDate = DateTime(startDate.year + 1, startDate.month, startDate.day);
     } else if (subscriptionType == 3) {
       // Lifetime Subscription
-      endDate = DateTime(today.year + 99, today.month, today.day);
+      endDate = DateTime(startDate.year + 99, startDate.month, startDate.day);
     }
   }
+
+  // Function to get the latest expiration date from the user's subscriptions
+  DateTime getOldestExpirationDate(List<UserSubscription> subscriptions) {
+    if (subscriptions.isEmpty) {
+      return DateTime.now(); 
+    }
+
+    // Find the latest expiration date
+    DateTime oldestEndDate = subscriptions.first.endDate;
+    for (var sub in subscriptions) {
+      if (sub.endDate.isAfter(oldestEndDate)) {
+        oldestEndDate = sub.endDate;
+      }
+    }
+    return oldestEndDate.add(const Duration(days: 1));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +86,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     // Date format
     DateFormat dateFormatter = DateFormat('MM/dd/yyyy');
 
+    // Retrieve user subscriptions
     List<UserSubscription> userSubscriptions =
         UserSingleton.getUser()!.subscriptions;
     print(userSubscriptions);
+
     return Scaffold(
       backgroundColor: const Color(itemColor),
       body: Padding(
@@ -136,16 +157,20 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                   setState(() {
                     currentPrice = selectedPrice;
                     currentSubscription = selectedTitle;
-                    startDate = DateTime.now();
+
+                    // Get the oldest expiration date from the user's subscriptions
+                    startDate = getOldestExpirationDate(userSubscriptions);
+
                     // Calculate the end date based on the selected subscription
-                    final subscriptionType = subscriptionTypeMap.entries
+                    selectedSubscriptionType = subscriptionTypeMap.entries
                         .firstWhere(
                           (entry) => entry.value == selectedTitle,
                           orElse: () => const MapEntry(0, 'Unknown'),
-                        ).key;
-                    calculateEndDate(subscriptionType);
-
+                        )
+                        .key;
+                    calculateEndDate(selectedSubscriptionType);
                   });
+
                   print(
                       'Selected price: $currentPrice with $currentSubscription');
                 },
@@ -263,8 +288,25 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               height: height * 0.04,
               minHeight: 15,
               onPressed: () {
-                sendTransaction(5, currentSubscription, currentPrice, startDate);
-                sendSubscription(3, startDate, endDate, 0);
+                User? user = UserSingleton.getUser(); 
+                if (user != null) {
+                  DateTime formattedDate = DateTime.now();
+                  String description = '$currentSubscription payment';
+                  sendTransaction(
+                      user.userId, 
+                      description, 
+                      currentPrice, 
+                      formattedDate 
+                      );
+
+                  sendSubscription(
+                    user.userId, 
+                    startDate, 
+                    endDate,
+                    0, 
+                    selectedSubscriptionType 
+                  );
+                }
               },
               label: 'BUY',
               fontSize: 15,
