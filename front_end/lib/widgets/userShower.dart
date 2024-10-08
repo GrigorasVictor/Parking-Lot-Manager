@@ -19,7 +19,7 @@ class _UserShowerState extends State<UserShower> {
   @override
   void initState() {
     super.initState();
-    _user = UserSingleton.getUser(); 
+    _user = UserSingleton.getUser();
   }
 
   @override
@@ -36,10 +36,11 @@ class _UserShowerState extends State<UserShower> {
       children: <Widget>[
         _buildCustomCard('Name', _user!.fullName, Icons.person, cardHeight),
         _buildCustomCard('Email', _user!.email, Icons.email, cardHeight),
-        _buildCustomCard('Phone Number', _user!.phoneNumber, Icons.phone, cardHeight),
+        _buildCustomCard(
+            'Phone Number', _user!.phoneNumber, Icons.phone, cardHeight),
 
         const Padding(
-          padding: EdgeInsets.fromLTRB(25, 0, 0, 0), 
+          padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
           child: Text(
             'Registered Licence Plates:',
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -49,18 +50,22 @@ class _UserShowerState extends State<UserShower> {
         // Horizontal list for registered license plates
         if (_user!.registrations.isNotEmpty)
           SizedBox(
-            height: 150, // Set a height for the sliding cards
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
+            height: 150,
+            child: PageView.builder(
+              controller: PageController(
+                  viewportFraction:
+                      0.8),
               itemCount: _user!.registrations.length,
               itemBuilder: (context, index) {
                 final registration = _user!.registrations[index];
                 return Padding(
-                  padding: const EdgeInsets.only(right: 10.0), // Space between cards
+                  padding:
+                      const EdgeInsets.only(right: 10.0), // Space between cards
                   child: CarCard(
                     descriptionText: registration.licencePlate,
                     onClose: () {
-                      _showDeleteDialog(context, registration.licencePlate, registration.registrationId);
+                      _showDeleteDialog(context, registration.licencePlate,
+                          registration.registrationId);
                     },
                   ),
                 );
@@ -77,7 +82,8 @@ class _UserShowerState extends State<UserShower> {
   }
 
   // Function to build CustomCard with icon
-  Widget _buildCustomCard(String title, String? content, IconData icon, double height) {
+  Widget _buildCustomCard(
+      String title, String? content, IconData icon, double height) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 0),
       child: Column(
@@ -86,10 +92,11 @@ class _UserShowerState extends State<UserShower> {
           Row(
             children: [
               Icon(icon, size: 24),
-              const SizedBox(width: 8), 
+              const SizedBox(width: 8),
               Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ],
           ),
@@ -103,38 +110,39 @@ class _UserShowerState extends State<UserShower> {
     );
   }
 
-  void _showDeleteDialog(BuildContext context, String licencePlate, int plateId) {
+  void _showDeleteDialog(
+      BuildContext context, String licencePlate, int plateId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color(backgroundColor), 
+          backgroundColor: const Color(backgroundColor),
           title: const Text(
             "Delete Licence Plate",
-            style: TextStyle(color: Colors.white), 
+            style: TextStyle(color: Colors.white),
           ),
           content: Text(
             "Are you sure you want to delete $licencePlate?",
-            style: const TextStyle(color: Colors.white),  
+            style: const TextStyle(color: Colors.white),
           ),
           actions: <Widget>[
             TextButton(
               child: const Text(
                 "Cancel",
-                style: TextStyle(color: Colors.green), 
+                style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: const Text(
                 "Delete",
-                style: TextStyle(color: Colors.green), 
+                style: TextStyle(color: Colors.green),
               ),
               onPressed: () {
-                _deleteLicencePlate(plateId, context); 
-                Navigator.of(context).pop(); 
+                _deleteLicencePlate(plateId, context);
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -147,7 +155,8 @@ class _UserShowerState extends State<UserShower> {
     bool answer = await deleteLicencePlate(plateId);
     if (answer) {
       setState(() {
-        _user!.registrations.removeWhere((reg) => reg.registrationId == plateId);
+        _user!.registrations
+            .removeWhere((reg) => reg.registrationId == plateId);
       });
     } else {
       _showDeletionFailedDialog(context); // Show failure dialog
@@ -160,7 +169,7 @@ class _UserShowerState extends State<UserShower> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color(backgroundColor), 
+          backgroundColor: const Color(backgroundColor),
           title: const Text(
             "Deletion Failed",
             style: TextStyle(color: Colors.white),

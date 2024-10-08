@@ -50,8 +50,8 @@ class SubscriptionCard extends StatelessWidget {
         return AlertDialog(
           backgroundColor: Colors.grey.shade300,
           title: const Text('Subscription Expiration'),
-          content: Text(
-            'Your subscription expires in $daysLeft days.',
+          content:Text( daysLeft > 0 ?
+            'Your subscription expires in $daysLeft days.' : 'Your subscription has expired.',
             style: const TextStyle(fontSize: 16),
           ),
           actions: [

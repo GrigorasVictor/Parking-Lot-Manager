@@ -77,6 +77,28 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return oldestEndDate.add(const Duration(days: 1));
   }
 
+  void _buySubscription(){
+    User? user = UserSingleton.getUser(); 
+                if (user != null && currentPrice.isNotEmpty) {
+                  DateTime formattedDate = DateTime.now();
+                  String description = '$currentSubscription payment';
+                  sendTransaction(
+                      user.userId, 
+                      description, 
+                      currentPrice, 
+                      formattedDate 
+                      );
+
+                  sendSubscription(
+                    user.userId, 
+                    startDate, 
+                    endDate,
+                    0, 
+                    selectedSubscriptionType 
+                  );
+                }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -288,25 +310,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               height: height * 0.04,
               minHeight: 15,
               onPressed: () {
-                User? user = UserSingleton.getUser(); 
-                if (user != null) {
-                  DateTime formattedDate = DateTime.now();
-                  String description = '$currentSubscription payment';
-                  sendTransaction(
-                      user.userId, 
-                      description, 
-                      currentPrice, 
-                      formattedDate 
-                      );
-
-                  sendSubscription(
-                    user.userId, 
-                    startDate, 
-                    endDate,
-                    0, 
-                    selectedSubscriptionType 
-                  );
-                }
+                if(currentPrice.isNotEmpty && currentSubscription.isNotEmpty)
+                  _showBuyDialog(context);
               },
               label: 'BUY',
               fontSize: 15,
@@ -316,4 +321,45 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       ),
     );
   }
+
+  void _showBuyDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black, 
+          title: const Text(
+            "Buy Subscription",
+            style: TextStyle(color: Colors.white), 
+          ),
+          content: Text(
+            "Are you sure you want to purchase a ${currentSubscription} for ${currentPrice}?",
+            style: const TextStyle(color: Colors.white),  
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.green), 
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+            ),
+            TextButton(
+              child: const Text(
+                "Buy",
+                style: TextStyle(color: Colors.green), 
+              ),
+              onPressed: () {
+                _buySubscription();
+                Navigator.of(context).pop(); 
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
 }
