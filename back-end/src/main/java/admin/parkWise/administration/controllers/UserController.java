@@ -60,7 +60,7 @@ UserController{
 
         repo.save(user);
 
-        return new ResponseEntity<>("Photo received", HttpStatus.OK);
+        return new ResponseEntity<>("{ \"msg\" : \"Photo received\"}", HttpStatus.OK);
     }
 
     @GetMapping()
