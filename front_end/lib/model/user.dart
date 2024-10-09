@@ -17,7 +17,7 @@ class User {
     required this.email,
     required this.phoneNumber,
     required this.registrations,
-    required this.subscriptions, // Added subscriptions parameter
+    required this.subscriptions,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {

@@ -21,7 +21,7 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
-  File? _image;
+  File? _image = UserSingleton.getImage();
   String? _uploadedImageUrl;
   User? user = UserSingleton.getUser();
 
@@ -37,6 +37,7 @@ class _AccountPageState extends State<AccountPage> {
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
+        UserSingleton.setImage(_image!);
       });
       try {
         final imageUrl = await uploadImage(_image!, user!.userId);
