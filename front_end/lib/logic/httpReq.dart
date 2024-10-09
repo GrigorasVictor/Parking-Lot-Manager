@@ -26,7 +26,6 @@ Future<void> sendTransaction(
   int amountInDollars = double.parse(price.replaceAll('\$', '')).ceil();
   DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
 
-
   final Map<String, dynamic> dataToSend = {
     'user_id': userId,
     'transaction_date': dateFormatter.format(startDate),
@@ -39,7 +38,7 @@ Future<void> sendTransaction(
       url,
       headers: {
         'Content-Type': 'application/json',
-        ...await getHeaderCoockie(), 
+        ...await getHeaderCoockie(),
       },
       body: jsonEncode(dataToSend),
     );
@@ -56,8 +55,8 @@ Future<void> sendTransaction(
   }
 }
 
-Future<bool> sendSubscription(
-    int userId, DateTime startDate, DateTime endDate, int parkingSpace, int subscriptionType) async {
+Future<bool> sendSubscription(int userId, DateTime startDate, DateTime endDate,
+    int parkingSpace, int subscriptionType) async {
   final Uri url = Uri.http('localhost:8080', '/userSubscriptions');
 
   DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
@@ -75,7 +74,7 @@ Future<bool> sendSubscription(
       url,
       headers: {
         'Content-Type': 'application/json',
-        ...await getHeaderCoockie(), 
+        ...await getHeaderCoockie(),
       },
       body: jsonEncode(dataToSend),
     );
@@ -101,7 +100,7 @@ Future<bool> sendNumberPlate(String numberPlate) async {
       url,
       headers: {
         'Content-Type': 'application/json',
-        ...await getHeaderCoockie(), 
+        ...await getHeaderCoockie(),
       },
       body: jsonEncode(dataToSend),
     );
@@ -125,7 +124,7 @@ Future<bool> deleteLicencePlate(int id) async {
     final response = await http.delete(
       Uri.parse(apiUrl),
       headers: {
-        ...await getHeaderCoockie(), 
+        ...await getHeaderCoockie(),
       },
     );
     print(response.statusCode);
@@ -134,17 +133,24 @@ Future<bool> deleteLicencePlate(int id) async {
   return false;
 }
 
+// Function to upload the image
 Future<String> uploadImage(File image, int id) async {
-  final uri = Uri.parse('http://localhost:8080/users/upload-photo');
+  final uri = Uri.parse(
+      'http://localhost:8080/users/upload-photo'); 
+
+  Map<String, String> headers = await getHeaderCoockie();
+
   final request = http.MultipartRequest('POST', uri)
     ..files.add(await http.MultipartFile.fromPath(
-      'image',
+      'photo', 
       image.path,
       contentType: MediaType('image', 'jpeg'),
-    ));
+    ))
+    ..headers.addAll(headers);
 
   try {
     final response = await request.send();
+
     if (response.statusCode == 200) {
       final responseData = await response.stream.bytesToString();
       final data = jsonDecode(responseData);
@@ -164,8 +170,8 @@ Future<List<ParkingLot>> getParkingLots() async {
       url,
       headers: {
         'Content-Type': 'application/json',
-        ...await getHeaderCoockie(), 
-      },  
+        ...await getHeaderCoockie(),
+      },
     );
 
     if (response.statusCode == 200) {

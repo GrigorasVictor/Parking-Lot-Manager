@@ -28,7 +28,7 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     super.initState();
-    _fetchUserImage();
+    // _fetchUserImage();
   }
 
   /// Method to handle the image picking and uploading logic
@@ -52,8 +52,8 @@ class _AccountPageState extends State<AccountPage> {
 
   /// Fetches the user's image from the server
   Future<void> _fetchUserImage() async {
-    final uri = Uri.parse('https://your-server-url/user/${user!.userId}');
-    final response = await http.get(uri);
+    final uri = Uri.parse('https://localhost:8080/users/upload-photo');
+    final response = await http.post(uri);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       setState(() {
