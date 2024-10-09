@@ -4,13 +4,13 @@ import 'registration.dart';
 class User {
   final int userId;
   final String fullName;
-  final String? image;
+  String? image;
   final String email;
   final String phoneNumber;
   final List<VehicleRegistration> registrations;
-  final List<UserSubscription> subscriptions; 
+  final List<UserSubscription> subscriptions;
 
-  const User({
+  User({
     required this.userId,
     required this.fullName,
     this.image,

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:front_end/logic/httpReq.dart';
@@ -7,7 +6,6 @@ import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:front_end/widgets/customButton.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 import 'package:front_end/widgets/userShower.dart';
 import 'package:front_end/widgets/uploadPopUp.dart';
 import 'package:flutter/services.dart';
@@ -21,14 +19,14 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
-  File? _image = UserSingleton.getImage();
   String? _uploadedImageUrl;
   User? user = UserSingleton.getUser();
+  File? _image;
 
   @override
   void initState() {
     super.initState();
-    // _fetchUserImage();
+    _image = File(user?.image as String);
   }
 
   /// Method to handle the image picking and uploading logic
@@ -37,7 +35,7 @@ class _AccountPageState extends State<AccountPage> {
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
-        UserSingleton.setImage(_image!);
+        UserSingleton.setImage(_image!.path);
       });
       try {
         final imageUrl = await uploadImage(_image!, user!.userId);
@@ -51,25 +49,12 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-  /// Fetches the user's image from the server
-  Future<void> _fetchUserImage() async {
-    final uri = Uri.parse('https://localhost:8080/users/upload-photo');
-    final response = await http.post(uri);
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() {
-        _uploadedImageUrl = data['image_url'];
-      });
-    } else {
-      print('Failed to fetch user image');
-    }
-  }
 
   /// Refreshes the entire page by re-fetching data
   Future<void> _refreshData() async {
-    await _fetchUserImage(); // Refresh profile image
     setState(() {
       user = UserSingleton.getUser(); // Refresh user data
+      _image = File(user?.image as String);
     });
   }
 
