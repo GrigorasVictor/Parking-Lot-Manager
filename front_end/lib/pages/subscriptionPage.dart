@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/subscription.dart';
+import 'package:front_end/model/subscriptionPlan.dart';
 import 'package:front_end/model/user.dart';
 import 'package:front_end/widgets/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -9,13 +10,6 @@ import 'package:front_end/widgets/customButton.dart';
 import 'package:front_end/widgets/listCard.dart';
 import 'package:front_end/widgets/subscriptionCard.dart';
 import 'package:intl/intl.dart';
-
-// Define a constant mapping for subscription types
-const Map<int, String> subscriptionTypeMap = {
-  1: 'Monthly Subscription',
-  2: 'Yearly Subscription',
-  3: 'Lifetime Subscription',
-};
 
 class SubscriptionPage extends StatefulWidget {
   const SubscriptionPage({super.key});
@@ -25,51 +19,30 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
-  final double textSize = 50;
-  final String font = 'Inter';
-  final double iconSize = 60;
-
-  final List<ListCardItem> subscriptionOptions = [
-    ListCardItem(
-        title: subscriptionTypeMap[1]!,
-        price: '\$4.99'), // Monthly Subscription
-    ListCardItem(
-        title: subscriptionTypeMap[2]!,
-        price: '\$49.99'), // Yearly Subscription
-    ListCardItem(
-        title: subscriptionTypeMap[3]!,
-        price: '\$99.99'), // Lifetime Subscription
-  ];
-
   String currentPrice = '';
   String currentSubscription = '';
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now();
   int selectedSubscriptionType = 0;
+  List<UserSubscription> userSubscriptions = [];
 
-  // Function to calculate the end date based on subscription type
-  void calculateEndDate(int subscriptionType) {
-    if (subscriptionType == 1) {
-      // Monthly Subscription
-      endDate = DateTime(startDate.year, startDate.month + 1, startDate.day);
-    } else if (subscriptionType == 2) {
-      // Yearly Subscription
-      endDate = DateTime(startDate.year + 1, startDate.month, startDate.day);
-    } else if (subscriptionType == 3) {
-      // Lifetime Subscription
-      endDate = DateTime(startDate.year + 99, startDate.month, startDate.day);
-    }
+  @override
+  void initState() {
+    super.initState();
+    userSubscriptions = UserSingleton.getUser()!.subscriptions;
   }
 
-  // Function to get the latest expiration date from the user's subscriptions
-  DateTime getOldestExpirationDate(List<UserSubscription> subscriptions) {
-    if (subscriptions.isEmpty) {
-      return DateTime.now(); 
-    }
+  void calculateEndDate(int timeLength) {
+    endDate =
+        DateTime(startDate.year, startDate.month + timeLength, startDate.day);
+  }
 
-    // Find the latest expiration date
-    DateTime oldestEndDate = subscriptions.first.endDate;
-    for (var sub in subscriptions) {
+  DateTime getOldestExpirationDate() {
+    if (userSubscriptions.isEmpty) {
+      return DateTime.now();
+    }
+    DateTime oldestEndDate = userSubscriptions.first.endDate;
+    for (var sub in userSubscriptions) {
       if (sub.endDate.isAfter(oldestEndDate)) {
         oldestEndDate = sub.endDate;
       }
@@ -77,41 +50,44 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return oldestEndDate.add(const Duration(days: 1));
   }
 
-  void _buySubscription(){
-    User? user = UserSingleton.getUser(); 
-                if (user != null && currentPrice.isNotEmpty) {
-                  DateTime formattedDate = DateTime.now();
-                  String description = '$currentSubscription payment';
-                  sendTransaction(
-                      user.userId, 
-                      description, 
-                      currentPrice, 
-                      formattedDate 
-                      );
+  void _buySubscription() async {
+    User? user = UserSingleton.getUser();
+    if (user != null && currentPrice.isNotEmpty) {
+      DateTime formattedDate = DateTime.now();
+      String description = '$currentSubscription payment';
 
-                  sendSubscription(
-                    user.userId, 
-                    startDate, 
-                    endDate,
-                    0, 
-                    selectedSubscriptionType 
-                  );
-                }
+      await sendTransaction(
+        user.userId,
+        description,
+        currentPrice,
+        formattedDate,
+      );
+
+      await sendSubscription(
+        user.userId,
+        startDate,
+        endDate,
+        currentSubscription.replaceAll(' Subscription', ''),
+      );
+
+      setState(() {
+        userSubscriptions.add(UserSubscription(
+          subscriptionId: 0,
+          userId: user.userId,
+          subscriptionType: currentSubscription.replaceAll(' Subscription', ''),
+          startDate: getOldestExpirationDate(),
+          endDate: endDate,
+        ));
+      });
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
-    // Date format
     DateFormat dateFormatter = DateFormat('MM/dd/yyyy');
-
-    // Retrieve user subscriptions
-    List<UserSubscription> userSubscriptions =
-        UserSingleton.getUser()!.subscriptions;
-    print(userSubscriptions);
 
     return Scaffold(
       backgroundColor: const Color(itemColor),
@@ -132,33 +108,46 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             ),
             const SizedBox(height: 5),
 
-            // Swipeable Cards for User Subscriptions
-            Expanded(
-              child: PageView.builder(
-                itemCount: userSubscriptions.length,
-                itemBuilder: (context, index) {
-                  final subscription = userSubscriptions[index];
-                  String title =
-                      subscriptionTypeMap[subscription.subscriptionType] ??
-                          'Unknown Subscription';
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                    decoration: BoxDecoration(
-                      color: const Color(itemColorHighlighted),
-                      borderRadius: BorderRadius.circular(12.0),
+            // Check if userSubscriptions is empty
+            if (userSubscriptions.isEmpty) ...[
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    'No subscriptions found.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
                     ),
-                    child: SubscriptionCard(
-                      width: width * 0.9,
-                      height: height * 0.2,
-                      subscriptionText: title.toUpperCase(),
-                      expirationDate:
-                          dateFormatter.format(subscription.endDate),
-                      svgBackgroundColor: const Color(itemColorHighlighted),
-                    ),
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
+            ] else ...[
+              Expanded(
+                child: PageView.builder(
+                  itemCount: userSubscriptions.length,
+                  itemBuilder: (context, index) {
+                    final subscription = userSubscriptions[index];
+                    String title =
+                        "${subscription.subscriptionType} Subscription"; 
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                      decoration: BoxDecoration(
+                        color: const Color(itemColorHighlighted),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: SubscriptionCard(
+                        width: width * 0.9,
+                        height: height * 0.2,
+                        subscriptionText: title.toUpperCase(),
+                        expirationDate:
+                            dateFormatter.format(subscription.endDate),
+                        svgBackgroundColor: const Color(itemColorHighlighted),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
 
             const SizedBox(height: 15),
             const AutoSizeText(
@@ -173,28 +162,53 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
             const SizedBox(height: 5),
             Expanded(
               flex: 2,
-              child: Listcard(
-                items: subscriptionOptions,
-                onItemTap: (selectedPrice, selectedTitle) {
-                  setState(() {
-                    currentPrice = selectedPrice;
-                    currentSubscription = selectedTitle;
+              child: FutureBuilder<List<SubscriptionPlan>>(
+                future: getSubscriptionOptions(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.hasData) {
+                    print(snapshot.data);
+                    List<SubscriptionPlan> listOptionsSubs = snapshot.data!;
 
-                    // Get the oldest expiration date from the user's subscriptions
-                    startDate = getOldestExpirationDate(userSubscriptions);
+                    final List<ListCardItem> subscriptionOptions =
+                        listOptionsSubs
+                            .map((plan) => ListCardItem(
+                                  title: '${plan.name} Subscription',
+                                  price: plan.price.toString(),
+                                ))
+                            .toList();
 
-                    // Calculate the end date based on the selected subscription
-                    selectedSubscriptionType = subscriptionTypeMap.entries
-                        .firstWhere(
-                          (entry) => entry.value == selectedTitle,
-                          orElse: () => const MapEntry(0, 'Unknown'),
-                        )
-                        .key;
-                    calculateEndDate(selectedSubscriptionType);
-                  });
+                    return ListCard(
+                      items: subscriptionOptions,
+                      onItemTap: (selectedPrice, selectedTitle) {
+                        setState(() {
+                          currentPrice = selectedPrice;
+                          currentSubscription = selectedTitle;
+                          startDate = getOldestExpirationDate();
 
-                  print(
-                      'Selected price: $currentPrice with $currentSubscription');
+                          SubscriptionPlan selectedPlan =
+                              listOptionsSubs.firstWhere(
+                            (plan) =>
+                                '${plan.name} Subscription' == selectedTitle,
+                            orElse: () =>
+                                throw Exception('Subscription not found'),
+                          );
+
+                          selectedSubscriptionType = selectedPlan.id;
+                          calculateEndDate(selectedPlan.timeLength);
+                        });
+
+                        print(
+                            'Selected price: $currentPrice with $currentSubscription');
+                      },
+                    );
+                  } else {
+                    return const Center(
+                        child: Text('No subscription options available.'));
+                  }
                 },
               ),
             ),
@@ -231,7 +245,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                         ),
                         const SizedBox(height: 10),
                         AutoSizeText(
-                          currentPrice.isEmpty ? '\$0.00' : currentPrice,
+                          currentPrice.isEmpty ? '\$0.00' : '\$$currentPrice',
                           style: const TextStyle(
                             fontSize: 30,
                             color: Colors.green,
@@ -310,8 +324,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               height: height * 0.04,
               minHeight: 15,
               onPressed: () {
-                if(currentPrice.isNotEmpty && currentSubscription.isNotEmpty)
+                if (currentPrice.isNotEmpty && currentSubscription.isNotEmpty) {
                   _showBuyDialog(context);
+                }
               },
               label: 'BUY',
               fontSize: 15,
@@ -327,39 +342,66 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.black, 
-          title: const Text(
-            "Buy Subscription",
-            style: TextStyle(color: Colors.white), 
-          ),
-          content: Text(
-            "Are you sure you want to purchase a ${currentSubscription} for ${currentPrice}?",
-            style: const TextStyle(color: Colors.white),  
-          ),
-          actions: <Widget>[
+          backgroundColor: Colors.grey[300], 
+          title: const Text('Confirm Purchase'),
+          content: const Text(
+              'Are you sure you want to purchase this subscription?'),
+          actions: [
             TextButton(
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.green), 
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green, 
               ),
               onPressed: () {
                 Navigator.of(context).pop(); 
               },
+              child: const Text('Cancel',
+                  style: TextStyle(
+                      color: Colors.white)), 
             ),
             TextButton(
-              child: const Text(
-                "Buy",
-                style: TextStyle(color: Colors.green), 
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
               ),
               onPressed: () {
                 _buySubscription();
                 Navigator.of(context).pop(); 
+                _showSuccessDialog(context, true); 
               },
+              child: const Text('Confirm',
+                  style: TextStyle(
+                      color: Colors.white)), 
             ),
           ],
         );
       },
     );
   }
-  
+
+  void _showSuccessDialog(BuildContext context, bool success) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[300], 
+          title: Text(success ? 'Purchase Successful' : 'Purchase Failed'),
+          content: Text(success
+              ? 'Your subscription has been purchased successfully.'
+              : 'There was an error completing your purchase.'),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+              child: const Text('OK',
+                  style: TextStyle(
+                      color: Colors.white)), 
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

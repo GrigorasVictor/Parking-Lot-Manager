@@ -8,7 +8,7 @@ class UserSubscription {
   final int userId;
 
   @JsonKey(name: 'subscription_type')
-  final int subscriptionType;
+  final String subscriptionType;
 
   @JsonKey(name: 'start_date')
   final DateTime startDate;
@@ -16,8 +16,6 @@ class UserSubscription {
   @JsonKey(name: 'end_date')
   final DateTime endDate;
 
-  @JsonKey(name: 'parking_space')
-  final int? parkingSpace;
 
   UserSubscription({
     this.subscriptionId,
@@ -25,17 +23,15 @@ class UserSubscription {
     required this.subscriptionType,
     required this.startDate,
     required this.endDate,
-    this.parkingSpace,
   });
 
   factory UserSubscription.fromJson(Map<String, dynamic> json) {
     return UserSubscription(
       subscriptionId: json['subscription_id'] as int?,
       userId: json['user_id'] as int,
-      subscriptionType: json['subscription_type'] as int,
+      subscriptionType: json['subscription_type'] as String,
       startDate: DateTime.parse(json['start_date']),
       endDate: DateTime.parse(json['end_date']),
-      parkingSpace: json['parking_space'] as int?,
     );
   }
 
@@ -46,14 +42,12 @@ class UserSubscription {
       'subscription_type': subscriptionType,
       'start_date': startDate.toIso8601String(),
       'end_date': endDate.toIso8601String(),
-      'parking_space': parkingSpace,
     };
   }
 
   @override
   String toString() {
     return 'UserSubscription(subscriptionId: $subscriptionId, userId: $userId, '
-        'subscriptionType: $subscriptionType, startDate: $startDate, endDate: $endDate, '
-        'parkingSpace: $parkingSpace)';
+        'subscriptionType: $subscriptionType, startDate: $startDate, endDate: $endDate)';
   }
 }

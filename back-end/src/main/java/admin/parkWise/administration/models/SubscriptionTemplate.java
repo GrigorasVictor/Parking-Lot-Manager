@@ -22,7 +22,7 @@ public class SubscriptionTemplate {
 
     @Column(name = "time_length", nullable = false)
     @JsonProperty("timeLength")
-    private String timeLength;
+    private Integer timeLength;
 
     @Column(name = "name")
     @JsonProperty("name")

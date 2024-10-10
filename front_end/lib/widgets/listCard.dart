@@ -10,11 +10,11 @@ class ListCardItem {
   ListCardItem({required this.title, required this.price});
 }
 
-class Listcard extends StatelessWidget {
+class ListCard extends StatelessWidget {
   final List<ListCardItem> items;
   final OnItemTapCallback onItemTap;
 
-  const Listcard({super.key, required this.items, required this.onItemTap});
+  const ListCard({super.key, required this.items, required this.onItemTap});
 
   @override
   Widget build(BuildContext context) {

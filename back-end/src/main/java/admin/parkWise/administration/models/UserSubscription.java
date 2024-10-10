@@ -1,6 +1,5 @@
 package admin.parkWise.administration.models;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,8 +22,7 @@ public class UserSubscription {
 
     @JsonProperty("subscription_type")
     @Column(name = "subscription_type")
-    // aici am putea declara relatia ONE TO ONE intre tip si subscriptia efectiva
-    private Integer subscriptionType;
+    private String subscriptionType;
 
     @Column(name="start_date")
     @JsonProperty("start_date")
@@ -33,8 +31,4 @@ public class UserSubscription {
     @Column(name="end_date")
     @JsonProperty("end_date")
     private LocalDate  endDate;
-
-    @Column(name="parking_space")
-    @JsonProperty("parking_space")
-    private Integer parkingSpace;
 }

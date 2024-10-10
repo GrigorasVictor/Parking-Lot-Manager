@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:front_end/logic/httpReq.dart';
 import 'package:front_end/model/parkingLot.dart';
-import 'package:latlong2/latlong.dart'; 
-import 'package:front_end/widgets/constants.dart'; 
+import 'package:latlong2/latlong.dart';
+import 'package:front_end/widgets/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:geolocator/geolocator.dart'; // Import geolocator
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -14,37 +15,54 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final double iconSize = 40; 
+  final double iconSize = 40;
   final LatLng clujNapocaLatLng = const LatLng(46.7712, 23.6236);
 
   // List to hold parking lots (waypoints)
   late Future<List<ParkingLot>> futureParkingLots;
 
+  // Variable to hold the user's current location
+  LatLng? _userLocation;
+
   @override
   void initState() {
     super.initState();
     futureParkingLots = getParkingLots(); 
+    _getUserLocation(); 
   }
 
   // Function to refresh parking lot data
   Future<void> _refreshParkingLots() async {
     setState(() {
-      futureParkingLots = getParkingLots(); // Refresh the parking lot data
+      futureParkingLots = getParkingLots(); 
     });
+  }
+
+  // Get user location and update the map
+  Future<void> _getUserLocation() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        _userLocation = LatLng(position.latitude, position.longitude);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(backgroundColor), 
+      backgroundColor: const Color(backgroundColor),
       body: Column(
         children: [
           Expanded(
-            // Wrap the map content with RefreshIndicator for pull-to-refresh functionality
             child: RefreshIndicator(
-              onRefresh: _refreshParkingLots, // Refresh logic
+              onRefresh: _refreshParkingLots,
               child: FutureBuilder<List<ParkingLot>>(
-                future: futureParkingLots, 
+                future: futureParkingLots,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -53,21 +71,51 @@ class _MapPageState extends State<MapPage> {
                       ),
                     );
                   }
+
                   final List<ParkingLot> parkingLots = snapshot.data!;
 
                   return FlutterMap(
                     options: MapOptions(
-                      initialCenter: clujNapocaLatLng, 
+                      initialCenter:
+                          _userLocation ?? clujNapocaLatLng, 
                       initialZoom: 13.0,
                     ),
                     children: [
                       TileLayer(
-                        urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        urlTemplate:
+                            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                         subdomains: const ['a', 'b', 'c'],
                       ),
                       MarkerLayer(
                         markers: _createMarkers(parkingLots),
                       ),
+                      if (_userLocation != null)
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              width: iconSize,
+                              height: iconSize,
+                              point: _userLocation!, 
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.person_pin_circle,
+                                    color: Colors.blue,
+                                    size: iconSize,
+                                  ),
+                                  const Text(
+                                    "You are here",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   );
                 },
@@ -76,7 +124,7 @@ class _MapPageState extends State<MapPage> {
           ),
           Container(
             height: 15,
-            color: Colors.grey[300], 
+            color: Colors.grey[300],
             child: const Center(
               child: AutoSizeText(
                 "© OpenStreetMap contributors",

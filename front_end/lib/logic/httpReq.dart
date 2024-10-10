@@ -4,6 +4,7 @@ import 'package:front_end/logic/jwtLogic.dart';
 import 'package:front_end/logic/userSingleTon.dart';
 import 'package:front_end/model/parkingLot.dart';
 import 'package:front_end/model/registration.dart';
+import 'package:front_end/model/subscriptionPlan.dart';
 import 'package:http/http.dart' as http;
 import 'package:front_end/model/user.dart';
 import 'package:http_parser/http_parser.dart';
@@ -55,8 +56,7 @@ Future<void> sendTransaction(
   }
 }
 
-Future<bool> sendSubscription(int userId, DateTime startDate, DateTime endDate,
-    int parkingSpace, int subscriptionType) async {
+Future<bool> sendSubscription(int userId, DateTime startDate, DateTime endDate, String subscriptionType) async {
   final Uri url = Uri.http('localhost:8080', '/userSubscriptions');
 
   DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
@@ -65,7 +65,6 @@ Future<bool> sendSubscription(int userId, DateTime startDate, DateTime endDate,
     'user_id': userId,
     'start_date': dateFormatter.format(startDate),
     'end_date': dateFormatter.format(endDate),
-    'parking_space': parkingSpace,
     'subscription_type': subscriptionType
   };
   print(dataToSend);
@@ -180,6 +179,28 @@ Future<List<ParkingLot>> getParkingLots() async {
     }
   } catch (e) {
     print('Error sending NumberPlate: $e');
+  }
+  return [];
+}
+
+Future<List<SubscriptionPlan>> getSubscriptionOptions() async { //TODO: make for subs
+  final Uri url = Uri.http('localhost:8080', '/subscription-templates');
+  try {
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        ...await getHeaderCoockie(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      List<dynamic> subscriptionPlanJSON = jsonDecode(response.body);
+      return subscriptionPlanJSON.map((json) => SubscriptionPlan.fromJson(json)).toList();
+    }
+  } catch (e) {
+    print('Error sending Subs: $e');
   }
   return [];
 }
