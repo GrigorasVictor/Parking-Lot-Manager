@@ -23,6 +23,7 @@ public class UserSubscription {
 
     @JsonProperty("subscription_type")
     @Column(name = "subscription_type")
+    // aici am putea declara relatia ONE TO ONE intre tip si subscriptia efectiva
     private Integer subscriptionType;
 
     @Column(name="start_date")

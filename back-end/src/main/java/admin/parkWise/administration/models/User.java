@@ -38,7 +38,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("licencePlates")
     private List<VehicleRegistration> licencePlates = new ArrayList<>();
-
+ 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty("subscriptions")
     private List<UserSubscription> userSubscriptions = new ArrayList<>();
