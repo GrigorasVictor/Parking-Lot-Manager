@@ -80,6 +80,9 @@ UserController{
         User user = optUser.get();
 
         String url = awsStorageService.uploadFile(photo);
+
+        System.out.println(url);
+
         if(url != null){
             user.setImage(url);
             repo.save(user);
