@@ -68,26 +68,28 @@ UserController{
     }*/
     @PostMapping("/upload-photo")
     public ResponseEntity<String> handleFileUpload(HttpServletRequest req, @RequestParam("photo") MultipartFile photo) {
-        if(photo.isEmpty()) return new ResponseEntity<>("Photo empty", HttpStatus.BAD_REQUEST);
+        if (photo.isEmpty()) return new ResponseEntity<>("Photo empty", HttpStatus.BAD_REQUEST);
 
         Optional<String> token = JwtService.getToken(req);
 
-        if(token.isEmpty()) return new ResponseEntity<>("Missing token!", HttpStatus.BAD_REQUEST);
+        if (token.isEmpty()) return new ResponseEntity<>("Missing token!", HttpStatus.BAD_REQUEST);
         Integer userId = JwtService.staticExtractId(token.get());
 
         Optional<User> optUser = repo.findById(userId);
-        if(optUser.isEmpty()) return new ResponseEntity<>("Missing user!", HttpStatus.BAD_REQUEST);
+        if (optUser.isEmpty()) return new ResponseEntity<>("Missing user!", HttpStatus.BAD_REQUEST);
         User user = optUser.get();
 
-        String url = awsStorageService.uploadFile(photo);
-        if(url != null){
-            user.setImage(url);
+        // Upload the photo and get the CID (implement this logic in your AwsStorageService)
+        String cid = awsStorageService.uploadFile(photo);
+
+        if (cid != null) {
+            String ipfsUrl = "https://ipfs.filebase.io/ipfs/" + cid; // Construct IPFS Gateway URL
+            user.setImage(ipfsUrl); // Save the IPFS URL in the user's image field
             repo.save(user);
             System.out.println(user);
-            return new ResponseEntity<>("{ \"msg\" : \"Photo received\"}", HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>("{ \"msg\" : \"Photo is not received\"}", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("{ \"msg\" : \"Photo received\", \"url\": \"" + ipfsUrl + "\" }", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("{ \"msg\" : \"Photo is not received\" }", HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
