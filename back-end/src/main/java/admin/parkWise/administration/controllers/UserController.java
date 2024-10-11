@@ -2,6 +2,7 @@ package admin.parkWise.administration.controllers;
 
 import admin.parkWise.administration.models.User;
 import admin.parkWise.administration.repository.UserRepo;
+import admin.parkWise.administration.services.AwsStorageService;
 import admin.parkWise.administration.services.JwtService;
 import io.jsonwebtoken.Jwts;
 import jakarta.persistence.EntityManager;
@@ -24,7 +25,10 @@ UserController{
     @Autowired
     UserRepo repo;
 
-    @PostMapping("/upload-photo")
+    @Autowired
+    AwsStorageService awsStorageService;
+
+    /*@PostMapping("/upload-photo")
     public ResponseEntity<String> handleFileUpload(HttpServletRequest req, @RequestParam("photo") MultipartFile photo, HttpServletRequest servletRequest) {
 
         if(photo.isEmpty()) return new ResponseEntity<>("Photo empty", HttpStatus.BAD_REQUEST);
@@ -61,6 +65,30 @@ UserController{
         repo.save(user);
 
         return new ResponseEntity<>("{ \"msg\" : \"Photo received\"}", HttpStatus.OK);
+    }*/
+    @PostMapping("/upload-photo")
+    public ResponseEntity<String> handleFileUpload(HttpServletRequest req, @RequestParam("photo") MultipartFile photo) {
+        if(photo.isEmpty()) return new ResponseEntity<>("Photo empty", HttpStatus.BAD_REQUEST);
+
+        Optional<String> token = JwtService.getToken(req);
+
+        if(token.isEmpty()) return new ResponseEntity<>("Missing token!", HttpStatus.BAD_REQUEST);
+        Integer userId = JwtService.staticExtractId(token.get());
+
+        Optional<User> optUser = repo.findById(userId);
+        if(optUser.isEmpty()) return new ResponseEntity<>("Missing user!", HttpStatus.BAD_REQUEST);
+        User user = optUser.get();
+
+        String url = awsStorageService.uploadFile(photo);
+        if(url != null){
+            user.setImage(url);
+            repo.save(user);
+            System.out.println(user);
+            return new ResponseEntity<>("{ \"msg\" : \"Photo received\"}", HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("{ \"msg\" : \"Photo is not received\"}", HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
     @GetMapping()
