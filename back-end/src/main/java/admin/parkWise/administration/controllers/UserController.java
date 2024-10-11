@@ -79,7 +79,7 @@ UserController{
         if (optUser.isEmpty()) return new ResponseEntity<>("Missing user!", HttpStatus.BAD_REQUEST);
         User user = optUser.get();
 
-        // Upload the photo and get the CID (implement this logic in your AwsStorageService)
+        // Maybe CID, maybe NOT
         String cid = awsStorageService.uploadFile(photo);
 
         if (cid != null) {

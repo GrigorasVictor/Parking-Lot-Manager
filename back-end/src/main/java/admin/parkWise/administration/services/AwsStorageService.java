@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
 
@@ -35,8 +36,17 @@ public class AwsStorageService {
                 .key(fileName).build();
 
         try {
-            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
-            return filebaseEndpoint + "/" + bucketName + "/" + fileName; // Public URL format for Filebase
+            PutObjectResponse resp = s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+
+//            resp.
+
+            // VEZI CA AICI ESTE CHETIA ASTA DE ETAG
+            // SA VERIFICI DACA E ACCEIASI CU AIA CU CERE PUTEM ACCESA PUBLIC
+            // DACA E PUTEM RECONSTRUII LINKU
+
+            System.out.println(resp);
+
+            return resp.eTag(); // Public URL format for Filebase
 
         } catch (IOException e) {
             e.printStackTrace();
