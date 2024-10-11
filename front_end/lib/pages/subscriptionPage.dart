@@ -50,8 +50,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return oldestEndDate.add(const Duration(days: 1));
   }
 
-  void _buySubscription() async {
+  Future<bool> _buySubscription() async {
     User? user = UserSingleton.getUser();
+    bool answer=false;
     if (user != null && currentPrice.isNotEmpty) {
       DateTime formattedDate = DateTime.now();
       String description = '$currentSubscription payment';
@@ -63,7 +64,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         formattedDate,
       );
 
-      await sendSubscription(
+      answer = await sendSubscription(
         user.userId,
         startDate,
         endDate,
@@ -80,6 +81,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         ));
       });
     }
+    return answer;
   }
 
   @override
@@ -362,10 +364,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
               ),
-              onPressed: () {
-                _buySubscription();
+              onPressed: () async {
+                bool answer = await _buySubscription();
                 Navigator.of(context).pop(); 
-                _showSuccessDialog(context, true); 
+                _showSuccessDialog(context, answer); 
               },
               child: const Text('Confirm',
                   style: TextStyle(

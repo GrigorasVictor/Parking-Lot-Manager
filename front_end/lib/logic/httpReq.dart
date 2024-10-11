@@ -183,7 +183,7 @@ Future<List<ParkingLot>> getParkingLots() async {
   return [];
 }
 
-Future<List<SubscriptionPlan>> getSubscriptionOptions() async { //TODO: make for subs
+Future<List<SubscriptionPlan>> getSubscriptionOptions() async { 
   final Uri url = Uri.http('localhost:8080', '/subscription-templates');
   try {
     final response = await http.get(

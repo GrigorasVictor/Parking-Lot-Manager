@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/subscription-templates")
-public class SubscriptionTemplateController {//extends AbstractController<SubscriptionTemplate, SubscriptionTemplateRepo> {
+public class SubscriptionTemplateController extends AbstractController<SubscriptionTemplate, SubscriptionTemplateRepo> {
 
 }

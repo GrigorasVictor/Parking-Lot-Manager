@@ -14,12 +14,12 @@ import java.time.LocalDate;
 
 @Component
 public class SubscriptionCleanupService {
-    private static final int cleanupRate = 60000;
+    private static final int CLEAN_UP_RATE = 86400;
 
     @Autowired
     SubscriptionRepo subscriptionRepo;
 
-    @Scheduled(fixedRate = cleanupRate)
+    @Scheduled(fixedRate = CLEAN_UP_RATE)
     @Transactional
     public void expiredSubscriptionCleanup(){
         System.out.println("Ran subscription clean-up duty.");
