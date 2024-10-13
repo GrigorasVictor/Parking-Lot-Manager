@@ -2,7 +2,14 @@ package admin.parkWise.administration.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -25,7 +32,7 @@ public class AwsStorageService {
     @Autowired
     private S3Client s3Client;
 
-    public String uploadFile(MultipartFile file) {
+    public void uploadFile(MultipartFile file, String uploadName) {
         if(file.isEmpty())
             throw new IllegalArgumentException("File name cannot be empty.");
 
@@ -36,25 +43,27 @@ public class AwsStorageService {
         
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(fileName)
+                .key(uploadName)
                 .build();
 
         try {
-            PutObjectResponse resp = s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));\
-
-            // VEZI CA AICI ESTE CHETIA ASTA DE ETAG
-            // SA VERIFICI DACA E ACCEIASI CU AIA CU CERE PUTEM ACCESA PUBLIC
-            // DACA E PUTEM RECONSTRUII LINKU
-
-            System.out.println(resp);
-
-            return resp.eTag(); // Public URL format for Filebase
-
+            PutObjectResponse putResp = s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("!! ==== ERROR AWS: " + e.getMessage());
-            return null;
         }
     }
+
+    public byte[] getImage(String imageName) throws IOException {
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(imageName)
+                .build();
+
+        ResponseInputStream<GetObjectResponse> s3ObjectStream = s3Client.getObject(getObjectRequest);
+
+        return s3ObjectStream.readAllBytes();
+    }
+
 }
 
