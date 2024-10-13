@@ -16,8 +16,8 @@ class ParkingInfoList extends StatefulWidget {
     this.initialHours,
     this.initialMinutes,
     this.initialSeconds,
-    required this.activeCars, 
-    required this.totalSpots, 
+    required this.activeCars,
+    required this.totalSpots,
   });
 
   final String parkingId;
@@ -26,8 +26,10 @@ class ParkingInfoList extends StatefulWidget {
   final int? initialHours;
   final int? initialMinutes;
   final int? initialSeconds;
-  final int activeCars; 
-  final int totalSpots; 
+  final int activeCars;
+  final int totalSpots;
+
+  final GlobalKey<_ParkingInfoListState> stateKey = GlobalKey<_ParkingInfoListState>();
 
   @override
   _ParkingInfoListState createState() => _ParkingInfoListState();
@@ -58,6 +60,23 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
         _isLoading = false;
       });
     });
+  }
+
+  // Method to update the timer from another file
+  void updateTimer({int? hours, int? minutes, int? seconds, bool setInactive = false}) {
+    if (setInactive) {
+      setState(() {
+        _timer?.cancel();
+        _formattedTime = 'Inactive';
+      });
+    } else {
+      final int totalSeconds = (hours ?? 0) * 3600 + (minutes ?? 0) * 60 + (seconds ?? 0);
+      if (totalSeconds >= 0) {
+        setState(() {
+          _startTimer(initialSeconds: totalSeconds);
+        });
+      }
+    }
   }
 
   void _startTimerWithInitialTime() {
@@ -156,7 +175,7 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
                             ),
                             const SizedBox(width: 10),
                             AutoSizeText(
-                              '${widget.activeCars}/${widget.totalSpots}', // Display active cars/total spots
+                              '${widget.activeCars}/${widget.totalSpots}',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontFamily: 'Inter',
@@ -219,7 +238,7 @@ class _ParkingInfoListState extends State<ParkingInfoList> {
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: _navigateToDetailsPage, // Navigate to details page
+                onTap: widget.onTap,
                 splashColor: const Color(itemColorHighlightedTransparent),
                 highlightColor: Colors.transparent,
               ),

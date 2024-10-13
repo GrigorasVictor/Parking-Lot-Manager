@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:front_end/widgets/userShower.dart';
 import 'package:front_end/widgets/uploadPopUp.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -19,28 +20,40 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
-  String? _uploadedImageUrl;
-  User? user = UserSingleton.getUser();
-  File? _image;
+  String? _uploadedImageUrl; 
+  User? user = UserSingleton.getUser(); 
+  File? _image; 
 
   @override
   void initState() {
     super.initState();
-    _image = File(user?.image as String);
+    _initializeImage();
   }
 
-  /// Method to handle the image picking and uploading logic
+  /// Initialize the image by fetching it from the server
+  void _initializeImage() async {
+    _image = await getPhoto();
+    if (_image != null) {
+      setState(() {
+        _uploadedImageUrl = user?.image; // Update the uploaded image URL if available
+      });
+    }
+  }
+
+  /// Method to handle image picking and uploading logic
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
-        UserSingleton.setImage(_image!.path);
+        _image = File(pickedFile.path); // Store the selected file locally
       });
+
       try {
+        // Attempt to upload the image and get the URL
         final imageUrl = await uploadImage(_image!, user!.userId);
         setState(() {
-          _uploadedImageUrl = imageUrl;
+          _uploadedImageUrl = imageUrl; // Update state with the uploaded image URL
+          UserSingleton.setImage(_uploadedImageUrl!); // Update singleton with the new image URL
         });
         _showUploadPopup('Image uploaded successfully!', true);
       } catch (e) {
@@ -49,12 +62,39 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
+  /// Fetch photo from the server using cookies
+  Future<File?> getPhoto() async {
+    try {
+      final Uri url = Uri.parse(user!.image!); // Ensure the image URL is valid
+      final response = await http.get(
+        url,
+        headers: {
+          ...await getHeaderCoockie(), // Add the cookie headers
+        },
+      );
 
-  /// Refreshes the entire page by re-fetching data
+      if (response.statusCode == 200) {
+        // Save the image to a temporary file or use memory directly
+        final bytes = response.bodyBytes;
+        final dir = Directory.systemTemp; // Use a temporary directory
+        final file = await File('${dir.path}/profile_image.png').writeAsBytes(bytes);
+        return file; // Return the file
+      } else {
+        print('Failed to load image: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching photo: $e');
+    }
+    return null; // Return null if there was an error
+  }
+
+  /// Refreshes the entire page by re-fetching user data
   Future<void> _refreshData() async {
     setState(() {
       user = UserSingleton.getUser(); // Refresh user data
-      _image = File(user?.image as String);
+      if (user?.image != null) {
+        _uploadedImageUrl = user!.image; // Reset the uploaded image URL
+      }
     });
   }
 
@@ -278,12 +318,12 @@ class _AccountPageState extends State<AccountPage> {
                           child: CircleAvatar(
                             radius: 100,
                             backgroundColor: const Color(itemColorHighlighted),
+                            // Load the image from the URL or display a placeholder
                             backgroundImage: _uploadedImageUrl != null
-                                ? NetworkImage(_uploadedImageUrl!)
+                                ? NetworkImage(_uploadedImageUrl!) // Use the uploaded URL
                                 : (_image != null ? FileImage(_image!) : null),
                             child: _uploadedImageUrl == null && _image == null
-                                ? const Icon(Icons.person,
-                                    size: 60, color: Colors.black)
+                                ? const Icon(Icons.person, size: 60, color: Colors.black)
                                 : null,
                           ),
                         ),
@@ -310,7 +350,6 @@ class _AccountPageState extends State<AccountPage> {
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
-                          // ignore: prefer_const_constructors
                           UserShower(),
                           const SizedBox(height: 15),
                           CustomElevatedButton(

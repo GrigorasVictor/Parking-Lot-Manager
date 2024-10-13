@@ -143,7 +143,7 @@ Future<String> uploadImage(File image, int id) async {
     ..files.add(await http.MultipartFile.fromPath(
       'photo', 
       image.path,
-      contentType: MediaType('image', 'jpeg'),
+      contentType: MediaType('image', 'png'),
     ))
     ..headers.addAll(headers);
 
@@ -203,4 +203,23 @@ Future<List<SubscriptionPlan>> getSubscriptionOptions() async {
     print('Error sending Subs: $e');
   }
   return [];
+}
+
+Future<File?> getPhoto() async { 
+  final Uri url = user!.image as Uri;
+  try {
+    final response = await http.get(
+      url,
+      headers: {
+        ...await getHeaderCoockie(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+    }
+  } catch (e) {
+    print('Error sending Subs: $e');
+  }
+  return null;
 }

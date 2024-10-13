@@ -43,7 +43,6 @@ class _MainPageState extends State<MainPage> {
       }
     });
   }
-
   // Function to build parking info list dynamically
   ParkingInfoList _buildParkingInfoList(int id, bool isActive, int activeCars, int totalSpots) {
     return ParkingInfoList(
