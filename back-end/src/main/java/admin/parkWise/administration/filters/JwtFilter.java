@@ -30,10 +30,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println(request.getRequestURL().toString());
         if(
                 request.getRequestURL().toString().endsWith("/login") ||
                 request.getRequestURL().toString().endsWith("/register") ||
-                request.getRequestURL().toString().contains("users/image")
+                request.getRequestURL().toString().contains("/image")
         ) {
             filterChain.doFilter(request, response);
             return;
@@ -50,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (optToken.isEmpty()) {
             //TODO: maybe throw an error or smth
             filterChain.doFilter(request, response);
-            System.out.println("null");
+            System.out.println("TOKEN is null!");
             return;
         } else {
             token = optToken.get();
