@@ -133,7 +133,7 @@ Future<bool> deleteLicencePlate(int id) async {
 }
 
 // Function to upload the image
-Future<String> uploadImage(File image, int id) async {
+Future<String> uploadImage(File image) async {
   final uri = Uri.parse(
       'http://localhost:8080/users/upload-photo'); 
 
@@ -153,7 +153,7 @@ Future<String> uploadImage(File image, int id) async {
     if (response.statusCode == 200) {
       final responseData = await response.stream.bytesToString();
       final data = jsonDecode(responseData);
-      return data['image_url'];
+      return data['url'];
     } else {
       throw Exception('Failed to upload image: ${response.statusCode}');
     }
@@ -205,21 +205,28 @@ Future<List<SubscriptionPlan>> getSubscriptionOptions() async {
   return [];
 }
 
-Future<File?> getPhoto() async { 
-  final Uri url = user!.image as Uri;
-  try {
-    final response = await http.get(
-      url,
-      headers: {
-        ...await getHeaderCoockie(),
-      },
-    );
+  /// Fetch photo from the server using cookies
+  Future<File?> getPhoto() async {
+    try {
+      final Uri url = Uri.parse(user!.image!); // Ensure the image URL is valid
+      final response = await http.get(
+        url,
+        headers: {
+          ...await getHeaderCoockie(), // Add the cookie headers
+        },
+      );
 
-    if (response.statusCode == 200) {
-      print(response.body);
+      if (response.statusCode == 200) {
+        // Save the image to a temporary file or use memory directly
+        final bytes = response.bodyBytes;
+        final dir = Directory.systemTemp; // Use a temporary directory
+        final file = await File('${dir.path}/profile_image.png').writeAsBytes(bytes);
+        return file; // Return the file
+      } else {
+        print('Failed to load image: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching photo: $e');
     }
-  } catch (e) {
-    print('Error sending Subs: $e');
+    return null; // Return null if there was an error
   }
-  return null;
-}

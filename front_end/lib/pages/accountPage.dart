@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:front_end/widgets/userShower.dart';
 import 'package:front_end/widgets/uploadPopUp.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -20,9 +19,9 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
-  String? _uploadedImageUrl; 
-  User? user = UserSingleton.getUser(); 
-  File? _image; 
+  String? _uploadedImageUrl;
+  User? user;
+  File? _image;
 
   @override
   void initState() {
@@ -30,31 +29,24 @@ class _AccountPageState extends State<AccountPage> {
     _initializeImage();
   }
 
-  /// Initialize the image by fetching it from the server
   void _initializeImage() async {
-    _image = await getPhoto();
-    if (_image != null) {
+    user = UserSingleton.getUser();
+    if (_image == null) {
       setState(() {
-        _uploadedImageUrl = user?.image; // Update the uploaded image URL if available
+        _uploadedImageUrl = user?.image;
       });
     }
   }
 
-  /// Method to handle image picking and uploading logic
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path); // Store the selected file locally
+        _image = File(pickedFile.path); 
       });
 
       try {
-        // Attempt to upload the image and get the URL
-        final imageUrl = await uploadImage(_image!, user!.userId);
-        setState(() {
-          _uploadedImageUrl = imageUrl; // Update state with the uploaded image URL
-          UserSingleton.setImage(_uploadedImageUrl!); // Update singleton with the new image URL
-        });
+        uploadImage(_image!);
         _showUploadPopup('Image uploaded successfully!', true);
       } catch (e) {
         _showUploadPopup('Failed to upload image: $e', false);
@@ -62,38 +54,12 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-  /// Fetch photo from the server using cookies
-  Future<File?> getPhoto() async {
-    try {
-      final Uri url = Uri.parse(user!.image!); // Ensure the image URL is valid
-      final response = await http.get(
-        url,
-        headers: {
-          ...await getHeaderCoockie(), // Add the cookie headers
-        },
-      );
-
-      if (response.statusCode == 200) {
-        // Save the image to a temporary file or use memory directly
-        final bytes = response.bodyBytes;
-        final dir = Directory.systemTemp; // Use a temporary directory
-        final file = await File('${dir.path}/profile_image.png').writeAsBytes(bytes);
-        return file; // Return the file
-      } else {
-        print('Failed to load image: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching photo: $e');
-    }
-    return null; // Return null if there was an error
-  }
-
-  /// Refreshes the entire page by re-fetching user data
   Future<void> _refreshData() async {
     setState(() {
-      user = UserSingleton.getUser(); // Refresh user data
+      user = UserSingleton.getUser();
       if (user?.image != null) {
-        _uploadedImageUrl = user!.image; // Reset the uploaded image URL
+        _uploadedImageUrl = user!.image;
+        _image = null; // Reset local image, if any
       }
     });
   }
@@ -318,12 +284,13 @@ class _AccountPageState extends State<AccountPage> {
                           child: CircleAvatar(
                             radius: 100,
                             backgroundColor: const Color(itemColorHighlighted),
-                            // Load the image from the URL or display a placeholder
-                            backgroundImage: _uploadedImageUrl != null
-                                ? NetworkImage(_uploadedImageUrl!) // Use the uploaded URL
-                                : (_image != null ? FileImage(_image!) : null),
+                            backgroundImage: _image != null // Load local image if set
+                                ? FileImage(_image!)
+                                : (_uploadedImageUrl != null
+                                    ? NetworkImage(_uploadedImageUrl!)
+                                    : null), // Otherwise, load network image or fallback
                             child: _uploadedImageUrl == null && _image == null
-                                ? const Icon(Icons.person, size: 60, color: Colors.black)
+                                ? const Icon(Icons.person, size: 60, color: Colors.black) // Fallback icon
                                 : null,
                           ),
                         ),
