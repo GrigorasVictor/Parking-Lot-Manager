@@ -41,6 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         System.out.println("do internal filtrer");
+        //wow
 
         Optional<String> optToken = JwtService.getToken(request);
         String token = null;
