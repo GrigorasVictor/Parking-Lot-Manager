@@ -32,7 +32,8 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if(
                 request.getRequestURL().toString().endsWith("/login") ||
-                request.getRequestURL().toString().endsWith("/register")
+                request.getRequestURL().toString().endsWith("/register") ||
+                request.getRequestURL().toString().contains("users/image")
         ) {
             filterChain.doFilter(request, response);
             return;
