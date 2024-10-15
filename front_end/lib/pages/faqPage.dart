@@ -19,81 +19,65 @@ class _HelpPageState extends State<HelpPage> {
 
   // Toggle between active and inactive based on user input from dialog
   void onTap() {
-    _showToggleDialog();
+    _showTimeInputDialog();
   }
 
-  // Function to show input dialog and allow user to activate/deactivate parking spot
-  Future<void> _showToggleDialog() async {
-    bool deactivate = true;
+  // Function to show input dialog and allow user to enter hours, minutes, and seconds
+  Future<void> _showTimeInputDialog() async {
     int hours = 0, minutes = 0, seconds = 0;
 
     final result = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Parking Spot Status'),
+          title: const Text('Enter Time for Parking Spot'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                isActive
-                    ? 'Parking spot is currently ACTIVE. Would you like to deactivate it?'
-                    : 'Parking spot is currently INACTIVE. Please enter time to activate.',
-              ),
+              const Text('Please input hours, minutes, and seconds. Enter -1 to deactivate the parking spot.'),
               const SizedBox(height: 16),
-              if (!isActive) ...[
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Hours'),
-                        onChanged: (value) {
-                          hours = int.tryParse(value) ?? 0;
-                        },
-                      ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Hours'),
+                      onChanged: (value) {
+                        hours = int.tryParse(value) ?? 0;
+                      },
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Minutes'),
-                        onChanged: (value) {
-                          minutes = int.tryParse(value) ?? 0;
-                        },
-                      ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Minutes'),
+                      onChanged: (value) {
+                        minutes = int.tryParse(value) ?? 0;
+                      },
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(labelText: 'Seconds'),
-                        onChanged: (value) {
-                          seconds = int.tryParse(value) ?? 0;
-                        },
-                      ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Seconds'),
+                      onChanged: (value) {
+                        seconds = int.tryParse(value) ?? 0;
+                      },
                     ),
-                  ],
-                ),
-              ]
+                  ),
+                ],
+              ),
             ],
           ),
           actions: <Widget>[
-            if (isActive)
-              TextButton(
-                onPressed: () {
-                  deactivate = true;
-                  Navigator.of(context).pop(true);
-                },
-                child: const Text('Deactivate'),
-              ),
-            if (!isActive)
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true); // Confirm activation
-                },
-                child: const Text('Activate'),
-              ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Confirm the input
+              },
+              child: const Text('Confirm'),
+            ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false); // Cancel
@@ -105,19 +89,16 @@ class _HelpPageState extends State<HelpPage> {
       },
     );
 
-    if (result == true && deactivate) {
-      // If the result is deactivate, update the state to reflect the deactivation
+    // If the user confirmed their input, update the state accordingly
+    if (result == true) {
       setState(() {
-        initialHours = -1;
-        initialMinutes = -1;
-        initialSeconds = -1;
-        isActive = false; // Now parking is inactive
-      });
-    } else if (result == true && !deactivate) {
-      // If activating, do nothing to the timer state; it remains as is.
-      setState(() {
-        // Keep isActive true, but don't modify the initialHours, initialMinutes, or initialSeconds
-        isActive = true;
+        // Update the timer values to the input values or deactivate if -1 is input
+        initialHours = hours;
+        initialMinutes = minutes;
+        initialSeconds = seconds;
+
+        // If any value is -1, deactivate the spot
+        isActive = !(hours == -1 || minutes == -1 || seconds == -1);
       });
     }
   }
