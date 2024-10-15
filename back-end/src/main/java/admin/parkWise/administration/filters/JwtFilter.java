@@ -1,6 +1,5 @@
 package admin.parkWise.administration.filters;
 
-import admin.parkWise.administration.models.UserAuth;
 import admin.parkWise.administration.repository.UserAuthRepo;
 import admin.parkWise.administration.services.JwtService;
 import jakarta.servlet.FilterChain;
@@ -65,7 +64,6 @@ public class JwtFilter extends OncePerRequestFilter {
         if ((userEmail != null) &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
-//            UserDetails counterData = context.getBean(UserAuth.class).;
             UserDetails counterData = authRepo.findByEmail(userEmail);
             System.out.println(counterData);
 

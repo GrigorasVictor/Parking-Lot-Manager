@@ -1,21 +1,15 @@
 package admin.parkWise.administration.controllers;
 
 import admin.parkWise.administration.models.UserAuth;
-import admin.parkWise.administration.repository.UserAuthRepo;
 import admin.parkWise.administration.services.UserAuthDBService;
-import admin.parkWise.administration.services.ValidatorsService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.PreparedStatement;
 
 @RestController
 public class AuthController {
