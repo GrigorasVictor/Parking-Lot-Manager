@@ -22,7 +22,7 @@ def check_registration_number_exists(registration_number):
         result = cursor.fetchone()
 
         # Check if the registration number exists
-        return str(result[0]) if result else None
+        return str(result[0]) if result else "None"
 
     except (Exception, psycopg2.DatabaseError) as error:
         print(f"Error: {error}")
