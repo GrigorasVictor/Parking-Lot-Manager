@@ -31,7 +31,7 @@ public class TCPClient : MonoBehaviour
     {
         screenRecorder = GameObject.Find("ScreenRecorder").GetComponent<ScreenRecorder>();
         tcpClient = new TcpClient();
-        hostAddress = TCPServer.GetLocalIpV4Address();
+        //hostAddress = TCPServer.GetLocalIpV4Address();
         hostAddress = "localhost";
 
         text = "Attempting to connect at: " + hostAddress + ":" + port;
