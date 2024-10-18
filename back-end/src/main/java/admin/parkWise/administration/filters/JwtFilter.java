@@ -1,6 +1,5 @@
 package admin.parkWise.administration.filters;
 
-import admin.parkWise.administration.models.UserAuth;
 import admin.parkWise.administration.repository.UserAuthRepo;
 import admin.parkWise.administration.services.JwtService;
 import jakarta.servlet.FilterChain;
@@ -30,18 +29,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println(request.getRequestURL().toString());
         if(
                 request.getRequestURL().toString().endsWith("/login") ||
                 request.getRequestURL().toString().endsWith("/register") ||
-                request.getRequestURL().toString().endsWith("/send") ||
-                request.getRequestURL().toString().endsWith("/get")
-
+                request.getRequestURL().toString().contains("/image")
         ) {
             filterChain.doFilter(request, response);
             return;
         }
 
         System.out.println("do internal filtrer");
+        //wow
 
         Optional<String> optToken = JwtService.getToken(request);
         String token = null;
@@ -52,7 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (optToken.isEmpty()) {
             //TODO: maybe throw an error or smth
             filterChain.doFilter(request, response);
-            System.out.println("null");
+            System.out.println("TOKEN is null!");
             return;
         } else {
             token = optToken.get();
@@ -65,7 +64,6 @@ public class JwtFilter extends OncePerRequestFilter {
         if ((userEmail != null) &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
-//            UserDetails counterData = context.getBean(UserAuth.class).;
             UserDetails counterData = authRepo.findByEmail(userEmail);
             System.out.println(counterData);
 

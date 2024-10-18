@@ -20,28 +20,33 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   final ImagePicker _picker = ImagePicker();
   String? _uploadedImageUrl;
-  User? user = UserSingleton.getUser();
+  User? user;
   File? _image;
 
   @override
   void initState() {
     super.initState();
-    _image = File(user?.image as String);
+    _initializeImage();
   }
 
-  /// Method to handle the image picking and uploading logic
+  void _initializeImage() async {
+    user = UserSingleton.getUser();
+    if (_image == null) {
+      setState(() {
+        _uploadedImageUrl = user?.image;
+      });
+    }
+  }
+
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _image = File(pickedFile.path);
-        UserSingleton.setImage(_image!.path);
+        _image = File(pickedFile.path); 
       });
+
       try {
-        final imageUrl = await uploadImage(_image!, user!.userId);
-        setState(() {
-          _uploadedImageUrl = imageUrl;
-        });
+        uploadImage(_image!);
         _showUploadPopup('Image uploaded successfully!', true);
       } catch (e) {
         _showUploadPopup('Failed to upload image: $e', false);
@@ -49,12 +54,13 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-
-  /// Refreshes the entire page by re-fetching data
   Future<void> _refreshData() async {
     setState(() {
-      user = UserSingleton.getUser(); // Refresh user data
-      _image = File(user?.image as String);
+      user = UserSingleton.getUser();
+      if (user?.image != null) {
+        _uploadedImageUrl = user!.image;
+        _image = null; // Reset local image, if any
+      }
     });
   }
 
@@ -278,12 +284,13 @@ class _AccountPageState extends State<AccountPage> {
                           child: CircleAvatar(
                             radius: 100,
                             backgroundColor: const Color(itemColorHighlighted),
-                            backgroundImage: _uploadedImageUrl != null
-                                ? NetworkImage(_uploadedImageUrl!)
-                                : (_image != null ? FileImage(_image!) : null),
+                            backgroundImage: _image != null // Load local image if set
+                                ? FileImage(_image!)
+                                : (_uploadedImageUrl != null
+                                    ? NetworkImage(_uploadedImageUrl!)
+                                    : null), // Otherwise, load network image or fallback
                             child: _uploadedImageUrl == null && _image == null
-                                ? const Icon(Icons.person,
-                                    size: 60, color: Colors.black)
+                                ? const Icon(Icons.person, size: 60, color: Colors.black) // Fallback icon
                                 : null,
                           ),
                         ),
@@ -310,7 +317,6 @@ class _AccountPageState extends State<AccountPage> {
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
-                          // ignore: prefer_const_constructors
                           UserShower(),
                           const SizedBox(height: 15),
                           CustomElevatedButton(
