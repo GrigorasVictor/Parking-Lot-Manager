@@ -1,34 +1,14 @@
 package admin.parkWise.administration.messageQueue;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-public class Producer {
-    private final int SECONDS = 3000;
-    private final boolean DURABLE = false;
-    private final boolean EXCLUSIVE = false;
-    private final boolean AUTO_DELETE = false;
+@Component
+public class Producer extends QueueFactory {
     private final String QUEUE = "licencePlate";
 
-//    @Value("${ampq-url}")
-    private String channelUrl = "amqps://jcjuueuk:YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H@sparrow.rmq.cloudamqp.com/jcjuueuk";
-
-    private ConnectionFactory factory;
-    private Connection connection;
-    private Channel channel;
-    public Producer(){
-        try {
-            factory = new ConnectionFactory();
-            factory.setUri(channelUrl);
-            factory.setConnectionTimeout(SECONDS);
-
-            connection = factory.newConnection();
-            channel = connection.createChannel();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public Producer() {
+        super();
     }
 
     public void publish(String routingKey, String message){
@@ -40,7 +20,7 @@ public class Producer {
             System.out.println(e.getMessage());
         }
     }
-
+    //daca dai url hardcodat, merge
     public static void main(String[] args) {
         Producer producer = new Producer();
 

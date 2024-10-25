@@ -1,40 +1,14 @@
 package admin.parkWise.administration.messageQueue;
-
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import java.nio.charset.StandardCharsets;
 
-public class Consumer {
-    private final int SECONDS = 3000;
-    private final boolean DURABLE = false;
-    private final boolean EXCLUSIVE = false;
-    private final boolean AUTO_DELETE = false;
+public class Consumer extends QueueFactory{
     private final String QUEUE = "validation";
 
-    // Set the RabbitMQ URL either directly or with @Value
-    //@Value("${ampq.url}")
-    private String channelUrl = "amqps://jcjuueuk:YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H@sparrow.rmq.cloudamqp.com/jcjuueuk";
-
-    private ConnectionFactory factory;
-    private Connection connection;
-    private Channel channel;
-
-    public Consumer() {
-        try {
-            factory = new ConnectionFactory();
-            factory.setUri(channelUrl);
-            factory.setConnectionTimeout(SECONDS);
-
-            connection = factory.newConnection();
-            channel = connection.createChannel();
-        } catch (Exception e) {
-            System.out.println("Error initializing Consumer: " + e.getMessage());
-        }
+    public Consumer(){
+        super();
     }
-
     public void startConsuming() {
         try {
             channel.queueDeclare(QUEUE, DURABLE, EXCLUSIVE, AUTO_DELETE, null);
