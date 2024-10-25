@@ -12,8 +12,8 @@ public class Producer {
     private final boolean AUTO_DELETE = false;
     private final String QUEUE = "licencePlate";
 
-    @Value("${ampq-url}")
-    private String channelUrl;
+//    @Value("${ampq-url}")
+    private String channelUrl = "amqps://jcjuueuk:YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H@sparrow.rmq.cloudamqp.com/jcjuueuk";
 
     private ConnectionFactory factory;
     private Connection connection;
@@ -39,5 +39,11 @@ public class Producer {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        Producer producer = new Producer();
+
+        producer.publish("licencePlate", "din Java");
     }
 }

@@ -8,7 +8,7 @@ channel = connection.channel()
 channel.queue_declare(queue='licencePlate')
 
 def callBack(ch, method, properties, body):
-    print("Received in PythonAI")
+    print("Received in PythonAI " + body.decode())
 
 channel.basic_consume(queue="licencePlate", on_message_callback=callBack, auto_ack=True)
 print("Python AI started consuming")

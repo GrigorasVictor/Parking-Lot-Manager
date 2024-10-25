@@ -7,4 +7,6 @@ connection = pika.BlockingConnection(params)
 channel = connection.channel()
 
 def publish(method, body):
-    channel.basic_publish(exchange='', routing_key='licencePlate', body='test')
+    channel.basic_publish(exchange='', routing_key= 'licencePlate', body='test')
+
+publish('ceva', 'altCeva')

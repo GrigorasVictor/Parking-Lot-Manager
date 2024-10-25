@@ -15,7 +15,7 @@ public class Consumer {
     private final boolean AUTO_DELETE = false;
     private final String QUEUE = "validation";
 
-    @Value("${ampq-url}")
+    @Value("${ampq.url}")
     private String channelUrl;
 
     private ConnectionFactory factory;
@@ -48,5 +48,9 @@ public class Consumer {
             System.out.println(e.getMessage());
         }
         return message.get();
+    }
+
+    public static void main(String[] args) {
+
     }
 }
