@@ -1,6 +1,8 @@
 import psycopg2
 import json
 
+from queueMessaging.producer import publish
+
 FILE_PATH = 'db.localconfig'
 
 def check_registration_number_exists(registration_number):
@@ -22,6 +24,9 @@ def check_registration_number_exists(registration_number):
         result = cursor.fetchone()
 
         # Check if the registration number exists
+
+        if str(result[0]): publish()
+
         return str(result[0]) if result else None
 
     except (Exception, psycopg2.DatabaseError) as error:
