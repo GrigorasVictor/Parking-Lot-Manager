@@ -1,14 +1,16 @@
 package admin.parkWise.administration.messageQueue;
 
-import org.springframework.beans.factory.annotation.Value;
+import admin.parkWise.administration.configs.QueueConfig;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Producer extends QueueFactory {
+@Configurable
+public class Producer extends AbstractQueue {
     private final String QUEUE = "licencePlate";
 
-    public Producer() {
-        super();
+    public Producer(QueueConfig qc) {
+        super(qc);
     }
 
     public void publish(String routingKey, String message){
@@ -20,10 +22,10 @@ public class Producer extends QueueFactory {
             System.out.println(e.getMessage());
         }
     }
-    //daca dai url hardcodat, merge
-    public static void main(String[] args) {
-        Producer producer = new Producer();
 
-        producer.publish("licencePlate", "din Java");
-    }
+//    public static void main(String[] args) {
+//        Producer producer = new Producer();
+//
+//        producer.publish("licencePlate", "din Java");
+//    }
 }

@@ -1,13 +1,20 @@
 package admin.parkWise.administration.messageQueue;
+import admin.parkWise.administration.configs.QueueConfig;
 import com.rabbitmq.client.DeliverCallback;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 
-public class Consumer extends QueueFactory{
+@Service
+@Configurable
+public class Consumer extends AbstractQueue {
     private final String QUEUE = "validation";
 
-    public Consumer(){
-        super();
+    public Consumer(QueueConfig qc){
+        super(qc);
     }
     public void startConsuming() {
         try {
@@ -23,8 +30,8 @@ public class Consumer extends QueueFactory{
         }
     }
 
-    public static void main(String[] args) {
-        Consumer consumer = new Consumer();
-        consumer.startConsuming();
-    }
+//    public static void main(String[] args) {
+//        Consumer consumer = new Consumer();
+//        consumer.startConsuming();
+//    }
 }
