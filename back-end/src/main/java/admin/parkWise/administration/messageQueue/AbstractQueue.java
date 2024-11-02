@@ -6,10 +6,14 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
-@Service
-@Configurable
+import static admin.parkWise.administration.configs.QueueConfig.url;
+
+@Component
 public abstract class AbstractQueue {
     protected final int SECONDS = 3000;
     protected final boolean DURABLE = false;
@@ -19,15 +23,20 @@ public abstract class AbstractQueue {
     protected ConnectionFactory factory;
     protected Connection connection;
     protected Channel channel;
-    @Autowired
-    private QueueConfig configQueueProperties;
 
-    public AbstractQueue(QueueConfig qc){
+//    private QueueConfig qc;
+    @Autowired
+    private Environment env;
+
+    @Autowired
+    private String url;
+
+    @Autowired
+    public void init(){
         try {
-            configQueueProperties = qc;
-            System.out.println(configQueueProperties.getAmqpUrl());
+            System.out.println(url);
             factory = new ConnectionFactory();
-            factory.setUri(configQueueProperties.getAmqpUrl());
+            factory.setUri(url);
             factory.setConnectionTimeout(SECONDS);
 
             connection = factory.newConnection();

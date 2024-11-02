@@ -3,19 +3,22 @@ import admin.parkWise.administration.configs.QueueConfig;
 import com.rabbitmq.client.DeliverCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 
-@Service
+@Component
 @Configurable
 public class Consumer extends AbstractQueue {
     private final String QUEUE = "validation";
 
-    public Consumer(QueueConfig qc){
-        super(qc);
+    @Autowired
+    public Consumer(){
+        super();
     }
+
     public void startConsuming() {
         try {
             channel.queueDeclare(QUEUE, DURABLE, EXCLUSIVE, AUTO_DELETE, null);

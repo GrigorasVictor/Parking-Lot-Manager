@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 public class Producer extends AbstractQueue {
     private final String QUEUE = "licencePlate";
 
-    public Producer(QueueConfig qc) {
-        super(qc);
+    public Producer() {
+        super();
     }
 
     public void publish(String routingKey, String message){

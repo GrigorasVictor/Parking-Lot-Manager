@@ -6,20 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 @Configuration
+@Component
 public class QueueConfig {
 
     @Value("${amqp.url}")
-    private String url;
+    public static String url;
     @Value("${amqp.password}")
-    private String password;
-
-    @Bean
-    public String getAmqpUrl(){
-        return this.url;
-    }
-    @Bean
-    public String getPassword() {
-        return password;
-    }
+    public static String password;
 }
 
