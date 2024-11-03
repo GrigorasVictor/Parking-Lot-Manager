@@ -14,9 +14,8 @@ import java.nio.charset.StandardCharsets;
 public class Consumer extends AbstractQueue {
     private final String QUEUE = "validation";
 
-    @Autowired
-    public Consumer(){
-        super();
+    public Consumer(QueueConfig queueConfig) {
+        super(queueConfig);
     }
 
     public void startConsuming() {
@@ -32,9 +31,4 @@ public class Consumer extends AbstractQueue {
             System.out.println("Error starting consumer: " + e.getMessage());
         }
     }
-
-//    public static void main(String[] args) {
-//        Consumer consumer = new Consumer();
-//        consumer.startConsuming();
-//    }
 }
