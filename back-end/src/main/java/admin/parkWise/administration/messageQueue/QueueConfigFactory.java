@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Bean;
 
 public class QueueConfigFactory {
     @Value("${amqp.url}")
-    public String url = "amqps://jcjuueuk:YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H@sparrow.rmq.cloudamqp.com/jcjuueuk";
+    public String url;// = "amqps://jcjuueuk:YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H@sparrow.rmq.cloudamqp.com/jcjuueuk";
 
     @Value("${amqp.password}")
-    public String password = "YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H";
+    public String password;// = "YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H";
 
     @Bean
     public QueueConfig queueConfig(){

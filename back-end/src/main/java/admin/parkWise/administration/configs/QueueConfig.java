@@ -12,10 +12,10 @@ public class QueueConfig { // TODO: needs renaming
     public final int SECONDS = 3000;
 
     @Value("${amqp.url}")
-    public String url = "amqps://jcjuueuk:YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H@sparrow.rmq.cloudamqp.com/jcjuueuk";
+    public String url;
 
     @Value("${amqp.password}")
-    public String password = "YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H";
+    public String password;// = "YgdVAqQkaln9sXpkh9BFMgZfe3PGDE2H";
 
 
     public QueueConfig(String url, String password) {
